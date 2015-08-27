@@ -1,4 +1,4 @@
-from code.experiment import experiment_new
+from code.experiment import experiment
 
 from hyperopt import fmin, tpe, hp, Trials, space_eval
 
@@ -61,7 +61,7 @@ def call_experiment(args):
     name = model + '_' + regularizer + '_' + '_'.join(feature_list)
     datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
     print name
-    return experiment_new.run_group_experiment(name, datasets, 0, feature_list,
+    return experiment.run_group_experiment(name, datasets, 0, feature_list,
                                                model_type=model, regularizer=regularizer)
 
 

@@ -1,4 +1,4 @@
-from code.experiment.experiment_new import run_group_experiment
+from code.experiment.experiment import run_group_experiment
 
 run_group_experiment('test_dlrd', ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes'],
                      test_fold=0, feature_list=['ngrams,binarize=True'],
