@@ -4,11 +4,11 @@ import gensim
 import numpy as np
 import pandas as pd
 
-from .. import labels
-from .. import data_splitting as ds
-from .. import evaluation
-from .. util import defines
-from .. util import file_handling as fh
+from ..preprocessing import labels
+from ..preprocessing import data_splitting as ds
+from ..experiment import evaluation
+from ..util import defines
+from ..util import file_handling as fh
 
 
 def load_data(datasets, test_fold, dev_subfold):

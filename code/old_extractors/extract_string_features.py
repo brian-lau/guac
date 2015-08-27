@@ -2,9 +2,9 @@ import re
 import sys
 from optparse import OptionParser
 
-from old_extractors import features
-from old_extractors.features import tokenizer
-from util import file_handling as fh, defines
+from ..old_extractors import features
+from ..old_extractors.features import tokenizer
+from ..util import file_handling as fh, defines
 
 
 def main():

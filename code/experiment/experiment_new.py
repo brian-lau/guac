@@ -9,11 +9,11 @@ import pandas as pd
 from scipy import stats
 from scipy import sparse
 
-from models.sparse_model import SparseModel
-from experiment import evaluation
-from util import file_handling as fh, defines
-from feature_extractors import feature_loader
-from preprocessing import data_splitting as ds, labels
+from ..models.sparse_model import SparseModel
+from ..experiment import evaluation
+from ..util import file_handling as fh, defines
+from ..feature_extractors import feature_loader
+from ..preprocessing import data_splitting as ds, labels
 
 
 def main():

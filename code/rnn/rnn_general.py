@@ -6,18 +6,13 @@ import copy
 import os
 import random
 import timeit
-import gensim
-from optparse import OptionParser
 
 import numpy as np
-import pandas as pd
 
 import theano
 from theano import tensor as T
 
 import common
-from .. import labels
-from .. import data_splitting as ds
 from ..util import defines
 from ..util import file_handling as fh
 

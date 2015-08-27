@@ -5,7 +5,7 @@ from optparse import OptionParser
 
 import pandas as pd
 
-from .. util import file_handling as fh, defines
+from ..util import file_handling as fh, defines
 
 
 def main():

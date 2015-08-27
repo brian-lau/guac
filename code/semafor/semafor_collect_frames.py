@@ -1,9 +1,9 @@
 
 from optparse import OptionParser
 
-import defines
-import features
-import file_handling as fh
+from ..util import defines
+from ..old_extractors import features
+from ..util import file_handling as fh
 
 def main():
     # Handle input options and arguments

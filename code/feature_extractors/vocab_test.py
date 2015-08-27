@@ -1,5 +1,3 @@
-__author__ = 'dcard'
-
 import vocabulary
 import vocabulary_with_counts
 

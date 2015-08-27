@@ -17,11 +17,10 @@ import theano
 from theano import tensor as T
 
 import common
-from .. import labels
 from ..util import defines
 from ..util import file_handling as fh
-from .. import data_splitting as ds
-from .. import evaluation
+from ..preprocessing import labels
+from ..preprocessing import data_splitting as ds
 
 #from ..feature_extractors import tokenizer
 

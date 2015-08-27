@@ -1,10 +1,7 @@
 import re
 
 import nltk.data
-#from nltk.corpus import stopwords
-#from nltk.corpus import wordnet as wn
 from nltk.stem import WordNetLemmatizer
-#from nltk.tokenize.punkt import PunktWordTokenizer
 
 
 def split_sentences(text, decorate=False):

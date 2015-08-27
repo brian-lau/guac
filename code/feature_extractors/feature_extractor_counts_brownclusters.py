@@ -1,12 +1,10 @@
 import re
-import ast
-from optparse import OptionParser
 
 import tokenizer
 from feature_extractor_counts import FeatureExtractorCounts
-from .. preprocessing import data_splitting as ds
-from .. util import defines
-from .. util import file_handling as fh
+from ..preprocessing import data_splitting as ds
+from ..util import defines
+from ..util import file_handling as fh
 
 
 class FeatureExtractorCountsBrownClusters(FeatureExtractorCounts):

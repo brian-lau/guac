@@ -1,7 +1,7 @@
 import ast
 import numpy as np
 
-from .. import experiment_new
+from ..experiment import experiment_new
 
 from hyperopt import fmin, tpe, hp, Trials, space_eval
 

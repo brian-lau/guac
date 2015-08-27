@@ -4,8 +4,8 @@ from optparse import OptionParser
 import numpy as np
 import pandas as pd
 
-from feature_extractors import vocabulary
-from util import file_handling as fh, defines
+from ..feature_extractors import vocabulary
+from ..util import file_handling as fh, defines
 
 
 def main():

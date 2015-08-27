@@ -2,9 +2,9 @@ import os
 import pandas as pd
 from optparse import OptionParser
 
-from .. import labels
-from .. import evaluation
-from .. import data_splitting as ds
+from ..preprocessing import labels
+from ..preprocessing import data_splitting as ds
+from ..experiment import evaluation
 from ..util import file_handling as fh
 from ..util import defines
 

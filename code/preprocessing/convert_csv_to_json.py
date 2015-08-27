@@ -3,7 +3,7 @@ from optparse import OptionParser
 import pandas as pd
 import numpy as np
 
-from util import file_handling as fh, defines
+from ..util import file_handling as fh, defines
 
 
 def main():

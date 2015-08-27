@@ -2,10 +2,10 @@ import re
 from collections import Counter
 from optparse import OptionParser
 
-from old_extractors import features
-from feature_extractors import vocabulary, tokenizer
-from util import file_handling as fh, defines
-import util.data_splitting as ds
+from ..old_extractors import features
+from ..feature_extractors import vocabulary, tokenizer
+from ..util import file_handling as fh, defines
+from ..util import data_splitting as ds
 
 
 def main():

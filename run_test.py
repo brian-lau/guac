@@ -1,12 +1,6 @@
-import ast
-import numpy as np
-
-from code.experiment.experiment_new import run_group_experiment
 from code.experiment import experiment_new
 
 from hyperopt import fmin, tpe, hp, Trials, space_eval
-
-from random import shuffle, sample
 
 space = {
     'model': hp.choice('model', [

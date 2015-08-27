@@ -1,7 +1,6 @@
 import ast
 from collections import Counter
 from scipy import sparse
-import cPickle as pickle
 import random
 
 import numpy as np

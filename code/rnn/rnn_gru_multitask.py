@@ -15,8 +15,8 @@ import theano
 from theano import tensor as T
 
 import common
-from .. import labels
-from .. import data_splitting as ds
+from ..preprocessing import labels
+from ..preprocessing import data_splitting as ds
 from ..util import defines
 from ..util import file_handling as fh
 

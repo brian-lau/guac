@@ -7,9 +7,9 @@ import numpy as np
 import pandas as pd
 from scipy import sparse
 
-from old_extractors import features
-from old_extractors.features import tokenizer
-from util import file_handling as fh, defines
+from ..old_extractors import features
+from ..old_extractors.features import tokenizer
+from ..util import file_handling as fh, defines
 
 
 def main():

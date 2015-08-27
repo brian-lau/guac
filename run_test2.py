@@ -1,17 +1,8 @@
-import ast
-import numpy as np
-
-from experiment.experiment_new import run_group_experiment
-
-from hyperopt import fmin, tpe, hp, Trials, space_eval
-
-from random import shuffle, sample
-
-alphas = np.repeat(1, 33)
+from code.experiment.experiment_new import run_group_experiment
 
 run_group_experiment('test_dlrd', ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes'],
                      test_fold=0, feature_list=['ngrams,binarize=True'],
-                     min_alpha_exp=0, max_alpha_exp=0, model_type='SVMNB', best_alphas=alphas)
+                     min_alpha_exp=0, max_alpha_exp=0, model_type='SVMNB')
 
 
 """

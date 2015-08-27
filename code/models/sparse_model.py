@@ -1,20 +1,16 @@
 import sys
-import random
 import operator
 
 import numpy as np
 from scipy.sparse import csr_matrix
-from scipy.sparse import coo_matrix
 
-from sklearn import cross_validation as cv
 from sklearn import svm
 from sklearn.linear_model import LogisticRegression as lr
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.naive_bayes import BernoulliNB
 
-from .. util import file_handling as fh
+from ..util import file_handling as fh
 
 # SVMNB and defaults taken from http://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf
 

@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
 
-from preprocessing import data_splitting as ds, labels
+from ..preprocessing import data_splitting as ds, labels
 
 
 def calc_f1_and_acc_for_column(true, predicted):

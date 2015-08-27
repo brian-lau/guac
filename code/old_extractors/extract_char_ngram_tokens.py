@@ -1,7 +1,7 @@
 from optparse import OptionParser
 
-from old_extractors import features
-from util import file_handling as fh, defines
+from ..old_extractors import features
+from ..util import file_handling as fh, defines
 
 
 def main():

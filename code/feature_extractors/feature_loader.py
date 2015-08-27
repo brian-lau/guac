@@ -1,4 +1,3 @@
-
 import os
 from optparse import OptionParser
 
