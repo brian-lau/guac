@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/brown_clusters/brown_clusters.iml" filepath="$PROJECT_DIR$/brown_clusters/brown_clusters.iml" />
+      <module fileurl="file://$PROJECT_DIR$/feature_extractors/feature_extractors.iml" filepath="$PROJECT_DIR$/feature_extractors/feature_extractors.iml" />
+      <module fileurl="file://$PROJECT_DIR$/guac.iml" filepath="$PROJECT_DIR$/guac.iml" />
+      <module fileurl="file://$PROJECT_DIR$/obsolete/obsolete.iml" filepath="$PROJECT_DIR$/obsolete/obsolete.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rnn/rnn.iml" filepath="$PROJECT_DIR$/rnn/rnn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/semafor/semafor.iml" filepath="$PROJECT_DIR$/semafor/semafor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/util/util.iml" filepath="$PROJECT_DIR$/util/util.iml" />
+    </modules>
+  </component>
+</project>
