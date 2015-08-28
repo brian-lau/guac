@@ -1,11 +1,9 @@
 # adapted from https://github.com/lisa-lab/DeepLearningTutorials
 
-import codecs
 from collections import OrderedDict
 import copy
 import os
 import random
-import sys
 import timeit
 import gensim
 from optparse import OptionParser
@@ -17,14 +15,14 @@ import theano
 from theano import tensor as T
 
 import common
-from ..util import defines
-from ..util import file_handling as fh
 from ..preprocessing import labels
 from ..preprocessing import data_splitting as ds
+from ..util import defines
+from ..util import file_handling as fh
 
-#from ..feature_extractors import tokenizer
 
 # Otherwise the deepcopy fails
+import sys
 sys.setrecursionlimit(5000)
 
 
@@ -89,74 +87,74 @@ class RNNSLU(object):
         else:
             self.emb = theano.shared(name='embeddings',
                                      value=initial_embeddings.astype(theano.config.floatX))
-        self.wx = theano.shared(name='wx',
-                                value=0.2 * np.random.uniform(-1.0, 1.0,
-                                                                 (de * cs, nh))
-                                .astype(theano.config.floatX))
-        self.wxr = theano.shared(name='wxr',
+
+        self.wr = theano.shared(name='wr',
                                 value=0.2 * np.random.uniform(-1.0, 1.0,
                                                               (de * cs, nh))
                                 .astype(theano.config.floatX))
-        self.wh = theano.shared(name='wh',
-                                value=0.2 * np.random.uniform(-1.0, 1.0,
-                                                                 (nh, nh))
-                                .astype(theano.config.floatX))
-        self.whr = theano.shared(name='whr',
+        self.ur = theano.shared(name='ur',
                                 value=0.2 * np.random.uniform(-1.0, 1.0,
                                                               (nh, nh))
                                 .astype(theano.config.floatX))
-        self.w = theano.shared(name='w',
-                               value=0.2 * np.random.uniform(-1.0, 1.0,
-                                                                (nh*2, nc))
-                               .astype(theano.config.floatX))
-        self.wr = theano.shared(name='wr',
-                               value=0.2 * np.random.uniform(-1.0, 1.0,
-                                                             (nh, nc))
-                               .astype(theano.config.floatX))
+        self.br = theano.shared(name='br',
+                                value=np.zeros(nh,
+                                               dtype=theano.config.floatX))
+        self.wz = theano.shared(name='wz',
+                                value=0.2 * np.random.uniform(-1.0, 1.0,
+                                                              (de * cs, nh))
+                                .astype(theano.config.floatX))
+        self.uz = theano.shared(name='uz',
+                                value=0.2 * np.random.uniform(-1.0, 1.0,
+                                                              (nh, nh))
+                                .astype(theano.config.floatX))
+        self.bz = theano.shared(name='bz',
+                                value=np.zeros(nh,
+                                               dtype=theano.config.floatX))
+        self.wh = theano.shared(name='wh',
+                                value=0.2 * np.random.uniform(-1.0, 1.0,
+                                                                 (de * cs, nh))
+                                .astype(theano.config.floatX))
+        self.uh = theano.shared(name='uh',
+                                value=0.2 * np.random.uniform(-1.0, 1.0,
+                                                                 (nh, nh))
+                                .astype(theano.config.floatX))
         self.bh = theano.shared(name='bh',
                                 value=np.zeros(nh,
-                                                  dtype=theano.config.floatX))
-        self.bhr = theano.shared(name='bhr',
-                                value=np.zeros(nh,
                                                dtype=theano.config.floatX))
-        self.b = theano.shared(name='b',
+        self.ws = theano.shared(name='ws',
+                               value=0.2 * np.random.uniform(-1.0, 1.0,
+                                                                (nh, nc))
+                               .astype(theano.config.floatX))
+        self.bs = theano.shared(name='bs',
                                value=np.zeros(nc,
                                                  dtype=theano.config.floatX))
-        self.br = theano.shared(name='br',
-                               value=np.zeros(nc,
-                                              dtype=theano.config.floatX))
-        #self.h0 = theano.shared(name='h0',
-        #                         value=np.zeros(nh,
-        #                                        dtype=theano.config.floatX))
-        self.hf0 = theano.shared(name='hf0',
+        self.hi = theano.shared(name='hi',
                                 value=np.zeros(nh,
                                                   dtype=theano.config.floatX))
-        self.hr0 = theano.shared(name='hr0',
-                                value=np.zeros(nh,
-                                               dtype=theano.config.floatX))
 
-
-    # bundle
-        #self.params = [self.emb, self.wx, self.wxr, self.wh, self.whr, self.w, self.wr, self.bh, self.bhr, self.b, self.br, self.hf0, self.hr0]
-        #self.params = [self.emb, self.wx, self.wh, self.w, self.bh, self.b, self.hf0, self.hr0, self.wxr, self.whr, self.bhr]
-        self.params = [self.emb, self.wx, self.wh, self.w, self.bh, self.b, self.hf0, self.hr0]
-        #self.params = [self.wx, self.wh, self.w, self.bh, self.b, self.h0]
-        # end-snippet-2
-        # as many columns as context window size
-        # as many lines as words in the sentence
+        # bundle
+        self.params = [self.emb,
+                       self.wr, self.ur, self.br,
+                       self.wz, self.uz, self.bz,
+                       self.wh, self.uh, self.bh,
+                       self.ws, self.bs]
         # start-snippet-3
         idxs = T.imatrix()
         x = self.emb[idxs].reshape((idxs.shape[0], de*cs))
         #y = T.ivector('y_sentence')  # labels
         y = T.ivector('y')
+        #h_i = T.alloc(np.asarray(0., dtype='float32'), nh, 1)
         # end-snippet-3 start-snippet-4
 
         def recurrence(x_t, h_tm1):
-            h_t = T.nnet.sigmoid(T.dot(x_t, self.wx)
-                                 + T.dot(h_tm1, self.wh) + self.bh)
-            #s_t = T.nnet.sigmoid(T.dot(h_t, self.w) + self.b)
-            #return [h_t, s_t]
-            return h_t
+            r_t = T.nnet.sigmoid(T.dot(x_t, self.wr) + T.dot(h_tm1, self.ur) + self.br)
+            z_t = T.nnet.sigmoid(T.dot(x_t, self.wz) + T.dot(h_tm1, self.uz) + self.bz)
+            temp = r_t * T.dot(h_tm1, self.uh)
+            g_t = T.tanh(T.dot(x_t, self.wh) + temp + self.bh)
+            h_t = (1 - z_t) * h_tm1 + z_t * g_t
+            #h_t = g_t * T.repeat(z_t, nh)
+            s_t = T.nnet.sigmoid(T.dot(h_t, self.ws) + self.bs)
+            return [h_t, s_t]
 
         """
         h, _ = theano.scan(fn=recurrence,
@@ -165,26 +163,8 @@ class RNNSLU(object):
                                 n_steps=x.shape[0])
         """
 
-        def recurrence_r(x_t, h_t_rp1):
-            #h_t_r = T.nnet.sigmoid(T.dot(x_t, self.wxr)
-            #                     + T.dot(h_t_rp1, self.whr) + self.bhr)
-            h_t_r = T.nnet.sigmoid(T.dot(x_t, self.wx)
-                                   + T.dot(h_t_rp1, self.wh) + self.bh)
+        [h, s], _ = theano.scan(fn=recurrence, sequences=x, outputs_info=[self.hi, None], n_steps=x.shape[0])
 
-            return h_t_r
-
-        #[h_f, s_f], _ = theano.scan(fn=recurrence, sequences=x, outputs_info=[self.hr0, None], n_steps=x.shape[0])
-        h_f, _ = theano.scan(fn=recurrence, sequences=x, outputs_info=self.hf0, n_steps=x.shape[0])
-
-        #[h_r, s_r], _ = theano.scan(fn=recurrence_r, sequences=x, outputs_info=[self.hf0, None], n_setps=x.shapep[0],
-        #                            go_backwards=True)
-        h_r, _ = theano.scan(fn=recurrence_r, sequences=x, outputs_info=self.hr0, go_backwards=True)
-
-        #h = h_f + h_r
-        h = T.concatenate([h_f, h_r], axis=1)
-
-        s = T.nnet.softmax(T.dot(h, self.w) + self.b)
-        #s = (s_f + s_r)/2.0
 
         # add a logistic layer after the last hidden node
         #final_h = h[-1, :]
@@ -196,13 +176,18 @@ class RNNSLU(object):
 
         # take the max over just the scores corresponding to y = 1
 
-        p_y_given_x_sentence = T.max(s, axis=0)
         #p_y_given_x_sentence = theano.printing.Print('p_y_given_x_sentence')(T.max(s, axis=0))
 
         #y_pred = theano.printing.Print('y_pred')(s > 0.5)
         #y_pred = T.argmax(p_y_given_x_sentence)
-        #y_pred = p_y_given_x_sentence > 0.5
+
+        # MAX
+        p_y_given_x_sentence = T.max(s, axis=0)
         y_pred = s > 0.5
+
+        # MEAN
+        #p_y_given_x_sentence = T.mean(s, axis=0)
+        #y_pred = p_y_given_x_sentence > 0.5
 
         # cost and gradients and learning rate
         # start-snippet-5
@@ -263,8 +248,7 @@ class RNNSLU(object):
 
     def load(self, input_dir):
         for param in self.params:
-            param.set_value(np.load(os.path.join(input_dir,
-                                                    param.name + '.npy')))
+            param.set_value(np.load(os.path.join(input_dir, param.name + '.npy')))
 
     def print_embeddings(self):
         #print self.emb.name, self.emb.get_value()
@@ -276,7 +260,7 @@ def main(param=None):
     usage = "%prog"
     parser = OptionParser(usage=usage)
     parser.add_option('-o', dest='output_dir', default='',
-                      help='output directory: default=%default')
+                  help='output directory: default=%default')
 
     (options, args) = parser.parse_args()
     if options.output_dir == '':
@@ -290,27 +274,27 @@ def main(param=None):
         param = {
             'test_fold': 0,
             'dev_subfold': 0,
-            'lr': 0.1,
+            'lr': 0.05,
             'verbose': 1,
             'decay': True,
             # decay on the learning rate if improvement stops
             'win': 1,
             # number of words in the context window
-            'nhidden': 100,
+            'nhidden': 50,
             # number of hidden units
             'seed': 345,
-            #'emb_dimension': 300,
             'word2vec_dim': 300,
             'bc_dim': 0,
             'extra_dims': 1,
             # dimension of word embedding
-            'nepochs': 40,
+            'nepochs': 50,
             # 60 is recommended
             'savemodel': True,
             'custom_word2vec': False}
     print param
 
-    datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
+
+    dataset = param['dataset']
 
     train_items = []
     dev_items = []
@@ -321,7 +305,7 @@ def main(param=None):
         train_items.extend(ds.get_train_documents(d, param['test_fold'], param['dev_subfold']))
         dev_items.extend(ds.get_dev_documents(d, param['test_fold'], param['dev_subfold']))
         test_items.extend(ds.get_test_documents(d, param['test_fold']))
-        label_list.append(labels.get_labels(d))
+        label_list.append(labels.get_datset_labels(d))
 
     all_labels = pd.concat(label_list, axis=0)
 
@@ -348,8 +332,7 @@ def main(param=None):
         test_y.append(np.array(all_labels.loc[item]).astype('int32'))
 
 
-
-    idx2label = {0: 'no', 1: 'yes'}
+    idx2label = {0: 'NO', 1: 'YES'}
 
     idx2word = dict((k, v) for v, k in words2idx.iteritems())
 
@@ -370,7 +353,6 @@ def main(param=None):
 
     #initial_embeddings = 0.2 * np.random.uniform(-1.0, 1.0,((vocsize+1), param['emb_dimension']))
 
-
     if param['custom_word2vec']:
         # my word2vec vectors
         print "Loading custom word2vec vectors"
@@ -381,6 +363,10 @@ def main(param=None):
         print "Loading standard word2vec vectors"
         vector_file = defines.word2vec_vectors_filename
         vectors = gensim.models.Word2Vec.load_word2vec_format(vector_file, binary=True)
+
+
+    #vector_filename = defines.brown_augmented_word2vec_filename
+    #vectors = pd.read_csv(vector_filename, header=None, index_col=0)
 
     #print "Loading brown clusters"
     #brown_cluster_filename = fh.make_filename(defines.vectors_dir, 'brown_vectors', 'json')
@@ -445,6 +431,16 @@ def main(param=None):
         predictions_valid = [np.max(rnn.classify(np.asarray(contextwin(x, param['win'])).astype('int32')), axis=0)
                              for x in valid_lex]
 
+
+        """
+        predictions_train = [rnn.classify(np.asarray(contextwin(x, param['win'])).astype('int32'))
+                             for x in train_lex]
+        predictions_test = [rnn.classify(np.asarray(contextwin(x, param['win'])).astype('int32'))
+                            for x in test_lex]
+        predictions_valid = [rnn.classify(np.asarray(contextwin(x, param['win'])).astype('int32'))
+                             for x in valid_lex]
+        """
+
         #detailed_valid_test = [rnn.classify(np.asarray(contextwin(x, param['win'])).astype('int32'))
         #                      for x in valid_lex]
 
@@ -478,10 +474,10 @@ def main(param=None):
             #param['vr'], param['tr'] = valid_recall, test_recall
             param['be'] = e
 
-            #subprocess.call(['mv', folder + '/current.test.txt',
-            #                 folder + '/best.test.txt'])
-            #subprocess.call(['mv', folder + '/current.valid.txt',
-            #                 folder + '/best.valid.txt'])
+            #subprocess.call(['mv', output_dir + '/current.test.txt',
+            #                 output_dir + '/best.test.txt'])
+            #subprocess.call(['mv', output_dir + '/current.valid.txt',
+            #                 output_dir + '/best.valid.txt'])
 
         # learning rate decay if no improvement in 10 epochs
         if param['decay'] and abs(param['be']-param['ce']) >= 10:

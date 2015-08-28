@@ -2,6 +2,7 @@ import sys
 import operator
 
 import numpy as np
+import pandas as pd
 from scipy.sparse import csr_matrix
 
 from sklearn import svm
@@ -11,6 +12,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.naive_bayes import MultinomialNB
 
 from ..util import file_handling as fh
+from ..preprocessing import data_splitting as ds
 
 # SVMNB and defaults taken from http://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf
 
@@ -73,8 +75,21 @@ class SparseModel:
             self.model_type = 'default'
             self.model = None
 
+    def set_alpha(self, alpha):
+        self.params['alpha'] = alpha
+        if self.model_type == 'LR':
+            self.model.set_params(C=alpha)
+        elif self.model_type == 'SVM' or self.model_type == 'SVMNB':
+            self.model.set_params(C=alpha)
+        elif self.model_type == 'MNB':
+            self.model.set_params(alpha=alpha)
+
     def fit(self, X, y):
         n_items, n_features = X.shape
+        test1 = X[0, :]
+        test2= X[1, :]
+        test3 = X[2, :]
+        test4 = X[234, :]
         if y.sum() == 0 or y.sum() == n_items or self.model_type == 'default':
             counts = np.bincount(y)
             y_mode = np.argmax(counts)
@@ -110,6 +125,60 @@ class SparseModel:
             self.model.coef_ = (1 - self.params['beta']) * w_bar + self.params['beta'] * w
         else:
             self.model.fit(X, y)
+
+    def tune_alpha(self, X, y, alpha_values, train_indices, valid_indices, reuser=None, verbose=1):
+        train_f1s = []
+        valid_f1s = []
+        X_train = X[train_indices, :]
+        X_valid = X[valid_indices, :]
+        y_train = y[train_indices]
+        y_valid = y[valid_indices]
+
+        if verbose > 1:
+            print "Train:", X_train.shape, " Dev:", X_valid.shape
+
+        for alpha in alpha_values:
+            self.set_alpha(alpha)
+            self.fit(X_train, y_train)
+
+            f1_train, acc_train = self.eval_f1_acc(X_train, y_train)
+            f1_valid, acc_valid = self.eval_f1_acc(X_valid, y_valid)
+
+            if reuser is not None:
+                f1_valid = reuser.mask_value(f1_valid, f1_train)
+
+            train_f1s.append(f1_train)
+            valid_f1s.append(f1_valid)
+
+        return train_f1s, valid_f1s
+
+    # X = sparse matrix (indices x features)
+    # y = vector (indices x 1)
+    # alpha_values = list of alpha values to try
+    # td_splits = vector ot train/dev split values (indices x 1)
+    def tune_by_cv(self, X, y, alpha_values, td_splits, n_dev_folds, reuser=None, verbose=1):
+        column_names = [str(l) for l in alpha_values]
+        valid_f1_summary = pd.DataFrame(np.zeros([n_dev_folds, len(alpha_values)]),
+                                        index=range(n_dev_folds), columns=column_names)
+
+        for dev_fold in range(n_dev_folds):
+            train_indices = np.array(td_splits != dev_fold)
+            valid_indices = np.array(td_splits == dev_fold)
+
+            train_f1s, valid_f1s = self.tune_alpha(X, y, alpha_values, train_indices, valid_indices, reuser=reuser,
+                                                   verbose=verbose)
+
+            valid_f1_summary.loc[dev_fold] = valid_f1s
+
+            if verbose > 1:
+                print dev_fold, valid_f1s
+
+        mean_valid_f1s = valid_f1_summary.mean(axis=0)
+        best_alpha = float(mean_valid_f1s.idxmax())
+        self.set_alpha(best_alpha)
+
+        return valid_f1_summary, best_alpha
+
 
     def get_coefs(self):
         if self.model_type == 'default' or self.model_type == 'SVM':
@@ -173,7 +242,6 @@ class SparseModel:
         else:
             output = {'default': self.default}
         fh.write_to_json(output, output_filename, sort_keys=False)
-
 
 
 def baseline_model(y):

@@ -9,6 +9,7 @@ import pandas as pd
 from scipy import stats
 from scipy import sparse
 
+from . import reusable_holdout
 from ..models.sparse_model import SparseModel
 from ..experiment import evaluation
 from ..util import file_handling as fh, defines
@@ -91,148 +92,114 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type='LR
                          reuse=False, orig_T=0.04, tau=0.01, verbose=1,
                          best_alphas=None, svm_beta=0):
 
-    # create experiments directory
+    # create experiments directory and save the parameters for this experiment
     exp_dir = make_exp_dir(datasets, test_fold, name)
+    print exp_dir
     params_list = [exp_dir, name, datasets, test_fold, feature_list, model_type, regularization,
                    min_alpha_exp, max_alpha_exp, alpha_exp_base, reuse, orig_T, tau, best_alphas]
     params_names =  '[exp_dir, name, datasets, test_fold, feature_list, model_type, regularization,\
         min_alpha_exp, max_alpha_exp, alpha_exp_base, reuse, orig_T, tau, best_alphas]'
     write_log(exp_dir, params_names, params_list)
 
-    T_hat = orig_T
+    # create the reusable holdout if desired
+    reuser = None
     if reuse:
-        gamma = stats.laplace.rvs(scale=4*tau/np.sqrt(2))
-        T_hat = orig_T + gamma
+        reuser = reusable_holdout.ReuseableHoldout(T=orig_T, tau=tau)
 
-    ys = []
-    codes = None
-    for f in datasets:
-        # load all labels for this dataset
-        multi_y = labels.get_labels(f)
-        ys.append(multi_y)
-        if codes is None:
-            codes = multi_y.columns
-        else:
-            assert (codes == multi_y.columns).all()
-    y = pd.concat(ys, axis=0)
-
-    #summary_per_code = create_summary_dfs_per_code(datasets, codes, y, test_fold, np.arange(len(codes)))
-
-    # build an index of the items in the datasets for this group
-    test_items = []
-    index = []
-    for dataset in datasets:
-        test_items.extend(ds.get_test_documents(dataset, test_fold))
-        index.extend(ds.get_all_documents(dataset))
-
+    # load the labels
+    all_y = labels.get_labels(datasets)
+    index = all_y.index.tolist()
+    codes = all_y.columns
     n_dev_folds = ds.get_n_dev_folds(datasets[0])
 
-    if best_alphas is None:
+    # load the features
+    X, column_names = load_features(feature_list, test_fold, None, index, verbose=verbose)
 
+    # if alpha values were not provided, choose them by cross-validation + grid search
+    models = {}
+    if best_alphas is None:
+        print "Tuning hyperparameters"
+        # choose the values of alpha to try based on the input
         alpha_exponents = np.arange(min_alpha_exp, max_alpha_exp+1)
         alphas = alpha_exp_base**alpha_exponents
 
         train_f1s = {}
         valid_f1s = {}
-        for code in codes:
-            train_f1s[code] = pd.DataFrame(np.zeros([n_dev_folds, len(alphas)]),
-                                           index=range(n_dev_folds), columns=[str(l) for l in alphas])
-            valid_f1s[code] = pd.DataFrame(np.zeros([n_dev_folds, len(alphas)]),
-                                           index=range(n_dev_folds), columns=[str(l) for l in alphas])
 
-        # do cross validation on the dev_subfolds
-        print "Doing cross validation"
-        for dev_subfold in range(n_dev_folds):
+        train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, None)
+        train_items, train_indices = get_items_and_indices(datasets, train_dict, index)
+        td_split_list = np.array(ds.get_td_split_list(datasets, test_fold))
 
-            # get a list of training and validation items for this dev fold
-            train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, dev_subfold)
-
-            X, column_names = load_features(feature_list, test_fold, dev_subfold, index)
-            if verbose > 0:
-                n_train = np.sum([len(train_dict[f]) for f in datasets])
-                print 'dev_fold =', str(dev_subfold), '; n_train =', n_train, '; n_features =', len(column_names)
-
-            # train a best model for each data set based on the training and dev data
-            cv_train_f1s, cv_valid_f1s = compare_r_strengths(datasets, X, index, column_names, y,
-                                                             train_dict, valid_dict,
-                                                             model_type, regularization=regularization,
-                                                             alphas=alphas, beta=beta,
-                                                             reuse=reuse, orig_T=orig_T, T_hat=T_hat, tau=tau)
-
-            #print cv_train_f1s
-            if verbose > 1:
-                print cv_valid_f1s
-
-            for code_index, code in enumerate(codes):
-                train_f1s[code].loc[dev_subfold] = cv_train_f1s.loc[code]
-                valid_f1s[code].loc[dev_subfold] = cv_valid_f1s.loc[code]
-
-        # determine best value of the model parameter
         best_alphas = []
+        X_train = X[train_indices, :]
         for code in codes:
-            best_alpha = valid_f1s[code].mean(axis=0).idxmax()
-            best_alphas.append(float(best_alpha))
-            if verbose > 1:
-                print "Code:", code, " y sum:", y[code].sum(),  " best lambda:", best_alpha, \
-                    " mean_f1_dev:", valid_f1s[code].loc[:, str(best_alpha)].mean(), \
-                    " mean_f1_train:", train_f1s[code].loc[:, str(best_alpha)].mean()
+            y = all_y.loc[train_items, code].as_matrix()
+            model = SparseModel(model_type=model_type, column_names=column_names, regularization=regularization,
+                                beta=beta)
+            valid_f1s[code], best_alpha = model.tune_by_cv(X_train, y, alphas, td_split_list, n_dev_folds,
+                                                           reuser=reuser, verbose=verbose)
+            best_alphas.append(best_alpha)
+            models[code] = model
+            print code, '; y_sum = ' + str(y.sum()) + '; best alpha =', best_alpha,\
+                "; valid f1 = ", valid_f1s[code].mean(axis=0)[str(best_alpha)]
+
+    else:
+        # otherwise, just use the ones that were provided
+        for code_index, code in enumerate(codes):
+            models[code] = SparseModel(model_type=model_type, column_names=column_names, regularization=regularization,
+                                beta=beta, alpha=float(best_alphas[code_index]))
 
     # re-run above, with best lambda, to get predictions (to estimate expected dev performance)
     print "Estimating hold-out performance"
     train_cv_summary = create_summary_dfs(datasets)
     valid_cv_summary = create_summary_dfs(datasets)
     masked_valid_cv_summary = create_summary_dfs(datasets)
-    summary_per_code = create_summary_dfs_per_code(datasets, codes, y, test_fold, best_alphas)
-    for dev_subfold in range(n_dev_folds):
-        # get a list of training and validation items for this dev fold
-        train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, dev_subfold)
 
-        X, column_names = load_features(feature_list, test_fold, dev_subfold, index)
-        if verbose > 0:
-            n_train = np.sum([len(train_dict[f]) for f in datasets])
-            print 'dev_fold =', str(dev_subfold), '; n_train =', n_train, '; n_features =', len(column_names)
+    summary_per_code = create_summary_dfs_per_code(datasets, codes, all_y, test_fold, best_alphas)
 
-        pred_train, pred_valid,\
-        pred_train_prob, pred_valid_prob, models = train_and_predict(datasets, X, index, column_names, y, train_dict,
-                                                                     valid_dict, model_type,
-                                                                     regularization=regularization,
-                                                                     alphas=best_alphas, beta=beta, verbose=verbose)
+    for dev_fold in range(n_dev_folds):
+        print "fold", dev_fold
+        train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, dev_fold)
 
-        evaluate_predictions(train_cv_summary, datasets, pred_train, y, train_dict, 'dev_fold_' + str(dev_subfold))
-        evaluate_predictions(valid_cv_summary, datasets, pred_valid, y, valid_dict, 'dev_fold_' + str(dev_subfold))
+        pred_train, pred_valid, \
+        pred_train_prob, pred_valid_prob = train_and_predict(datasets, X, index, column_names, all_y,
+                                                             train_dict, valid_dict, models,
+                                                             verbose=verbose)
 
-        T_hat = evaluate_predictions(masked_valid_cv_summary, datasets, pred_valid, y, valid_dict,
-                                     'dev_fold_' + str(dev_subfold),
-                                     reuse=reuse, orig_T=orig_T, T_hat=T_hat, tau=tau, train_summary=train_cv_summary)
+        evaluate_predictions(train_cv_summary, datasets, pred_train, all_y, train_dict, 'dev_fold_' + str(dev_fold))
+        evaluate_predictions(valid_cv_summary, datasets, pred_valid, all_y, valid_dict, 'dev_fold_' + str(dev_fold))
+        evaluate_predictions(masked_valid_cv_summary, datasets, pred_valid, all_y, valid_dict,
+                             'dev_fold_' + str(dev_fold), reuser=reuser, train_summary=train_cv_summary)
 
-        evaluate_predictions_per_code(summary_per_code, datasets, pred_valid, y, valid_dict, 'f1_dev_fold_'
-                                      + str(dev_subfold))
+        evaluate_predictions_per_code(summary_per_code, datasets, pred_valid, all_y, valid_dict, 'f1_dev_fold_'
+                                      + str(dev_fold))
 
-    print "Train CV summary:"
-    print train_cv_summary['macrof1']
-    print "Validation CV summary:"
-    print valid_cv_summary['macrof1']
-    print "Noisy validation CV summary:"
-    print masked_valid_cv_summary['macrof1']
+    if verbose > 0:
+        print "Train CV summary:"
+        print train_cv_summary['macrof1']
+        print "Validation CV summary:"
+        print valid_cv_summary['macrof1']
+        print "Noisy validation CV summary:"
+        print masked_valid_cv_summary['macrof1']
     write_summary_dfs_to_file(exp_dir, 'train_cv', train_cv_summary)
     write_summary_dfs_to_file(exp_dir, 'valid_cv', valid_cv_summary)
     write_summary_dfs_to_file(exp_dir, 'masked_valid_cv', masked_valid_cv_summary)
 
     # finally, train one full model and evaluate on the test data
-    dev_subfold = None
     print "Training final model"
     train_summary = create_summary_dfs(datasets)
     test_summary = create_summary_dfs(datasets)
+    dev_subfold = None
     train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, dev_subfold)
     X, column_names = load_features(feature_list, test_fold, dev_subfold, index)
     if verbose > 0:
         n_train = np.sum([len(train_dict[f]) for f in datasets])
-        print 'dev_fold =', str(dev_subfold), '; n_train =', n_train, '; n_features =', len(column_names)
+        print ' n_train =', n_train, '; n_features =', len(column_names)
 
-    pred_train, pred_test, pred_train_prob,\
-    pred_test_prob, models = train_and_predict(datasets, X, index, column_names, y, train_dict, test_dict,
-                                               model_type, regularization=regularization,
-                                               alphas=best_alphas, beta=beta, verbose=verbose)
+    pred_train, pred_test,\
+    pred_train_prob, pred_test_prob = train_and_predict(datasets, X, index, column_names,
+                                                        all_y, train_dict, test_dict,
+                                                        valid_dict, models, verbose=verbose)
 
     for f in datasets:
         pred_train[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'train', 'csv'))
@@ -240,10 +207,10 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type='LR
         pred_train_prob[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'train_prob', 'csv'))
         pred_test_prob[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'test_prob', 'csv'))
 
-    evaluate_predictions(train_summary, datasets, pred_train, y, train_dict, 'train')
-    evaluate_predictions(test_summary,  datasets, pred_test,  y, test_dict,  'test')
-    evaluate_predictions_per_code(summary_per_code, datasets, pred_train, y, train_dict, 'f1_train')
-    evaluate_predictions_per_code(summary_per_code, datasets, pred_test, y, test_dict, 'f1_test')
+    evaluate_predictions(train_summary, datasets, pred_train, all_y, train_dict, 'train')
+    evaluate_predictions(test_summary,  datasets, pred_test,  all_y, test_dict,  'test')
+    evaluate_predictions_per_code(summary_per_code, datasets, pred_train, all_y, train_dict, 'f1_train')
+    evaluate_predictions_per_code(summary_per_code, datasets, pred_test, all_y, test_dict, 'f1_test')
 
     write_summary_dfs_to_file(exp_dir, 'train', train_summary)
     write_summary_dfs_to_file(exp_dir, 'test',  test_summary)
@@ -267,6 +234,7 @@ def load_features(feature_list, test_fold, dev_subfold, items, verbose=1):
     # for each feature in feature_list:
     feature_matrices = []
     column_names = []
+    print "Loading features"
     for feature in feature_list:
         feature_description = feature + ',test_fold=' + str(test_fold)
         # TRYING THIS: JUST USE ALL THE ITEMS TO BUILD THE VOCAB...
@@ -305,62 +273,12 @@ def get_items_and_indices(datasets, item_dict, index):
     return items, indices
 
 
-def compare_r_strengths(datasets, X, index, column_names, all_y, train_dict, valid_dict,
-                        model_type, regularization=None, alphas=None, beta=None,
-                        reuse=False, orig_T=None, T_hat=None, tau=None):
-
-    codes = all_y.columns
-    cv_train_f1s = pd.DataFrame(np.zeros([len(codes), len(alphas)]), index=codes, columns=[str(l) for l in alphas])
-    cv_valid_f1s = pd.DataFrame(np.zeros([len(codes), len(alphas)]), index=codes, columns=[str(l) for l in alphas])
-
-    train_items, train_indices = get_items_and_indices(datasets, train_dict, index)
-    valid_items, valid_indices = get_items_and_indices(datasets, valid_dict, index)
-
-    # go through labels one by one
-    for code in codes:
-        y = all_y[code].as_matrix()
-
-        #if y.sum() == 0:
-        if False:
-            ## I THINK I CAN DELETE ALL OF THIS...
-            """
-            model = models_sparse.train_model(X[train_indices, :], y.loc[train_items].as_matrix(), column_names,
-                                              model_type=model_type, penalty=regularizer, alpha=0)
-            f1_train, acc_train = model.eval_f1_acc(X[train_indices, :], y.loc[train_items])
-            f1_dev, acc_dev = model.eval_f1_acc(X[valid_indices, :], y.loc[valid_items])
-
-            for r_strength in lambdas:
-                if reuse:
-                    f1_dev, T_hat = mask_valid_f1(f1_dev, f1_train, orig_T, T_hat, tau)
-
-                cv_train_f1s.loc[code, str(r_strength)] = f1_train
-                cv_valid_f1s.loc[code, str(r_strength)] = f1_dev
-            """
-            pass
-        else:
-            for alpha in alphas:
-                model = SparseModel(model_type=model_type, column_names=column_names,
-                                    regularization=regularization, alpha=alpha, beta=beta)
-
-                model.fit(X[train_indices, :], y[train_indices])
-
-                f1_train, acc_train = model.eval_f1_acc(X[train_indices, :], y[train_indices])
-                f1_dev, acc_dev = model.eval_f1_acc(X[valid_indices, :], y[valid_indices])
-
-                if reuse:
-                    f1_dev, T_hat = mask_valid_f1(f1_dev, f1_train, orig_T, T_hat, tau)
-
-                cv_train_f1s.loc[code, str(alpha)] = f1_train
-                cv_valid_f1s.loc[code, str(alpha)] = f1_dev
-
-    return cv_train_f1s, cv_valid_f1s
-
-
 def train_and_predict(datasets, X, index, column_names, all_y, train_dict, valid_dict,
-                      model_type, regularization=None, alphas=None, beta=None, verbose=1):
+                      models, verbose=1):
 
     codes = all_y.columns
 
+    # get a list of training and validation items for this dev fold
     train_items, train_indices = get_items_and_indices(datasets, train_dict, index)
     valid_items, valid_indices = get_items_and_indices(datasets, valid_dict, index)
 
@@ -370,17 +288,11 @@ def train_and_predict(datasets, X, index, column_names, all_y, train_dict, valid
     prediction_matrices_train_prob = create_prediction_matrices(datasets, train_dict, dtype=float)
     prediction_matrices_valid_prob = create_prediction_matrices(datasets, valid_dict, dtype=float)
 
-    models = {}
-
     for code_index, code in enumerate(codes):
-        y = all_y[code].as_matrix()
+        y_train = all_y.loc[train_items, code].as_matrix()
 
-        model = SparseModel(model_type=model_type, column_names=column_names,
-                            regularization=regularization, alpha=float(alphas[code_index]), beta=beta)
-
-        model.fit(X[train_indices, :], y[train_indices])
-
-        models[code] = model
+        model = models[code]
+        model.fit(X[train_indices, :], y_train)
 
         # make predictions
         predictions_train = model.predict(X[train_indices, :])
@@ -398,14 +310,13 @@ def train_and_predict(datasets, X, index, column_names, all_y, train_dict, valid
                 prediction_matrices_valid[f][code] = predictions_valid[f_valid_indices]
                 prediction_matrices_valid_prob[f][code] = predictions_valid_prob[f_valid_indices]
 
-    return prediction_matrices_train, prediction_matrices_valid, \
-        prediction_matrices_train_prob, prediction_matrices_valid_prob, models
+    return prediction_matrices_train, prediction_matrices_valid, prediction_matrices_train_prob, prediction_matrices_valid_prob
 
 
 def create_prediction_matrices(datasets, items_dict, dtype=int):
     prediction_matrices = {}
     for dataset in datasets:
-        y = labels.get_labels(dataset)
+        y = labels.get_datset_labels(dataset)
         prediction_matrices[dataset] = pd.DataFrame(np.zeros([len(items_dict[dataset]), len(y.columns)],
                                                     dtype=dtype), index=items_dict[dataset],
                                                     columns=y.columns)
@@ -422,16 +333,16 @@ def create_summary_dfs(datasets):
 
 
 def evaluate_predictions(output_dfs, datasets, predictions, true, item_dict, rowname,
-                         reuse=False, orig_T=None, T_hat=None, tau=None, train_summary=None):
+                         reuser=None, train_summary=None):
     true_concat = []
     pred_concat = []
     for f in datasets:
         if len(item_dict[f]) > 0:
             micro_f1, acc = evaluation.calc_micro_mean_f1_acc(true.loc[item_dict[f]], predictions[f])
             macro_f1, pp = evaluation.calc_macro_mean_f1_pp(true.loc[item_dict[f]], predictions[f])
-            if reuse:
-                micro_f1, T_hat = mask_valid_f1(micro_f1, train_summary['microf1'].loc[rowname, f], orig_T, T_hat, tau)
-                macro_f1, T_hat = mask_valid_f1(macro_f1, train_summary['macrof1'].loc[rowname, f], orig_T, T_hat, tau)
+            if reuser is not None:
+                micro_f1 = reuser.mask_value(micro_f1, train_summary['microf1'].loc[rowname, f])
+                macro_f1 = reuser.mask_value(macro_f1, train_summary['macrof1'].loc[rowname, f])
             output_dfs['microf1'].loc[rowname, f] = micro_f1
             output_dfs['macrof1'].loc[rowname, f] = macro_f1
             output_dfs['acc'].loc[rowname, f] = acc
@@ -442,14 +353,13 @@ def evaluate_predictions(output_dfs, datasets, predictions, true, item_dict, row
     true_concat = pd.concat(true_concat, axis=0)
     micro_f1, acc = evaluation.calc_micro_mean_f1_acc(true_concat, pred_concat)
     macro_f1, pp = evaluation.calc_macro_mean_f1_pp(true_concat, pred_concat)
-    if reuse:
-        micro_f1, T_hat = mask_valid_f1(micro_f1, train_summary['microf1'].loc[rowname, 'overall'], orig_T, T_hat, tau)
-        macro_f1, T_hat = mask_valid_f1(macro_f1, train_summary['macrof1'].loc[rowname, 'overall'], orig_T, T_hat, tau)
+    if reuser is not None:
+        micro_f1 = reuser.mask_value(micro_f1, train_summary['microf1'].loc[rowname, 'overall'])
+        macro_f1 = reuser.mask_value(macro_f1, train_summary['macrof1'].loc[rowname, 'overall'])
     output_dfs['microf1'].loc[rowname, 'overall'] = micro_f1
     output_dfs['macrof1'].loc[rowname, 'overall'] = macro_f1
     output_dfs['acc'].loc[rowname, 'overall'] = acc
     output_dfs['pp'].loc[rowname, 'overall'] = pp
-    return T_hat
 
 
 def create_summary_dfs_per_code(datasets, codes, true, test_fold, best_lambdas):

@@ -22,7 +22,7 @@ def load_data(datasets, test_fold, dev_subfold):
         train_items.extend(ds.get_train_documents(d, test_fold, dev_subfold))
         dev_items.extend(ds.get_dev_documents(d, test_fold, dev_subfold))
         test_items.extend(ds.get_test_documents(d, test_fold))
-        label_list.append(labels.get_labels(d))
+        label_list.append(labels.get_datset_labels(d))
 
     items = (train_items, dev_items, test_items)
 
@@ -92,7 +92,7 @@ def load_embeddings(params, words2idx):
 
 
 def write_predictions(datasets, predictions, items, output_dir):
-    true_labels = labels.get_labels(datasets[0])
+    true_labels = labels.get_datset_labels(datasets[0])
     predictions_df = pd.DataFrame(np.zeros([len(items), len(true_labels.columns)]),
                                   index=items, columns=true_labels.columns)
 
@@ -103,7 +103,7 @@ def write_predictions(datasets, predictions, items, output_dir):
     count = 0
     for d in datasets:
         dev_items = ds.get_dev_documents(d, 0, 0)
-        true_labels = labels.get_labels(d)
+        true_labels = labels.get_datset_labels(d)
         print count, len(dev_items)
         output_df = predictions_df.loc[dev_items]
         #output_df = pd.DataFrame(np.zeros([len(items), len(true_labels.columns)]),

@@ -20,7 +20,7 @@ def main(param=None):
     # evaluate performance
     for d in datasets:
         dev_items = ds.get_dev_documents(d, 0, 0)
-        true_labels = labels.get_labels(d)
+        true_labels = labels.get_datset_labels(d)
 
         report_header = evaluation.get_report_header(d, test_fold=0, dev_subfold=0)
 

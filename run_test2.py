@@ -1,8 +1,8 @@
-from code.experiment.experiment import run_group_experiment
+from core.experiment.experiment import run_group_experiment
 
 run_group_experiment('test_dlrd', ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes'],
                      test_fold=0, feature_list=['ngrams,binarize=True'],
-                     min_alpha_exp=0, max_alpha_exp=0, model_type='SVMNB')
+                     model_type='LR', verbose=1)
 
 
 """

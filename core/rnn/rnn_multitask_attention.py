@@ -286,7 +286,7 @@ def main(params=None):
         train_items.extend(ds.get_train_documents(d, params['test_fold'], params['dev_subfold']))
         dev_items.extend(ds.get_dev_documents(d, params['test_fold'], params['dev_subfold']))
         test_items.extend(ds.get_test_documents(d, params['test_fold']))
-        label_list.append(labels.get_labels(d))
+        label_list.append(labels.get_datset_labels(d))
 
     all_labels = pd.concat(label_list, axis=0)
 

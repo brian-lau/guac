@@ -64,7 +64,7 @@ def calc_macro_mean_f1_pp(true, predicted):
 def get_report_header(dataset, test_fold, dev_subfold):
     training_items = ds.get_train_documents(dataset, test_fold, dev_subfold)
     dev_items = ds.get_dev_documents(dataset, test_fold, dev_subfold)
-    multi_y = labels.get_labels(dataset)
+    multi_y = labels.get_dataset_labels(dataset)
 
     n_items, n_tasks = multi_y.shape
 

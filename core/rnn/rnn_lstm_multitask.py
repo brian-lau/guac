@@ -88,56 +88,78 @@ class RNNSLU(object):
             self.emb = theano.shared(name='embeddings',
                                      value=initial_embeddings.astype(theano.config.floatX))
 
-        self.wr = theano.shared(name='wr',
+        self.W_xf = theano.shared(name='W_xf',
                                 value=0.2 * np.random.uniform(-1.0, 1.0,
                                                               (de * cs, nh))
                                 .astype(theano.config.floatX))
-        self.ur = theano.shared(name='ur',
+        self.W_hf = theano.shared(name='W_hf',
                                 value=0.2 * np.random.uniform(-1.0, 1.0,
                                                               (nh, nh))
                                 .astype(theano.config.floatX))
-        self.br = theano.shared(name='br',
-                                value=np.zeros(nh,
-                                               dtype=theano.config.floatX))
-        self.wz = theano.shared(name='wz',
+        self.W_cf = theano.shared(name='W_cf',
+                                  value=0.2 * np.random.uniform(-1.0, 1.0,
+                                                                (nh, nh))
+                                  .astype(theano.config.floatX))
+        self.b_f = theano.shared(name='b_f', value=np.array(np.random.uniform(0.0, 1.0, nh),
+                                                            dtype=theano.config.floatX))
+        self.W_xi = theano.shared(name='W_xi',
                                 value=0.2 * np.random.uniform(-1.0, 1.0,
                                                               (de * cs, nh))
                                 .astype(theano.config.floatX))
-        self.uz = theano.shared(name='uz',
+        self.W_hi = theano.shared(name='W_hi',
                                 value=0.2 * np.random.uniform(-1.0, 1.0,
                                                               (nh, nh))
                                 .astype(theano.config.floatX))
-        self.bz = theano.shared(name='bz',
-                                value=np.zeros(nh,
-                                               dtype=theano.config.floatX))
-        self.wh = theano.shared(name='wh',
+        self.W_ci = theano.shared(name='W_ci',
+                                  value=0.2 * np.random.uniform(-1.0, 1.0,
+                                                                (nh, nh))
+                                  .astype(theano.config.floatX))
+        self.b_i = theano.shared(name='b_i', value=np.zeros(nh, dtype=theano.config.floatX))
+        self.W_xo = theano.shared(name='W_xo',
+                                value=0.2 * np.random.uniform(-1.0, 1.0,
+                                                              (de * cs, nh))
+                                .astype(theano.config.floatX))
+        self.W_ho = theano.shared(name='W_ho',
+                                value=0.2 * np.random.uniform(-1.0, 1.0,
+                                                              (nh, nh))
+                                .astype(theano.config.floatX))
+        self.W_co = theano.shared(name='W_co',
+                                  value=0.2 * np.random.uniform(-1.0, 1.0,
+                                                                (nh, nh))
+                                  .astype(theano.config.floatX))
+        self.b_o = theano.shared(name='b_o', value=np.zeros(nh, dtype=theano.config.floatX))
+        self.W_xc = theano.shared(name='W_xc',
                                 value=0.2 * np.random.uniform(-1.0, 1.0,
                                                                  (de * cs, nh))
                                 .astype(theano.config.floatX))
-        self.uh = theano.shared(name='uh',
+        self.W_hc = theano.shared(name='W_hc',
                                 value=0.2 * np.random.uniform(-1.0, 1.0,
                                                                  (nh, nh))
                                 .astype(theano.config.floatX))
-        self.bh = theano.shared(name='bh',
+        self.b_c = theano.shared(name='b_c',
                                 value=np.zeros(nh,
                                                dtype=theano.config.floatX))
-        self.ws = theano.shared(name='ws',
+        self.W_s = theano.shared(name='W_s',
                                value=0.2 * np.random.uniform(-1.0, 1.0,
                                                                 (nh, nc))
                                .astype(theano.config.floatX))
-        self.bs = theano.shared(name='bs',
+        self.b_s = theano.shared(name='b_s',
                                value=np.zeros(nc,
                                                  dtype=theano.config.floatX))
-        self.hi = theano.shared(name='hi',
+        self.h_i = theano.shared(name='h_i',
                                 value=np.zeros(nh,
                                                   dtype=theano.config.floatX))
+        self.c_i = theano.shared(name='c_i',
+                                value=np.zeros(nh,
+                                               dtype=theano.config.floatX))
 
         # bundle
         self.params = [self.emb,
-                       self.wr, self.ur, self.br,
-                       self.wz, self.uz, self.bz,
-                       self.wh, self.uh, self.bh,
-                       self.ws, self.bs]
+                       self.W_xf, self.W_xi, self.W_xo, self.W_xc,
+                       self.W_hf, self.W_hi, self.W_ho, self.W_hc,
+                       self.W_cf, self.W_ci, self.W_co,
+                       self.b_f, self.b_i, self.b_o, self.b_c,
+                       self.W_s, self.b_s]
         # start-snippet-3
         idxs = T.imatrix()
         x = self.emb[idxs].reshape((idxs.shape[0], de*cs))
@@ -146,15 +168,15 @@ class RNNSLU(object):
         #h_i = T.alloc(np.asarray(0., dtype='float32'), nh, 1)
         # end-snippet-3 start-snippet-4
 
-        def recurrence(x_t, h_tm1):
-            r_t = T.nnet.sigmoid(T.dot(x_t, self.wr) + T.dot(h_tm1, self.ur) + self.br)
-            z_t = T.nnet.sigmoid(T.dot(x_t, self.wz) + T.dot(h_tm1, self.uz) + self.bz)
-            temp = r_t * T.dot(h_tm1, self.uh)
-            g_t = T.tanh(T.dot(x_t, self.wh) + temp + self.bh)
-            h_t = (1 - z_t) * h_tm1 + z_t * g_t
-            #h_t = g_t * T.repeat(z_t, nh)
-            s_t = T.nnet.sigmoid(T.dot(h_t, self.ws) + self.bs)
-            return [h_t, s_t]
+        def recurrence(x_t, h_tm1, c_tm1):
+            i_t = T.nnet.sigmoid(T.dot(x_t, self.W_xi) + T.dot(h_tm1, self.W_hi) + T.dot(c_tm1, self.W_ci) + self.b_i)
+            f_t = T.nnet.sigmoid(T.dot(x_t, self.W_xf) + T.dot(h_tm1, self.W_hf) + T.dot(c_tm1, self.W_cf) + self.b_f)
+            d_t = T.tanh(T.dot(x_t, self.W_xc) + T.dot(h_tm1, self.W_hc) + self.b_c)
+            c_t = f_t * c_tm1 + i_t * d_t
+            o_t = T.nnet.sigmoid(T.dot(x_t, self.W_xo) + T.dot(h_tm1, self.W_ho) + T.dot(c_t, self.W_co) + self.b_o)
+            h_t = o_t * c_t
+            s_t = T.nnet.sigmoid(T.dot(h_t, self.W_s) + self.b_s)
+            return [h_t, c_t, s_t]
 
         """
         h, _ = theano.scan(fn=recurrence,
@@ -163,7 +185,8 @@ class RNNSLU(object):
                                 n_steps=x.shape[0])
         """
 
-        [h, s], _ = theano.scan(fn=recurrence, sequences=x, outputs_info=[self.hi, None], n_steps=x.shape[0])
+        [h, c, s], _ = theano.scan(fn=recurrence, sequences=x, n_steps=x.shape[0],
+                                outputs_info=[self.h_i, self.c_i, None], )
 
 
         # add a logistic layer after the last hidden node
@@ -280,7 +303,7 @@ def main(param=None):
             # decay on the learning rate if improvement stops
             'win': 1,
             # number of words in the context window
-            'nhidden': 50,
+            'nhidden': 25,
             # number of hidden units
             'seed': 345,
             'word2vec_dim': 300,
@@ -305,7 +328,7 @@ def main(param=None):
         train_items.extend(ds.get_train_documents(d, param['test_fold'], param['dev_subfold']))
         dev_items.extend(ds.get_dev_documents(d, param['test_fold'], param['dev_subfold']))
         test_items.extend(ds.get_test_documents(d, param['test_fold']))
-        label_list.append(labels.get_labels(d))
+        label_list.append(labels.get_datset_labels(d))
 
     all_labels = pd.concat(label_list, axis=0)
 

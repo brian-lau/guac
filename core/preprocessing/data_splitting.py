@@ -135,6 +135,19 @@ def get_n_dev_folds(input_filename):
     df = pd.read_csv(filename, header=0, index_col=0)
     return df['minor_split'].max()+1
 
+def get_td_split_list(datasets, test_fold):
+    df = get_tdt_splits(datasets)
+    df = df[df['major_split'] != test_fold]
+    return df['minor_split'].tolist()
+
+def get_tdt_splits(datasets):
+    input_dir = defines.data_subsets_dir
+    dataframes = []
+    for f in datasets:
+        filename = fh.make_filename(input_dir, f, 'csv')
+        dataframes.append(pd.read_csv(filename, header=0, index_col=0))
+    return pd.concat(dataframes, axis=0)
+
 
 if __name__ == '__main__':
     main()

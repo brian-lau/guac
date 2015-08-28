@@ -38,8 +38,8 @@ def load_feature(feature_description, index_to_load, verbose=1):
 
     counts, index, column_names = extractor.get_counts()
     #index = [items.index(i) for i in index_to_load]
-    index_to_load = index.loc[index_to_load, 'index']
-    return counts[index_to_load, :], column_names
+    indices_to_load = index.loc[index_to_load, 'index']
+    return counts[indices_to_load, :], column_names
 
 
 def kwargs_list_to_dict(list_of_kwargs):
