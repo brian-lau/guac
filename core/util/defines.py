@@ -31,7 +31,12 @@ data_token_dir = os.path.join(data_dir, 'tokens')
 data_values_dir = os.path.join(data_dir, 'values')
 data_feature_dir = os.path.join(data_dir, 'features')
 data_featuredefns_dir = os.path.join(data_dir, 'feature_definitions')
-data_semafor_dir = os.path.join(data_dir, 'semafor')
+data_processed_dir = os.path.join(data_dir, 'processed')
+data_processed_text_dir = os.path.join(data_processed_dir, 'text')
+data_semafor_dir = os.path.join(data_processed_dir, 'semafor')
+data_stanford_dir = os.path.join(data_processed_dir, 'stanford')
+
+data_normalized_text_file = os.path.join(data_processed_text_dir, 'normalized.json')
 
 resources_group_dir = os.path.join(resources_dir, 'groups')
 resources_clusters_dir = os.path.join(resources_dir, 'clusters')

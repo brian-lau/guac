@@ -23,7 +23,7 @@ class FeatureExtractorCountsBrownClusters(FeatureExtractorCounts):
         FeatureExtractorCountsBrownClusters.extend_dirname(self)
 
     def extend_dirname(self):
-        self.dirname = self.dirname + '_' + self.params['clusters']
+        self.dirname = self.dirname + ',' + self.params['clusters']
 
     def get_dirname(self):
         return self.dirname

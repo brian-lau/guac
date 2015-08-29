@@ -86,7 +86,6 @@ def write_log(exp_dir, names_list, values_list):
     fh.write_to_json(summary, output_filename)
 
 # Run an experiment on a group of questions
-@profile
 def run_group_experiment(name, datasets, test_fold, feature_list, model_type='LR', regularization='l1',
                          min_alpha_exp=-1, max_alpha_exp=8, alpha_exp_base=np.sqrt(10), beta=1,
                          reuse=False, orig_T=0.04, tau=0.01, verbose=1,
@@ -199,7 +198,7 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type='LR
     pred_train, pred_test,\
     pred_train_prob, pred_test_prob = train_and_predict(datasets, X, index, column_names,
                                                         all_y, train_dict, test_dict,
-                                                        valid_dict, models, verbose=verbose)
+                                                        models, verbose=verbose)
 
     for f in datasets:
         pred_train[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'train', 'csv'))

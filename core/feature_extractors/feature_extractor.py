@@ -35,8 +35,8 @@ class FeatureExtractor:
         return self.params['dev_subfold']
 
     def make_dirname(self):
-        dirname = self.get_name() + '_' + self.get_type() + '_' \
-            + str(self.get_test_fold()) + '_' + str(self.get_dev_subfold())
+        dirname = self.get_name() + ',' + self.get_type() + ',' \
+            + str(self.get_test_fold()) + ',' + str(self.get_dev_subfold())
         return os.path.join(defines.features_dir, dirname)
 
     @classmethod

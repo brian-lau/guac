@@ -1,3 +1,4 @@
+
 import re
 import ast
 from optparse import OptionParser
@@ -16,7 +17,7 @@ from ..util import file_handling as fh
 class FeatureExtractorCountsNgrams(FeatureExtractorCounts):
 
     def __init__(self, test_fold=0, dev_subfold=None, n=1, min_doc_threshold=1, binarize=True,
-                 concat_oov_counts=False, append_dataset=False):
+                 concat_oov_counts=False, append_dataset=False, source='text'):
         #print "Creating from arguments"
         name = 'ngrams'
         prefix = '_n' + str(n) + '_'
@@ -28,6 +29,7 @@ class FeatureExtractorCountsNgrams(FeatureExtractorCounts):
         self.params['n'] = int(n)
         self.params['concat_oov_counts'] = ast.literal_eval(str(concat_oov_counts))
         self.params['append_dataset'] = ast.literal_eval(str(append_dataset))
+        self.params['source'] = source
         FeatureExtractorCountsNgrams.extend_dirname(self)
 
     @classmethod
@@ -45,9 +47,10 @@ class FeatureExtractorCountsNgrams(FeatureExtractorCounts):
         return self.params['n']
 
     def extend_dirname(self):
-        self.dirname = self.dirname + '_' + str(self.get_n()) \
-            + '_' + str(self.params['concat_oov_counts']) \
-            + '_' + str(self.params['append_dataset'])
+        self.dirname = self.dirname + ',' + str(self.get_n()) \
+            + ',' + str(self.params['concat_oov_counts']) \
+            + ',' + str(self.params['append_dataset']) \
+            + ',' + self.params['source']
 
     def get_dirname(self):
         return self.dirname
@@ -69,7 +72,8 @@ class FeatureExtractorCountsNgrams(FeatureExtractorCounts):
 
         all_items = train + dev + test
 
-        responses = fh.read_json(defines.data_raw_text_file)
+        input_file = fh.make_filename(defines.data_processed_text_dir, self.params['source'], 'json')
+        responses = fh.read_json(input_file)
 
         label_files = fh.get_label_files()
         tokens = {}

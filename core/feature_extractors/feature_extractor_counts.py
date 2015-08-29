@@ -35,8 +35,8 @@ class FeatureExtractorCounts(FeatureExtractor):
         return self.params['binarize']
 
     def extend_dirname(self):
-        self.dirname = self.dirname + '_' + str(self.params['add_oov']) + '_' \
-            + str(self.params['min_doc_threshold']) + '_' + str(self.params['binarize'])
+        self.dirname = self.dirname + ',' + str(self.params['add_oov']) + ',' \
+            + str(self.params['min_doc_threshold']) + ',' + str(self.params['binarize'])
 
     @classmethod
     def parse_dirname(cls, dirname):

@@ -2,80 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/models/multilabel_model.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/code/models/multilabel_model.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/.idea/.name" afterPath="$PROJECT_DIR$/core/.idea/.name" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/.idea/compiler.xml" afterPath="$PROJECT_DIR$/core/.idea/compiler.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/.idea/copyright/profiles_settings.xml" afterPath="$PROJECT_DIR$/core/.idea/copyright/profiles_settings.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/.idea/misc.xml" afterPath="$PROJECT_DIR$/core/.idea/misc.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/.idea/modules.xml" afterPath="$PROJECT_DIR$/core/.idea/modules.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/.idea/uiDesigner.xml" afterPath="$PROJECT_DIR$/core/.idea/uiDesigner.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/.idea/vcs.xml" afterPath="$PROJECT_DIR$/core/.idea/vcs.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/.idea/workspace.xml" afterPath="$PROJECT_DIR$/core/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/__init__.py" afterPath="$PROJECT_DIR$/core/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/brown_clusters/__init__.py" afterPath="$PROJECT_DIR$/core/brown_clusters/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/brown_clusters/brown_cluster_paths_to_vectors.py" afterPath="$PROJECT_DIR$/core/brown_clusters/brown_cluster_paths_to_vectors.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/brown_clusters/brown_clusters.iml" afterPath="$PROJECT_DIR$/core/brown_clusters/brown_clusters.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/brown_clusters/extract_all_relevant_vectors.py" afterPath="$PROJECT_DIR$/core/brown_clusters/extract_all_relevant_vectors.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/brown_clusters/output_text_for_brown_clusters.py" afterPath="$PROJECT_DIR$/core/brown_clusters/output_text_for_brown_clusters.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/experiment/__init__.py" afterPath="$PROJECT_DIR$/core/experiment/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/experiment/evaluation.py" afterPath="$PROJECT_DIR$/core/experiment/evaluation.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/experiment/experiment.py" afterPath="$PROJECT_DIR$/core/experiment/experiment.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/__init__.py" afterPath="$PROJECT_DIR$/core/feature_extractors/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/feature_extractor.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/feature_extractor_counts.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/feature_extractor_counts_anugrams.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_anugrams.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/feature_extractor_counts_brownclusters.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_brownclusters.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/feature_extractor_counts_ngrams.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/feature_extractors.iml" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractors.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/feature_loader.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_loader.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/tokenizer.py" afterPath="$PROJECT_DIR$/core/feature_extractors/tokenizer.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/vocab_test.py" afterPath="$PROJECT_DIR$/core/feature_extractors/vocab_test.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/vocabulary.py" afterPath="$PROJECT_DIR$/core/feature_extractors/vocabulary.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/feature_extractors/vocabulary_with_counts.py" afterPath="$PROJECT_DIR$/core/feature_extractors/vocabulary_with_counts.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/guac.iml" afterPath="$PROJECT_DIR$/core/guac.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/models/__init__.py" afterPath="$PROJECT_DIR$/core/models/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/models/resuable_holdout.py" afterPath="$PROJECT_DIR$/core/experiment/reusable_holdout.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/models/sparse_model.py" afterPath="$PROJECT_DIR$/core/models/sparse_model.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/old_extractors/__init__.py" afterPath="$PROJECT_DIR$/core/old_extractors/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/old_extractors/extract_char_ngram_tokens.py" afterPath="$PROJECT_DIR$/core/old_extractors/extract_char_ngram_tokens.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/old_extractors/extract_ngram_tokens.py" afterPath="$PROJECT_DIR$/core/old_extractors/extract_ngram_tokens.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/old_extractors/extract_ngram_tokens_for_rnn.py" afterPath="$PROJECT_DIR$/core/old_extractors/extract_ngram_tokens_for_rnn.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/old_extractors/extract_non-distributional_values.py" afterPath="$PROJECT_DIR$/core/old_extractors/extract_non-distributional_values.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/old_extractors/extract_question_feature.py" afterPath="$PROJECT_DIR$/core/old_extractors/extract_question_feature.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/old_extractors/extract_short_sentences.py" afterPath="$PROJECT_DIR$/core/old_extractors/extract_short_sentences.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/old_extractors/extract_string_features.py" afterPath="$PROJECT_DIR$/core/old_extractors/extract_string_features.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/old_extractors/extract_word2vec_values.py" afterPath="$PROJECT_DIR$/core/old_extractors/extract_word2vec_values.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/old_extractors/features.py" afterPath="$PROJECT_DIR$/core/old_extractors/features.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/preprocessing/__init__.py" afterPath="$PROJECT_DIR$/core/preprocessing/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/preprocessing/convert_csv_to_json.py" afterPath="$PROJECT_DIR$/core/preprocessing/convert_csv_to_json.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/preprocessing/data_splitting.py" afterPath="$PROJECT_DIR$/core/preprocessing/data_splitting.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/preprocessing/labels.py" afterPath="$PROJECT_DIR$/core/preprocessing/labels.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/__init__.py" afterPath="$PROJECT_DIR$/core/rnn/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/bidirectional_rnn.py" afterPath="$PROJECT_DIR$/core/rnn/bidirectional_rnn.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/common.py" afterPath="$PROJECT_DIR$/core/rnn/common.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/generate_synthetic_data_for_rnn.py" afterPath="$PROJECT_DIR$/core/rnn/generate_synthetic_data_for_rnn.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/hyperopt_rnn.py" afterPath="$PROJECT_DIR$/core/rnn/hyperopt_rnn.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/rnn.iml" afterPath="$PROJECT_DIR$/core/rnn/rnn.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/rnn_eval.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_eval.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/rnn_general.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_general.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/rnn_gru_multitask.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_gru_multitask.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/rnn_lstm_multitask.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_lstm_multitask.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/rnn_multitask.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_multitask.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/rnn/rnn_multitask_attention.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_multitask_attention.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/semafor/__init__.py" afterPath="$PROJECT_DIR$/core/semafor/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/semafor/semafor.iml" afterPath="$PROJECT_DIR$/core/semafor/semafor.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/semafor/semafor_collect_frames.py" afterPath="$PROJECT_DIR$/core/semafor/semafor_collect_frames.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/semafor/semafor_collect_pos_unigram_tokens.py" afterPath="$PROJECT_DIR$/core/semafor/semafor_collect_pos_unigram_tokens.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/semafor/semafor_preprocessing.py" afterPath="$PROJECT_DIR$/core/semafor/semafor_preprocessing.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/util/__init__.py" afterPath="$PROJECT_DIR$/core/util/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/util/defines.py" afterPath="$PROJECT_DIR$/core/util/defines.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/util/file_handling.py" afterPath="$PROJECT_DIR$/core/util/file_handling.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/util/util.iml" afterPath="$PROJECT_DIR$/core/util/util.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/word2vec/__init__.py" afterPath="$PROJECT_DIR$/core/word2vec/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/word2vec/train_vectors.py" afterPath="$PROJECT_DIR$/core/word2vec/train_vectors.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/code/word2vec/word2vec.iml" afterPath="$PROJECT_DIR$/core/word2vec/word2vec.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/stanford/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/preprocessing/normalize_text.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/feature_extractors/normalizer.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/stanford/stanford_preprocess.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/util/defines.py" afterPath="$PROJECT_DIR$/core/util/defines.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/experiment.py" afterPath="$PROJECT_DIR$/core/experiment/experiment.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/feature_extractors/feature_extractor.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_anugrams.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_anugrams.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_brownclusters.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_brownclusters.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/util/file_handling.py" afterPath="$PROJECT_DIR$/core/util/file_handling.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run_test2.py" afterPath="$PROJECT_DIR$/run_test2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -103,7 +42,7 @@
         <entry file="file://$PROJECT_DIR$/run_test2.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -112,8 +51,8 @@
       <file leaf-file-name="experiment.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.95022625">
-              <caret line="283" column="0" selection-start-line="283" selection-start-column="0" selection-end-line="283" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.6380091">
+              <caret line="203" column="0" selection-start-line="203" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -121,49 +60,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="evaluation.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/experiment/evaluation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-20.0">
-              <caret line="36" column="14" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="14" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="multilabel_model.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/models/multilabel_model.py">
+      <file leaf-file-name="decorate_words.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/preprocessing/decorate_words.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="32" column="22" selection-start-line="32" selection-start-column="22" selection-end-line="32" selection-end-column="22" />
+              <caret line="20" column="27" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
               <folding>
-                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sparse_model.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/models/sparse_model.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.9629629">
-              <caret line="146" column="29" selection-start-line="146" selection-start-column="29" selection-end-line="146" selection-end-column="29" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="reusable_holdout.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/experiment/reusable_holdout.py">
+      <file leaf-file-name="stanford_preprocess.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/stanford/stanford_preprocess.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="21" column="18" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="18" />
+              <caret line="160" column="0" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
               <folding>
-                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -195,18 +110,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/code/brown_clusters/brown_cluster_paths_to_vectors.py" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/code/brown_clusters/output_text_for_brown_clusters.py" />
-        <option value="$PROJECT_DIR$/code/rnn/generate_synthetic_data_for_rnn.py" />
-        <option value="$PROJECT_DIR$/code/util/defines.py" />
-        <option value="$PROJECT_DIR$/code/experiment/experiment_new.py" />
-        <option value="$PROJECT_DIR$/code/experiment/evaluation.py" />
-        <option value="$PROJECT_DIR$/code/feature_extractors/feature_extractor_counts.py" />
-        <option value="$PROJECT_DIR$/code/feature_extractors/feature_extractor_counts_anugrams.py" />
-        <option value="$PROJECT_DIR$/code/feature_extractors/feature_extractor_counts_brownclusters.py" />
-        <option value="$PROJECT_DIR$/code/feature_extractors/feature_extractor_counts_ngrams.py" />
-        <option value="$PROJECT_DIR$/code/feature_extractors/tokenizer.py" />
         <option value="$PROJECT_DIR$/code/feature_extractors/vocab_test.py" />
         <option value="$PROJECT_DIR$/code/feature_extractors/vocabulary.py" />
         <option value="$PROJECT_DIR$/code/old_extractors/extract_char_ngram_tokens.py" />
@@ -239,12 +142,24 @@
         <option value="$PROJECT_DIR$/code/preprocessing/data_splitting.py" />
         <option value="$PROJECT_DIR$/code/models/sparse_model.py" />
         <option value="$PROJECT_DIR$/code/experiment/experiment.py" />
-        <option value="$PROJECT_DIR$/run_test2.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_loader.py" />
         <option value="$PROJECT_DIR$/core/experiment/evaluation.py" />
         <option value="$PROJECT_DIR$/core/preprocessing/labels.py" />
         <option value="$PROJECT_DIR$/core/models/sparse_model.py" />
         <option value="$PROJECT_DIR$/core/models/multilabel_model.py" />
+        <option value="$PROJECT_DIR$/core/stanford/preprocess.py" />
+        <option value="$PROJECT_DIR$/core/feature_extractors/normalizer.py" />
+        <option value="$PROJECT_DIR$/core/util/file_handling.py" />
+        <option value="$PROJECT_DIR$/core/preprocessing/normalize_text.py" />
+        <option value="$PROJECT_DIR$/core/util/defines.py" />
+        <option value="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
+        <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor.py" />
+        <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts.py" />
+        <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_anugrams.py" />
+        <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_brownclusters.py" />
+        <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py" />
+        <option value="$PROJECT_DIR$/core/stanford/stanford_preprocess.py" />
+        <option value="$PROJECT_DIR$/run_test2.py" />
         <option value="$PROJECT_DIR$/core/experiment/experiment.py" />
       </list>
     </option>
@@ -260,8 +175,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1458" />
-    <option name="y" value="167" />
+    <option name="x" value="1461" />
+    <option name="y" value="169" />
     <option name="width" value="1226" />
     <option name="height" value="781" />
   </component>
@@ -288,8 +203,7 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -319,6 +233,42 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="guac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="guac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="guac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="guac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stanford" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -396,7 +346,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -595,6 +546,22 @@
       <listeners />
       <method />
     </configuration>
+    <configuration default="true" type="XSLT" factoryName="XSLT">
+      <option name="myOutputFile" />
+      <option name="myOpenOutputFile" value="false" />
+      <option name="myOpenInBrowser" value="false" />
+      <option name="mySmartErrorHandling" value="true" />
+      <option name="myRunnerPort" value="34873" />
+      <option name="myVmArguments" />
+      <option name="myWorkingDirectory" />
+      <option name="myModule" />
+      <option name="myJdk" />
+      <parameters />
+      <OutputType value="CONSOLE" save-to-file="false" />
+      <FileType name="XML" />
+      <JdkChoice value="FROM_MODULE" />
+      <method />
+    </configuration>
     <configuration default="true" type="executeSpecs" factoryName="Gauge Execution">
       <setting name="environment" value="" />
       <setting name="specsToExecute" value="" />
@@ -745,11 +712,17 @@
       <option name="project" value="LOCAL" />
       <updated>1440646455728</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="refactored to move self tuning by cv into model, and started working on a multilabel model (experiment code currently broken)">
+      <created>1440729307345</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1440729307345</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1458" y="167" width="1226" height="781" extended-state="0" />
+    <frame x="1461" y="169" width="1226" height="781" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -759,22 +732,22 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2508446" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32850942" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39797395" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32850942" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39797395" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -792,14 +765,15 @@
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
     <MESSAGE value="corrected imports after reorganization" />
     <MESSAGE value="moved reusable holdout to its own class" />
-    <option name="LAST_COMMIT_MESSAGE" value="moved reusable holdout to its own class" />
+    <MESSAGE value="refactored to move self tuning by cv into model, and started working on a multilabel model (experiment code currently broken)" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactored to move self tuning by cv into model, and started working on a multilabel model (experiment code currently broken)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/core/experiment/experiment.py</url>
-          <line>291</line>
+          <line>290</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
@@ -810,7 +784,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="21" />
+      <option name="time" value="22" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -819,60 +793,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/brown_clusters/brown_clusters.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/brown_clusters/brown_cluster_paths_to_vectors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/brown_clusters/extract_all_relevant_vectors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/brown_clusters/output_text_for_brown_clusters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29850745">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_anugrams.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="7" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_brownclusters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/feature_extractors/tokenizer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#9#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/feature_extractors/vocab_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -894,16 +814,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#31#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#14#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -971,18 +881,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/preprocessing/convert_csv_to_json.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/bidirectional_rnn.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="34" selection-start-line="21" selection-start-column="34" selection-end-line="21" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -990,7 +892,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="10" column="7" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1012,7 +913,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="35" selection-start-line="6" selection-start-column="35" selection-end-line="6" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1027,7 +927,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="20" column="20" selection-start-line="20" selection-start-column="20" selection-end-line="20" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1035,7 +934,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="20" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1043,7 +941,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="20" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1061,14 +958,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/util/file_handling.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/word2vec/train_vectors.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1076,21 +965,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="34" column="5" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#38#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_multitask_attention.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3179551">
           <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1101,49 +979,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/util/defines.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18703242">
-          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Applications/anaconda/lib/python2.7/site-packages/scipy/sparse/csr.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="224" column="0" selection-start-line="224" selection-start-column="0" selection-end-line="224" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="83" column="8" selection-start-line="83" selection-start-column="8" selection-end-line="83" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.40979382">
-          <caret line="83" column="54" selection-start-line="83" selection-start-column="54" selection-end-line="83" selection-end-column="54" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_loader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.87371135">
-          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1151,7 +990,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33247423">
           <caret line="126" column="0" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1178,7 +1016,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="18" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="18" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1188,14 +1026,14 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="32" column="22" selection-start-line="32" selection-start-column="22" selection-end-line="32" selection-end-column="22" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/models/sparse_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.9629629">
+        <state vertical-scroll-proportion="0.0">
           <caret line="146" column="29" selection-start-line="146" selection-start-column="29" selection-end-line="146" selection-end-column="29" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -1205,7 +1043,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/evaluation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-20.0">
+        <state vertical-scroll-proportion="0.0">
           <caret line="36" column="14" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="14" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
@@ -1213,18 +1051,156 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run_test2.py">
+    <entry file="file://$PROJECT_DIR$/core/feature_extractors/tokenizer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="0.022624435">
           <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/preprocessing/convert_csv_to_json.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="94" column="0" selection-start-line="94" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/util/file_handling.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="72" column="16" selection-start-line="72" selection-start-column="16" selection-end-line="72" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/feature_extractors/normalizer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="37" selection-start-line="6" selection-start-column="37" selection-end-line="6" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/preprocessing/normalize_text.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="11" column="47" selection-start-line="11" selection-start-column="47" selection-end-line="11" selection-end-column="47" />
+          <folding>
+            <element signature="e#1#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/util/defines.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="35" column="53" selection-start-line="35" selection-start-column="53" selection-end-line="35" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="39" column="44" selection-start-line="39" selection-start-column="44" selection-end-line="39" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_brownclusters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="25" column="40" selection-start-line="25" selection-start-column="40" selection-end-line="25" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="38" column="56" selection-start-line="38" selection-start-column="56" selection-end-line="38" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_loader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="60" selection-start-line="20" selection-start-column="60" selection-end-line="20" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="34" column="5" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/preprocessing/decorate_words.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="27" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="74" column="101" selection-start-line="74" selection-start-column="101" selection-end-line="74" selection-end-column="101" />
+          <folding>
+            <element signature="e#1#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_test2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_anugrams.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9049774">
+          <caret line="51" column="16" selection-start-line="51" selection-start-column="16" selection-end-line="51" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/stanford/stanford_preprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="160" column="0" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.95022625">
-          <caret line="283" column="0" selection-start-line="283" selection-start-column="0" selection-end-line="283" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.6380091">
+          <caret line="203" column="0" selection-start-line="203" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

@@ -68,8 +68,21 @@ def unpickle_data(input_filename):
 
 def read_text(input_filename):
     with codecs.open(input_filename, 'r') as input_file:
-        lines = input_file.read().split('\n')
+        #lines = input_file.read().split('\n')
+        lines = input_file.readlines()
     return lines
+
+def write_list_to_text(lines, output_filename, add_newlines=True, add_final_newline=False):
+    if add_newlines:
+        if add_final_newline:
+            lines = [line + '\n' for line in lines]
+        else:
+            lines = [line + '\n' for line in lines[:-1]] + [lines[-1]]
+    elif add_final_newline:
+        lines = lines[:-1] + [lines[-1] + '\n']
+
+    with codecs.open(output_filename, 'w') as output_file:
+        output_file.writelines(lines)
 
 def read_csv(input_filename):
     return pd.read_csv(input_filename, header=0, index_col=0)

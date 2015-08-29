@@ -47,9 +47,9 @@ class FeatureExtractorCountsAnUgrams(FeatureExtractorCounts):
 
     def extend_dirname(self):
         self.dirname = self.dirname + '_' + str(self.get_n()) \
-            + '_' + str(self.params['concat_oov_counts']) \
-            + '_' + str(self.params['append_dataset']) \
-            + '_' + self.params['annotation'] + '_' + str(self.params['groups'])
+            + ',' + str(self.params['concat_oov_counts']) \
+            + ',' + str(self.params['append_dataset']) \
+            + ',' + self.params['annotation'] + '_' + str(self.params['groups'])
 
     def get_dirname(self):
         return self.dirname
