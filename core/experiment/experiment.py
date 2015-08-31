@@ -100,8 +100,10 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
     params_list = [name, exp_dir, datasets, test_fold, feature_list, model_type,
                    min_alpha_exp, max_alpha_exp, alpha_exp_base,
                    reuse, orig_T, tau, best_alphas] + kwargs.values()
-    params_names =  'name, exp_dir, datasets, test_fold, feature_list, model_type, regularization,\
-        min_alpha_exp, max_alpha_exp, alpha_exp_base, reuse, orig_T, tau, best_alphas'
+    params_names = """name, exp_dir, datasets, test_fold, feature_list, model_type,
+                    min_alpha_exp, max_alpha_exp, alpha_exp_base,
+                    reuse, orig_T, tau, best_alphas"""
+
     for key in kwargs.keys():
         params_names += ', ' + key
     write_log(exp_dir, params_names, params_list)

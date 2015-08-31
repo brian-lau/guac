@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/preprocessing/decorate_words.py" afterPath="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/experiment.py" afterPath="$PROJECT_DIR$/core/experiment/experiment.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/run_with_bayes_opt_with_alpha.py" afterPath="$PROJECT_DIR$/core/experiment/run_with_bayes_opt_with_alpha.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -41,7 +42,7 @@
         <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="96" column="20" selection-start-line="96" selection-start-column="20" selection-end-line="96" selection-end-column="20" />
+              <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -49,10 +50,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="decorate_words.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="decorate_words.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/preprocessing/decorate_words.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6580938">
+            <state vertical-scroll-proportion="0.0">
               <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding />
             </state>
@@ -69,11 +70,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run_with_bayes_opt_with_alpha.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="run_with_bayes_opt_with_alpha.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt_with_alpha.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="221" column="87" selection-start-line="221" selection-start-column="87" selection-end-line="221" selection-end-column="87" />
+            <state vertical-scroll-proportion="0.40998486">
+              <caret line="239" column="33" selection-start-line="239" selection-start-column="33" selection-end-line="239" selection-end-column="33" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -166,10 +167,10 @@
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_brownclusters.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_loader.py" />
-        <option value="$PROJECT_DIR$/core/experiment/experiment.py" />
-        <option value="$PROJECT_DIR$/core/experiment/run_with_bayes_opt_with_alpha.py" />
         <option value="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" />
         <option value="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
+        <option value="$PROJECT_DIR$/core/experiment/experiment.py" />
+        <option value="$PROJECT_DIR$/core/experiment/run_with_bayes_opt_with_alpha.py" />
       </list>
     </option>
   </component>
@@ -757,7 +758,13 @@
       <option name="project" value="LOCAL" />
       <updated>1440981389240</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="fixed typo">
+      <created>1440981429784</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1440981429784</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -808,14 +815,15 @@
     <MESSAGE value="get experiments working again, and wrote some code to bring in the stanford pipeline and decorated unigrams" />
     <MESSAGE value="got bayes opt set up" />
     <MESSAGE value="updated decorated to produce all four datasets" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated decorated to produce all four datasets" />
+    <MESSAGE value="fixed typo" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed typo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/core/experiment/experiment.py</url>
-          <line>120</line>
+          <line>122</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
@@ -1169,16 +1177,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="96" column="20" selection-start-line="96" selection-start-column="20" selection-end-line="96" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/util/defines.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5234493">
@@ -1205,13 +1203,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt_with_alpha.py">
+    <entry file="file://$PROJECT_DIR$/core/preprocessing/decorate_words.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="221" column="87" selection-start-line="221" selection-start-column="87" selection-end-line="221" selection-end-column="87" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1225,11 +1221,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/preprocessing/decorate_words.py">
+    <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6580938">
-          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt_with_alpha.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40998486">
+          <caret line="239" column="33" selection-start-line="239" selection-start-column="33" selection-end-line="239" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

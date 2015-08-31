@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import glob
 import codecs
@@ -104,39 +105,39 @@ space = {
             ] )
     },
     'alphas': [
-        hp.qloguniform('alpha1', -1.15, 9.2, 1),
-        hp.qloguniform('alpha2', -1.15, 9.2, 1),
-        hp.qloguniform('alpha3', -1.15, 9.2, 1),
-        hp.qloguniform('alpha4', -1.15, 9.2, 1),
-        hp.qloguniform('alpha5', -1.15, 9.2, 1),
-        hp.qloguniform('alpha6', -1.15, 9.2, 1),
-        hp.qloguniform('alpha7', -1.15, 9.2, 1),
-        hp.qloguniform('alpha8', -1.15, 9.2, 1),
-        hp.qloguniform('alpha9', -1.15, 9.2, 1),
-        hp.qloguniform('alpha10', -1.15, 9.2, 1),
-        hp.qloguniform('alpha11', -1.15, 9.2, 1),
-        hp.qloguniform('alpha12', -1.15, 9.2, 1),
-        hp.qloguniform('alpha13', -1.15, 9.2, 1),
-        hp.qloguniform('alpha14', -1.15, 9.2, 1),
-        hp.qloguniform('alpha15', -1.15, 9.2, 1),
-        hp.qloguniform('alpha16', -1.15, 9.2, 1),
-        hp.qloguniform('alpha17', -1.15, 9.2, 1),
-        hp.qloguniform('alpha18', -1.15, 9.2, 1),
-        hp.qloguniform('alpha19', -1.15, 9.2, 1),
-        hp.qloguniform('alpha20', -1.15, 9.2, 1),
-        hp.qloguniform('alpha21', -1.15, 9.2, 1),
-        hp.qloguniform('alpha22', -1.15, 9.2, 1),
-        hp.qloguniform('alpha23', -1.15, 9.2, 1),
-        hp.qloguniform('alpha24', -1.15, 9.2, 1),
-        hp.qloguniform('alpha25', -1.15, 9.2, 1),
-        hp.qloguniform('alpha26', -1.15, 9.2, 1),
-        hp.qloguniform('alpha27', -1.15, 9.2, 1),
-        hp.qloguniform('alpha28', -1.15, 9.2, 1),
-        hp.qloguniform('alpha29', -1.15, 9.2, 1),
-        hp.qloguniform('alpha30', -1.15, 9.2, 1),
-        hp.qloguniform('alpha31', -1.15, 9.2, 1),
-        hp.qloguniform('alpha32', -1.15, 9.2, 1),
-        hp.qloguniform('alpha33', -1.15, 9.2, 1)
+        hp.loguniform('alpha1', -1.15, 9.2),
+        hp.loguniform('alpha2', -1.15, 9.2),
+        hp.loguniform('alpha3', -1.15, 9.2),
+        hp.loguniform('alpha4', -1.15, 9.2),
+        hp.loguniform('alpha5', -1.15, 9.2),
+        hp.loguniform('alpha6', -1.15, 9.2),
+        hp.loguniform('alpha7', -1.15, 9.2),
+        hp.loguniform('alpha8', -1.15, 9.2),
+        hp.loguniform('alpha9', -1.15, 9.2),
+        hp.loguniform('alpha10', -1.15, 9.2),
+        hp.loguniform('alpha11', -1.15, 9.2),
+        hp.loguniform('alpha12', -1.15, 9.2),
+        hp.loguniform('alpha13', -1.15, 9.2),
+        hp.loguniform('alpha14', -1.15, 9.2),
+        hp.loguniform('alpha15', -1.15, 9.2),
+        hp.loguniform('alpha16', -1.15, 9.2),
+        hp.loguniform('alpha17', -1.15, 9.2),
+        hp.loguniform('alpha18', -1.15, 9.2),
+        hp.loguniform('alpha19', -1.15, 9.2),
+        hp.loguniform('alpha20', -1.15, 9.2),
+        hp.loguniform('alpha21', -1.15, 9.2),
+        hp.loguniform('alpha22', -1.15, 9.2),
+        hp.loguniform('alpha23', -1.15, 9.2),
+        hp.loguniform('alpha24', -1.15, 9.2),
+        hp.loguniform('alpha25', -1.15, 9.2),
+        hp.loguniform('alpha26', -1.15, 9.2),
+        hp.loguniform('alpha27', -1.15, 9.2),
+        hp.loguniform('alpha28', -1.15, 9.2),
+        hp.loguniform('alpha29', -1.15, 9.2),
+        hp.loguniform('alpha30', -1.15, 9.2),
+        hp.loguniform('alpha31', -1.15, 9.2),
+        hp.loguniform('alpha32', -1.15, 9.2),
+        hp.loguniform('alpha33', -1.15, 9.2)
     ]
 
 }
@@ -229,7 +230,7 @@ def main():
 
     usage = "%prog"
     parser = OptionParser(usage=usage)
-    parser.add_option('-o', dest='output_filename', default='alpha_bayes_opt',
+    parser.add_option('-o', dest='output_filename', default='bayes_opt_alpha',
                       help='Output filename')
     parser.add_option('--reuse', dest='reuse', action="store_true", default=False,
                       help='Use reusable holdout; default=%default')
