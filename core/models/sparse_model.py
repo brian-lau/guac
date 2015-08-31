@@ -82,7 +82,7 @@ class SparseModel:
         elif self.model_type == 'SVM' or self.model_type == 'SVMNB':
             self.model.set_params(C=alpha)
         elif self.model_type == 'MNB':
-            self.model.set_params(alpha=alpha)
+            self.model.set_params(alpha=1/float(alpha))
 
     def fit(self, X, y):
         n_items, n_features = X.shape
