@@ -23,6 +23,7 @@ class SparseModel:
     default = None
     column_names = None
     params = None
+    trained = None
     w = None
     b = None
 
@@ -30,6 +31,7 @@ class SparseModel:
         self.model_type = model_type
         self.column_names = column_names
         self.params = kwargs
+        self.trained = None
         if model_type == 'LR':
             if self.params.get('regularization', None) is None:
                 self.params['regularization'] = 'l1'
@@ -67,7 +69,7 @@ class SparseModel:
             if 'alpha' not in self.params:
                 self.params['alpha'] = 1.0
             self.model = MultinomialNB(alpha=1/float(self.params['alpha']), fit_prior=True)
-        elif model_type == 'myBinaryMNB':
+        elif model_type == 'myMNB':
             if 'alpha' not in self.params:
                 self.params['alpha'] = 1.0
             self.model = None
@@ -86,17 +88,13 @@ class SparseModel:
 
     def fit(self, X, y):
         n_items, n_features = X.shape
-        test1 = X[0, :]
-        test2= X[1, :]
-        test3 = X[2, :]
-        test4 = X[234, :]
         if y.sum() == 0 or y.sum() == n_items or self.model_type == 'default':
             counts = np.bincount(y)
             y_mode = np.argmax(counts)
             self.default = y_mode
             self.model = None
             self.model_type = 'default'
-        elif self.model_type == 'myBinaryMNB':
+        elif self.model_type == 'myMNB':
             # assumes y = {0,1}
             assert len(np.bincount(y)) == 2
             index_0 = np.array(y) == 0
@@ -114,6 +112,7 @@ class SparseModel:
             _, n_features = X_dense.shape
             index_0 = np.array(y) == 0
             index_1 = np.array(y) == 1
+            #  TODO: Is this right?
             p = np.sum(X_dense[index_1, :], axis=0) + 1/float(self.params['alpha'])
             q = np.sum(X_dense[index_0, :], axis=0) + 1/float(self.params['alpha'])
             r = np.log((p / float(np.sum(np.abs(p)))) / (q / float(np.sum(np.abs(q)))))
@@ -124,7 +123,12 @@ class SparseModel:
             w_bar = np.sum(np.abs(w)) / float(n_features)
             self.model.coef_ = (1 - self.params['beta']) * w_bar + self.params['beta'] * w
         else:
+            if X.min() < 0:
+                fh.pickle_data(X, 'X_err.npy')
+                print self.model_type
+                sys.exit("X is not non-negative!")
             self.model.fit(X, y)
+        self.trained = True
 
     def tune_alpha(self, X, y, alpha_values, train_indices, valid_indices, reuser=None, verbose=1):
         train_f1s = []
@@ -149,6 +153,8 @@ class SparseModel:
 
             train_f1s.append(f1_train)
             valid_f1s.append(f1_valid)
+
+        self.trained = False
 
         return train_f1s, valid_f1s
 
@@ -176,14 +182,14 @@ class SparseModel:
         mean_valid_f1s = valid_f1_summary.mean(axis=0)
         best_alpha = float(mean_valid_f1s.idxmax())
         self.set_alpha(best_alpha)
-
+        self.trained = False
         return valid_f1_summary, best_alpha
 
 
     def get_coefs(self):
         if self.model_type == 'default' or self.model_type == 'SVM':
             return None
-        elif self.model_type == 'myBinaryMNB':
+        elif self.model_type == 'myMNB':
             return zip(self.column_names, self.w)
         else:
             return zip(self.column_names, self.model.coef_[0])
@@ -192,7 +198,7 @@ class SparseModel:
         n, p = X.shape
         if self.model_type == 'default':
             predictions = self.default * np.ones(shape=[n, 1], dtype=int)
-        elif self.model_type == 'myBinaryMNB':
+        elif self.model_type == 'myMNB':
             predictions = np.array((np.dot(X.toarray(), np.array(self.w)) + self.b) > 0, dtype=int)
         else:
             predictions = self.model.predict(X)
@@ -236,7 +242,7 @@ class SparseModel:
             coefs_sorted = sorted(coefs_dict.items(), key=operator.itemgetter(1))
             output = {'params': self.params, 'intercept': self.model.intercept_[0], 'coefs': coefs_sorted,
                       'model_type': self.model_type}
-        elif self.model_type == 'myBinaryMNB':
+        elif self.model_type == 'myMNB':
             coefs_list = self.get_coefs()
             coefs_dict = {k: v for (k, v) in coefs_list if v != 0}
             coefs_sorted = sorted(coefs_dict.items(), key=operator.itemgetter(1))

@@ -81,7 +81,7 @@ class FeatureExtractorCounts(FeatureExtractor):
 
         return vocab
 
-    def extract_feature_counts(self, items, tokens, vocab, dtype='int8'):
+    def extract_feature_counts(self, items, tokens, vocab):
         n_items = len(items)
         n_features = len(vocab)
 
@@ -116,6 +116,11 @@ class FeatureExtractorCounts(FeatureExtractor):
 
             oov_counts.append(token_counter.get(vocab.oov_index, 0))
             row_starts_and_ends.append(len(column_indices))
+
+        if self.get_binarize():
+            dtype = 'int8'
+        else:
+            dtype = 'int32'
 
         feature_counts = sparse.csr_matrix((values, column_indices, row_starts_and_ends), dtype=dtype)
 

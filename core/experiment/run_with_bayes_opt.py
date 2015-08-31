@@ -2,6 +2,7 @@ import os
 import re
 import glob
 import codecs
+import datetime
 from optparse import OptionParser
 
 import numpy as np
@@ -13,13 +14,16 @@ from ..util import defines
 from ..util import file_handling as fh
 
 
+output_dirname = None
 output_filename = None
 reuse = None
+search_alpha = None
 
 space = {
     'model': hp.choice('model', [
         {
             'model': 'SVM',
+            'kernel': hp.choice('kernel', ['linear', 'poly', 'rbf'])
         },
         {
             'model': 'LR',
@@ -109,7 +113,10 @@ space = {
 def call_experiment(args):
     kwargs = {}
 
-    model = args['model']['model']
+    #model = args['model']['model']
+
+    model = 'MNB'
+
     if model == 'LR':
         kwargs['regularization'] = args['model']['regularization']
     elif model == 'SVMNB':
@@ -154,9 +161,18 @@ def call_experiment(args):
 
     datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
 
+    if reuse:
+        kwargs['reuse'] = True
+
+    alphas = None
+    if search_alpha:
+        alphas = []
+        for alpha in args['alphas']:
+            alphas.append(float(alpha))
+        kwargs['best_alphas'] = alphas
 
     base_dir = fh.makedirs(defines.exp_dir, '_'.join(datasets), "test_fold_0")
-    basename = fh.get_basename(output_filename)
+    basename = fh.get_basename(output_dirname)
     existing_dirs = glob.glob(os.path.join(base_dir, basename + '*'))
     max_num = 0
     for dir in existing_dirs:
@@ -169,11 +185,7 @@ def call_experiment(args):
     name = fh.get_basename(output_filename) + '_' + str(max_num + 1)
 
     print feature_list
-    if reuse:
-        result = experiment.run_group_experiment(name, datasets, 0, feature_list, model_type=model, reuse=True,
-                                                 **kwargs)
-    else:
-        result = experiment.run_group_experiment(name, datasets, 0, feature_list, model_type=model, **kwargs)
+    result = experiment.run_group_experiment(name, datasets, 0, feature_list, model_type=model, **kwargs)
     print result
 
     with codecs.open(output_filename, 'a') as output_file:
@@ -187,20 +199,38 @@ def main():
 
     usage = "%prog"
     parser = OptionParser(usage=usage)
-    parser.add_option('-o', dest='output_filename', default='bayes_opt',
-                      help='Output filename')
+    parser.add_option('-o', dest='output_dirname', default='bayes_opt',
+                      help='Output directory name')
     parser.add_option('--reuse', dest='reuse', action="store_true", default=False,
                       help='Use reusable holdout; default=%default')
+    parser.add_option('--alpha', dest='alpha', action="store_true", default=False,
+                      help='Include alpha in search space (instead of grid search); default=%default')
+    parser.add_option('--codes', dest='n_codes', default=33,
+                      help='Number of codes (only matters with --alpha); default=%default')
 
     (options, args) = parser.parse_args()
 
-    global output_filename, reuse
-    output_filename = fh.make_filename(defines.exp_dir, options.output_filename, 'log')
+    global output_dirname, output_filename, reuse, search_alpha
     reuse = options.reuse
+    search_alpha = options.alpha
+    n_codes = int(options.n_codes)
+    output_dirname = options.output_dirname
+
+    if search_alpha:
+        space['alphas'] = []
+        for i in range(n_codes):
+            space['alphas'].append(hp.loguniform('alpha' + str(i), -1.15, 9.2),)
+        output_dirname += '_alphas'
+
+    if reuse:
+        output_dirname += '_reuse'
+
+    output_filename = fh.make_filename(output_dirname, fh.get_basename(output_dirname), 'log')
 
     with codecs.open(output_filename, 'w') as output_file:
-        output_file.write(output_filename + '\n')
+        output_file.write(output_dirname + '\n')
         output_file.write('reuse = ' + str(reuse) + '\n')
+        output_file.write('search alphas = ' + str(search_alpha) + '\n')
 
     trials = Trials()
     best = fmin(call_experiment,

@@ -3,6 +3,7 @@ import re
 import sys
 import glob
 import codecs
+import datetime
 from optparse import OptionParser
 
 import numpy as np
