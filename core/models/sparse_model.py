@@ -108,26 +108,35 @@ class SparseModel:
         elif self.model_type == 'SVMNB':
             # assumes y = {0,1}
             assert len(np.bincount(y)) == 2
+            # first calculate the inputs we would use for MNB
             X_dense = X.toarray()
             _, n_features = X_dense.shape
             index_0 = np.array(y) == 0
             index_1 = np.array(y) == 1
-            #  TODO: Is this right?
-            p = np.sum(X_dense[index_1, :], axis=0) + 1/float(self.params['alpha'])
-            q = np.sum(X_dense[index_0, :], axis=0) + 1/float(self.params['alpha'])
+            # assume a hyperparameter for MNB of 1.0
+            p = np.sum(X_dense[index_1, :], axis=0) + 1
+            q = np.sum(X_dense[index_0, :], axis=0) + 1
             r = np.log((p / float(np.sum(np.abs(p)))) / (q / float(np.sum(np.abs(q)))))
+            # multiply the feature counts by the log-count ratios from MNB (element-wise)
             X_dense = X_dense * r
             X_sparse = csr_matrix(X_dense)
+            # then train the on the adjusted data
             self.model.fit(X_sparse, y)
+            # finally, take a mixture of the two
             w = np.array(self.model.coef_)
             w_bar = np.sum(np.abs(w)) / float(n_features)
             self.model.coef_ = (1 - self.params['beta']) * w_bar + self.params['beta'] * w
-        else:
+        elif self.model_type == 'MNB':
+            # this was giving me some errors, but it was only because I was using int8 matrices, which were
+            # resulting in negative numbers in X
             if X.min() < 0:
                 fh.pickle_data(X, 'X_err.npy')
                 print self.model_type
                 sys.exit("X is not non-negative!")
             self.model.fit(X, y)
+        else:
+            self.model.fit(X, y)
+
         self.trained = True
 
     def tune_alpha(self, X, y, alpha_values, train_indices, valid_indices, reuser=None, verbose=1):

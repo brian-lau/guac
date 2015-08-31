@@ -23,7 +23,11 @@ space = {
     'model': hp.choice('model', [
         {
             'model': 'SVM',
-            'kernel': hp.choice('kernel', ['linear', 'poly', 'rbf'])
+            'kernel': hp.choice('ktype', [
+                {'ktype': 'linear'},
+                {'ktype': 'poly', 'degree': hp.choice('degree', [2, 3, 4])},
+                {'ktype': 'rbf'}
+            ] )
         },
         {
             'model': 'LR',
@@ -113,14 +117,17 @@ space = {
 def call_experiment(args):
     kwargs = {}
 
-    #model = args['model']['model']
-
-    model = 'MNB'
+    model = args['model']['model']
 
     if model == 'LR':
         kwargs['regularization'] = args['model']['regularization']
     elif model == 'SVMNB':
         kwargs['beta'] = args['model']['beta']
+    elif model == 'SVM':
+        ktype = args['model']['kernel']['ktype']
+        kwargs['kernel'] = ktype
+        if ktype == 'poly':
+            kwargs['degree'] = args['model']['kernel']['degree']
     feature_list = []
     unigrams = 'ngrams' + \
                ',binarize=' + args['features']['unigrams']['u_binarize'] + \

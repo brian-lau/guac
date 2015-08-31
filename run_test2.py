@@ -1,5 +1,4 @@
 from core.experiment import experiment
-from core.experiment import run_with_bayes_opt_with_alpha
 
 
 #experiment.run_group_experiment(['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes'],
