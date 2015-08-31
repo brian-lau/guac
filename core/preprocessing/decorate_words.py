@@ -27,9 +27,9 @@ def main():
     decorate_words(output_filename, 'Democrat')
     output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_rep', 'json')
     decorate_words(output_filename, 'Republican')
-    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_like', 'json')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_likes', 'json')
     decorate_words(output_filename, 'Likes')
-    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_dislike', 'json')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_dislikes', 'json')
     decorate_words(output_filename, 'Dislikes')
 
 

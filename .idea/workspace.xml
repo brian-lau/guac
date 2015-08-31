@@ -52,8 +52,8 @@
       <file leaf-file-name="decorate_words.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/preprocessing/decorate_words.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.61270803">
-              <caret line="31" column="44" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
+            <state vertical-scroll-proportion="0.6580938">
+              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -751,7 +751,13 @@
       <option name="project" value="LOCAL" />
       <updated>1440979544407</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="updated decorated to produce all four datasets">
+      <created>1440981389240</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1440981389240</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -801,7 +807,8 @@
     <MESSAGE value="refactored to move self tuning by cv into model, and started working on a multilabel model (experiment code currently broken)" />
     <MESSAGE value="get experiments working again, and wrote some code to bring in the stanford pipeline and decorated unigrams" />
     <MESSAGE value="got bayes opt set up" />
-    <option name="LAST_COMMIT_MESSAGE" value="got bayes opt set up" />
+    <MESSAGE value="updated decorated to produce all four datasets" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated decorated to produce all four datasets" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1220,8 +1227,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/preprocessing/decorate_words.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.61270803">
-          <caret line="31" column="44" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
+        <state vertical-scroll-proportion="0.6580938">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
           <folding />
         </state>
       </provider>
