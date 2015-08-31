@@ -220,7 +220,7 @@ def call_experiment(args):
     print result
 
     with codecs.open(output_filename, 'a') as output_file:
-        output_file.write(name + '\t' + result['loss'] + '\t' + result['test_f1'] + '\n')
+        output_file.write(name + '\t' + str(result['loss']) + '\t' + str(result['test_f1']) + '\n')
 
     return result
 
