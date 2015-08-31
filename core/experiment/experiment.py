@@ -27,7 +27,7 @@ def main():
                       help='Test fold; default=%default')
     parser.add_option('-g', dest='group_file', default='',
                       help='List of questions to group together (one group per line)')
-    parser.add_option('-r', dest='regularizer', default='l1',
+    parser.add_option('-r', dest='regularizer', default=None,
                       help='Regularization (l1 or l2): default=%default')
     parser.add_option('-m', dest='model_type', default='LR',
                       help='Model type (LR|SVM|MNB|SVMNB); default=%default')
@@ -56,48 +56,54 @@ def main():
     else:
         name = options.name
 
-    regularizer = options.regularizer
     model_type = options.model_type
     verbose = options.verbose
     reuse_holdout = options.reuse
     reuseable_T = options.reusable_T
     reuseable_tau = options.reusable_tau
+    kwargs = {}
+    if options.regularizer is not None:
+        kwargs['regularization'] = options.regularizer
 
     input_dir = defines.data_raw_csv_dir
     files = fh.ls(input_dir, '*.csv')
     files.sort()
 
+    print "groups = ", groups
+
     # process all the (given) data files
     print "Running experiments"
     for group in groups:
-        #valid_macro_f1, test_macro_f1 = run_group_experiment(name, group, test_fold, feature_list, model_type,
-        #    regularizer, reuse=reuse_holdout, orig_T=reuseable_T, tau=reuseable_tau, verbose=verbose)
-        #print group, valid_macro_f1, test_macro_f1
-        run_group_experiment(name, group, test_fold, feature_list, model_type,
-                             regularizer, min_alpha_exp=0, max_alpha_exp=0,
+        print group
+        result = run_group_experiment(name, group, test_fold, feature_list, model_type,
                              reuse=reuse_holdout, orig_T=reuseable_T, tau=reuseable_tau, verbose=1)
+
+
 
 
 
 def write_log(exp_dir, names_list, values_list):
     output_filename = fh.make_filename(exp_dir, 'log', 'json')
-    names = names_list[1:-1].split(',')
+    names = [s.lstrip() for s in names_list.split(',')]
     summary = dict(zip(names, [str(v) for v in values_list]))
     fh.write_to_json(summary, output_filename)
 
 # Run an experiment on a group of questions
-def run_group_experiment(name, datasets, test_fold, feature_list, model_type='LR', regularization='l1',
-                         min_alpha_exp=-1, max_alpha_exp=8, alpha_exp_base=np.sqrt(10), beta=1,
-                         reuse=False, orig_T=0.04, tau=0.01, verbose=1,
-                         best_alphas=None, svm_beta=0):
-
+def run_group_experiment(name, datasets, test_fold, feature_list, model_type, unique_name=False,
+                         min_alpha_exp=-1, max_alpha_exp=8, alpha_exp_base=np.sqrt(10),
+                         reuse=False, orig_T=0.04, tau=0.01, verbose=1, best_alphas=None,
+                         **kwargs):
+    print model_type
     # create experiments directory and save the parameters for this experiment
     exp_dir = make_exp_dir(datasets, test_fold, name)
     print exp_dir
-    params_list = [exp_dir, name, datasets, test_fold, feature_list, model_type, regularization,
-                   min_alpha_exp, max_alpha_exp, alpha_exp_base, reuse, orig_T, tau, best_alphas]
-    params_names =  '[exp_dir, name, datasets, test_fold, feature_list, model_type, regularization,\
-        min_alpha_exp, max_alpha_exp, alpha_exp_base, reuse, orig_T, tau, best_alphas]'
+    params_list = [name, exp_dir, datasets, test_fold, feature_list, model_type,
+                   min_alpha_exp, max_alpha_exp, alpha_exp_base,
+                   reuse, orig_T, tau, best_alphas] + kwargs.values()
+    params_names =  'name, exp_dir, datasets, test_fold, feature_list, model_type, regularization,\
+        min_alpha_exp, max_alpha_exp, alpha_exp_base, reuse, orig_T, tau, best_alphas'
+    for key in kwargs.keys():
+        params_names += ', ' + key
     write_log(exp_dir, params_names, params_list)
 
     # create the reusable holdout if desired
@@ -133,8 +139,7 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type='LR
         X_train = X[train_indices, :]
         for code in codes:
             y = all_y.loc[train_items, code].as_matrix()
-            model = SparseModel(model_type=model_type, column_names=column_names, regularization=regularization,
-                                beta=beta)
+            model = SparseModel(model_type=model_type, column_names=column_names, **kwargs)
             valid_f1s[code], best_alpha = model.tune_by_cv(X_train, y, alphas, td_split_list, n_dev_folds,
                                                            reuser=reuser, verbose=verbose)
             best_alphas.append(best_alpha)
@@ -145,8 +150,8 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type='LR
     else:
         # otherwise, just use the ones that were provided
         for code_index, code in enumerate(codes):
-            models[code] = SparseModel(model_type=model_type, column_names=column_names, regularization=regularization,
-                                beta=beta, alpha=float(best_alphas[code_index]))
+            models[code] = SparseModel(model_type=model_type, column_names=column_names,
+                                       alpha=float(best_alphas[code_index]), **kwargs)
 
     # re-run above, with best lambda, to get predictions (to estimate expected dev performance)
     print "Estimating hold-out performance"
@@ -190,7 +195,7 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type='LR
     test_summary = create_summary_dfs(datasets)
     dev_subfold = None
     train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, dev_subfold)
-    X, column_names = load_features(feature_list, test_fold, dev_subfold, index)
+    #X, column_names = load_features(feature_list, test_fold, dev_subfold, index)
     if verbose > 0:
         n_train = np.sum([len(train_dict[f]) for f in datasets])
         print ' n_train =', n_train, '; n_features =', len(column_names)
@@ -199,7 +204,6 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type='LR
     pred_train_prob, pred_test_prob = train_and_predict(datasets, X, index, column_names,
                                                         all_y, train_dict, test_dict,
                                                         models, verbose=verbose)
-
 
     for f in datasets:
         pred_train[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'train', 'csv'))
@@ -241,14 +245,15 @@ def load_features(feature_list, test_fold, dev_subfold, items, verbose=1):
         #if dev_subfold is not None:
         #    feature_description += ',dev_subfold=' + str(dev_subfold)
         counts, columns = feature_loader.load_feature(feature_description, items)
-        if verbose > 1:
+        if verbose > 0:
             print "Loaded", feature, "with shape", counts.shape
         feature_matrices.append(counts)
         column_names.extend(columns)
 
     # concatenate all features together
     X = sparse.csr_matrix(sparse.hstack(feature_matrices))
-    #print "Feature martix size:", X.shape
+    if verbose > 0:
+        print "Feature martix size:", X.shape
 
     return X, column_names
 

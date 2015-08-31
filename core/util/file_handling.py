@@ -20,7 +20,7 @@ def get_basename(input_filename):
 
 def make_filename(base_dir, input_filename, extension):
     basename = get_basename(input_filename)
-    filename = os.path.join(base_dir, basename + '.' + extension)
+    filename = os.path.join(makedirs(base_dir), basename + '.' + extension)
     return filename
 
 def makedirs(*args):

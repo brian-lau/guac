@@ -17,7 +17,7 @@ from ..util import file_handling as fh
 class FeatureExtractorCountsNgrams(FeatureExtractorCounts):
 
     def __init__(self, test_fold=0, dev_subfold=None, n=1, min_doc_threshold=1, binarize=True,
-                 concat_oov_counts=False, append_dataset=False, source='text'):
+                 concat_oov_counts=False, append_dataset=False, source='normalized'):
         #print "Creating from arguments"
         name = 'ngrams'
         prefix = '_n' + str(n) + '_'
@@ -108,24 +108,14 @@ class FeatureExtractorCountsNgrams(FeatureExtractorCounts):
             text = responses[rid].lower()
             text = text.lstrip()
             text = text.rstrip()
-            text = text.lstrip('/')
-            text = re.sub('<', '', text)
-            text = re.sub('>', '', text)
-            text = re.sub('-', ' - ', text)
-            text = re.sub('_', ' - ', text)
             tokens = []
-            paragraphs = re.split('[/\\\\]', text)
-            paragraphs = [p for p in paragraphs if p != '']
 
-            count = 0
-            for p in paragraphs:
-                count += 1
-                sentences = tokenizer.split_sentences(p)
-                for s in sentences:
-                    sent_tokens = tokenizer.make_ngrams(s, n)
-                    sent_tokens = [t.rstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
-                    sent_tokens = [t.lstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
-                    tokens = tokens + sent_tokens
+            sentences = tokenizer.split_sentences(text)
+            for s in sentences:
+                sent_tokens = tokenizer.make_ngrams(s, n)
+                #sent_tokens = [t.rstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
+                #sent_tokens = [t.lstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
+                tokens = tokens + sent_tokens
 
             tokens = [self.get_prefix() + t for t in tokens]
             if self.params['append_dataset']:

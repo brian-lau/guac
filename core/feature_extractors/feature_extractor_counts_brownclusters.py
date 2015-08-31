@@ -9,13 +9,12 @@ from ..util import file_handling as fh
 
 class FeatureExtractorCountsBrownClusters(FeatureExtractorCounts):
 
-    def __init__(self, test_fold=0, dev_subfold=None, min_doc_threshold=1, binarize=False,
-                 clusters=''):
+    def __init__(self, test_fold=0, dev_subfold=None, binarize=False, clusters=''):
         #print "Creating from arguments"
         name = 'brownclusters'
         prefix = '_bc-' + clusters + '_'
         FeatureExtractorCounts.__init__(self, name, prefix, add_oov=True,
-                                        min_doc_threshold=min_doc_threshold,
+                                        min_doc_threshold=1,
                                         binarize=binarize,
                                         test_fold=test_fold,
                                         dev_subfold=dev_subfold)
@@ -45,7 +44,7 @@ class FeatureExtractorCountsBrownClusters(FeatureExtractorCounts):
 
         all_items = train + dev + test
 
-        responses = fh.read_json(defines.data_raw_text_file)
+        responses = fh.read_json(defines.data_normalized_text_file)
 
         cluster_filename = fh.make_filename(defines.resources_clusters_dir, self.params['clusters'], 'json')
         cluster_dict = fh.read_json(cluster_filename)['index']
@@ -59,8 +58,6 @@ class FeatureExtractorCountsBrownClusters(FeatureExtractorCounts):
         vocab = self.make_vocabulary(tokens, all_items)
         feature_counts, oov_counts = self.extract_feature_counts(all_items, tokens, vocab)
 
-
-
         if write_to_file:
             vocab.write_to_file(self.get_vocab_filename())
             fh.write_to_json(all_items, self.get_index_filename(), sort_keys=False)
@@ -72,7 +69,6 @@ class FeatureExtractorCountsBrownClusters(FeatureExtractorCounts):
         self.vocab = vocab
         self.oov_counts = oov_counts
 
-
     def extract_tokens_from_file(self, responses, input_filename, n, cluster_dict, token_dict):
         Y = fh.read_csv(input_filename)
         rids = Y.index
@@ -81,25 +77,15 @@ class FeatureExtractorCountsBrownClusters(FeatureExtractorCounts):
             text = responses[rid].lower()
             text = text.lstrip()
             text = text.rstrip()
-            text = text.lstrip('/')
-            text = re.sub('<', '', text)
-            text = re.sub('>', '', text)
-            text = re.sub('-', ' - ', text)
-            text = re.sub('_', ' - ', text)
             tokens = []
-            paragraphs = re.split('[/\\\\]', text)
-            paragraphs = [p for p in paragraphs if p != '']
 
-            count = 0
-            for p in paragraphs:
-                count += 1
-                sentences = tokenizer.split_sentences(p)
-                for s in sentences:
-                    sent_tokens = tokenizer.make_ngrams(s, n)
-                    sent_tokens = [t.rstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
-                    sent_tokens = [t.lstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
-                    sent_tokens = sent_tokens + ['__ENDS__']
-                    tokens = tokens + sent_tokens
+            sentences = tokenizer.split_sentences(text)
+            for s in sentences:
+                sent_tokens = tokenizer.make_ngrams(s, n)
+                sent_tokens = [t.rstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
+                sent_tokens = [t.lstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
+                sent_tokens = sent_tokens + ['__ENDS__']
+                tokens = tokens + sent_tokens
 
             tokens = [self.get_prefix() + cluster_dict[t] for t in tokens if t in cluster_dict]
             token_dict[rid] = tokens

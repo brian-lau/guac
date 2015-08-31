@@ -223,24 +223,27 @@ class SparseModel:
 
     def write_to_file(self, output_filename):
         if self.model_type == 'SVM':
-            output = {'params': self.params, 'intercept': self.model.intercept_[0]}
+            output = {'params': self.params, 'intercept': self.model.intercept_[0], 'model_type': self.model_type}
         elif self.model_type == 'LR':
             coefs_list = self.get_coefs()
             coefs_dict = {k: v for (k, v) in coefs_list if v != 0}
             coefs_sorted = sorted(coefs_dict.items(), key=operator.itemgetter(1))
-            output = {'params': self.params, 'intercept': self.model.intercept_[0], 'coefs': coefs_sorted}
+            output = {'params': self.params, 'intercept': self.model.intercept_[0], 'coefs': coefs_sorted,
+                      'model_type': self.model_type}
         elif self.model_type == 'MNB':
             coefs_list = self.get_coefs()
             coefs_dict = {k: v for (k, v) in coefs_list if v != 0}
             coefs_sorted = sorted(coefs_dict.items(), key=operator.itemgetter(1))
-            output = {'params': self.params, 'intercept': self.model.intercept_[0], 'coefs': coefs_sorted}
+            output = {'params': self.params, 'intercept': self.model.intercept_[0], 'coefs': coefs_sorted,
+                      'model_type': self.model_type}
         elif self.model_type == 'myBinaryMNB':
             coefs_list = self.get_coefs()
             coefs_dict = {k: v for (k, v) in coefs_list if v != 0}
             coefs_sorted = sorted(coefs_dict.items(), key=operator.itemgetter(1))
-            output = {'params': self.params, 'intercept': self.b, 'coefs': coefs_sorted}
+            output = {'params': self.params, 'intercept': self.b, 'coefs': coefs_sorted,
+                      'model_type': self.model_type}
         else:
-            output = {'default': self.default}
+            output = {'default': self.default,  'model_type': self.model_type}
         fh.write_to_json(output, output_filename, sort_keys=False)
 
 

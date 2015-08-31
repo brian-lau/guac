@@ -2,7 +2,6 @@ import os
 from optparse import OptionParser
 
 from feature_extractor_counts_ngrams import FeatureExtractorCountsNgrams
-from feature_extractor_counts_anugrams import FeatureExtractorCountsAnUgrams
 from feature_extractor_counts_brownclusters import FeatureExtractorCountsBrownClusters
 
 from ..util import file_handling as fh
@@ -19,13 +18,8 @@ def load_feature(feature_description, index_to_load, verbose=1):
     extractor = None
     if feature_name == 'ngrams':
         extractor = extractor_factory(FeatureExtractorCountsNgrams, kwargs_list_to_dict(parts[1:]))
-        #extractor = extractor_factory(FeatureExtractorCountsNgrams, kwargs_list_to_dict(kwargs))
     elif feature_name == 'brown':
         extractor = extractor_factory(FeatureExtractorCountsBrownClusters, kwargs_list_to_dict(parts[1:]))
-        #extractor = extractor_factory(FeatureExtractorCountsBrownClusters, kwargs_list_to_dict(kwargs))
-    elif feature_name == 'anugrams':
-        extractor = extractor_factory(FeatureExtractorCountsAnUgrams, kwargs_list_to_dict(parts[1:]))
-        #extractor = extractor_factory(FeatureExtractorCountsAnUgrams, kwargs_list_to_dict(kwargs))
 
     if not os.path.exists(extractor.dirname):
         if verbose > 0:
