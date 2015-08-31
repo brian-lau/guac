@@ -22,8 +22,15 @@ def decorate_words(output_filename, search_word):
 
 
 def main():
+
     output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_dem', 'json')
     decorate_words(output_filename, 'Democrat')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_rep', 'json')
+    decorate_words(output_filename, 'Republican')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_like', 'json')
+    decorate_words(output_filename, 'Likes')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_dislike', 'json')
+    decorate_words(output_filename, 'Dislikes')
 
 
 if __name__ == '__main__':
