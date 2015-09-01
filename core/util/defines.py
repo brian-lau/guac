@@ -35,6 +35,7 @@ data_processed_dir = os.path.join(data_dir, 'processed')
 data_processed_text_dir = os.path.join(data_processed_dir, 'text')
 data_semafor_dir = os.path.join(data_processed_dir, 'semafor')
 data_stanford_dir = os.path.join(data_processed_dir, 'stanford')
+data_rnn_dir = os.path.join(data_dir, 'rnn')
 
 data_normalized_text_file = os.path.join(data_processed_text_dir, 'normalized.json')
 

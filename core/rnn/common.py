@@ -1,9 +1,11 @@
+import os
 import codecs
 import gensim
 
 import numpy as np
 import pandas as pd
 
+import extract_ngram_tokens_for_rnn
 from ..preprocessing import labels
 from ..preprocessing import data_splitting as ds
 from ..experiment import evaluation
@@ -11,7 +13,7 @@ from ..util import defines
 from ..util import file_handling as fh
 
 
-def load_data(datasets, test_fold, dev_subfold):
+def load_data(datasets, test_fold, dev_subfold, min_doc_thresh):
     train_items = []
     dev_items = []
     test_items = []
@@ -28,10 +30,15 @@ def load_data(datasets, test_fold, dev_subfold):
 
     all_labels = pd.concat(label_list, axis=0)
 
+    basename = extract_ngram_tokens_for_rnn.get_feature_name(n=1, m=min_doc_thresh)
+    all_lex_filename = fh.make_filename(defines.data_rnn_dir, basename, 'json')
+    if not os.path.exists(all_lex_filename):
+        extract_ngram_tokens_for_rnn.prepare_data_for_rnn(n=1, m=min_doc_thresh)
+
     # load word indices for all sentences
-    all_lex = fh.read_json(fh.make_filename(defines.data_token_dir, 'ngrams_1_rnn_indices', 'json'))
+    all_lex = fh.read_json(fh.make_filename(defines.data_rnn_dir, basename + '_indices', 'json'))
     # load a vocabulary index
-    words2idx = fh.read_json(fh.make_filename(defines.data_token_dir, 'ngrams_1_rnn_vocab', 'json'))
+    words2idx = fh.read_json(fh.make_filename(defines.data_rnn_dir, basename + '_vocab', 'json'))
 
     # build a train/test/validation set from the sentences
     train_lex = []

@@ -331,9 +331,10 @@ def main(params=None):
 
     if params is None:
         params = {
-            'output_dir': None,
+            'exp_name': 'test',
             'test_fold': 0,
-            'dev_subfold': 0,
+            'n_dev_folds': 5,
+            'min_doc_thresh': 1,
             'initialize_word_vectors': True,
             'custom_word2vec': True,
             'extra_dims': 1,            # could use for many things, including __OOV__
@@ -359,138 +360,143 @@ def main(params=None):
     np.random.seed(params['seed'])
     random.seed(params['seed'])
 
-    output_dir = params['output_dir']
-    if output_dir is None:
-        output_dir = fh.makedirs(defines.exp_dir, 'rnn', 'test')
+    output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'])
 
-    datasets = []
+    datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
 
-    all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], params['dev_subfold'])
-    train_xy, valid_xy, test_xy = all_data
-    train_lex, train_y = train_xy
-    valid_lex, valid_y = valid_xy
-    test_lex, test_y = test_xy
-    train_items, dev_items, test_items = items
-    vocsize = len(words2idx.keys())
-    idx2words = dict((k, v) for v, k in words2idx.iteritems())
-    total_emb_dims = params['word2vec_dim'] + params['extra_dims']
-    n_sentences = len(train_lex)
-    print "vocsize = ", vocsize, 'n_train', n_sentences
+    np.random.seed(params['seed'])
+    random.seed(params['seed'])
 
-    n_items, n_codes = all_labels.shape
+    for dev_fold in range(params['n_dev_folds']):
+        print "dev fold =", dev_fold
 
-    # get the words in the sentences for the test and validation sets
-    words_valid = [map(lambda x: idx2words[x], w) for w in valid_lex]
-    groundtruth_test = test_y[:]
-    words_test = [map(lambda x: idx2words[x], w) for w in test_lex]
+        all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], dev_fold)
+        train_xy, valid_xy, test_xy = all_data
+        train_lex, train_y = train_xy
+        valid_lex, valid_y = valid_xy
+        test_lex, test_y = test_xy
+        train_items, dev_items, test_items = items
+        vocsize = len(words2idx.keys())
+        idx2words = dict((k, v) for v, k in words2idx.iteritems())
+        total_emb_dims = params['word2vec_dim'] + params['extra_dims']
+        n_sentences = len(train_lex)
+        print "vocsize = ", vocsize, 'n_train', n_sentences
 
-    initial_embeddings = common.load_embeddings(params, words2idx)
+        n_items, n_codes = all_labels.shape
 
-    print "Building RNN"
-    rnn = RNN(nh=params['nhidden'],
-              nc=n_codes,
-              ne=vocsize,
-              de=total_emb_dims,
-              cs=params['win'],
-              initial_embeddings=initial_embeddings,
-              init_scale=params['init_scale'],
-              rnn_type=params['rnn_type'],
-              pooling_method=params['pooling_method'],
-              bidirectional=params['bidirectional'],
-              bi_combine=params['bi_combine']
-              )
 
-    # train with early stopping on validation set
-    best_f1 = -np.inf
-    params['clr'] = params['lr']
-    for e in xrange(params['n_epochs']):
-        # shuffle
-        #seed = random.rand
 
-        shuffle([train_lex, train_y], params['seed'])   # shuffle the input data
-        params['ce'] = e                # store the current epoch
-        tic = timeit.default_timer()
+        # get the words in the sentences for the test and validation sets
+        words_valid = [map(lambda x: idx2words[x], w) for w in valid_lex]
+        groundtruth_test = test_y[:]
+        words_test = [map(lambda x: idx2words[x], w) for w in test_lex]
 
-        for i, (x, y) in enumerate(zip(train_lex, train_y)):
-            rnn.train(x, y, params['win'], params['clr'], params['lr_emb_fac'])
-            print '[learning] epoch %i >> %2.2f%%' % (
-                e, (i + 1) * 100. / float(n_sentences)),
-            print 'completed in %.2f (sec) <<\r' % (timeit.default_timer() - tic),
-            sys.stdout.flush()
+        initial_embeddings = common.load_embeddings(params, words2idx)
 
-        # evaluation // back into the real world : idx -> words
-        print ""
+        print "Building RNN"
+        rnn = RNN(nh=params['nhidden'],
+                  nc=n_codes,
+                  ne=vocsize,
+                  de=total_emb_dims,
+                  cs=params['win'],
+                  initial_embeddings=initial_embeddings,
+                  init_scale=params['init_scale'],
+                  rnn_type=params['rnn_type'],
+                  pooling_method=params['pooling_method'],
+                  bidirectional=params['bidirectional'],
+                  bi_combine=params['bi_combine']
+                  )
 
-        print rnn.classify(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
-        #print rnn.get_element_weights(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
-        if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
-            print rnn.a_sum_check(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
+        # train with early stopping on validation set
+        best_f1 = -np.inf
+        params['clr'] = params['lr']
+        for e in xrange(params['n_epochs']):
+            # shuffle
 
-        """
-        predictions_train = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
-                             for x in train_lex]
-        predictions_test = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
-                            for x in test_lex]
-        predictions_valid = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
-                             for x in valid_lex]
-        """
+            shuffle([train_lex, train_y], params['seed'])   # shuffle the input data
+            params['ce'] = e                # store the current epoch
+            tic = timeit.default_timer()
 
-        predictions_train = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in train_lex]
-        predictions_test = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in test_lex]
-        predictions_valid = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
+            for i, (x, y) in enumerate(zip(train_lex, train_y)):
+                rnn.train(x, y, params['win'], params['clr'], params['lr_emb_fac'])
+                print '[learning] epoch %i >> %2.2f%%' % (
+                    e, (i + 1) * 100. / float(n_sentences)),
+                print 'completed in %.2f (sec) <<\r' % (timeit.default_timer() - tic),
+                sys.stdout.flush()
 
-        train_f1 = common.calc_mean_f1(predictions_train, train_y)
-        test_f1 = common.calc_mean_f1(predictions_test, test_y)
-        valid_f1 = common.calc_mean_f1(predictions_valid, valid_y)
+            # evaluation // back into the real world : idx -> words
+            print ""
 
-        question_f1s = []
-        question_pps = []
+            print rnn.classify(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
+            #print rnn.get_element_weights(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
+            if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
+                print rnn.a_sum_check(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
 
-        print "train_f1 =", train_f1, "valid_f1 =", valid_f1, "test_f1 =", test_f1
+            """
+            predictions_train = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
+                                 for x in train_lex]
+            predictions_test = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
+                                for x in test_lex]
+            predictions_valid = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
+                                 for x in valid_lex]
+            """
 
-        if valid_f1 > best_f1:
-            best_rnn = copy.deepcopy(rnn)
-            best_f1 = valid_f1
+            predictions_train = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in train_lex]
+            predictions_test = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in test_lex]
+            predictions_valid = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
 
-            if params['verbose']:
-                print('NEW BEST: epoch', e,
-                      'valid f1', valid_f1,
-                      'best test f1', test_f1)
+            train_f1 = common.calc_mean_f1(predictions_train, train_y)
+            test_f1 = common.calc_mean_f1(predictions_test, test_y)
+            valid_f1 = common.calc_mean_f1(predictions_valid, valid_y)
 
-            params['tr_f1'] = train_f1
-            params['te_f1'] = test_f1
-            params['v_f1'] = valid_f1
-            params['be'] = e            # store the current epoch as a new best
+            question_f1s = []
+            question_pps = []
 
-        # learning rate decay if no improvement in a given number of epochs
-        if abs(params['be']-params['ce']) >= params['decay_delay']:
-            params['clr'] *= params['decay_factor']
-            print "Reverting to current best; new learning rate = ", params['clr']
-            # also reset to the previous best
-            rnn = best_rnn
+            print "train_f1 =", train_f1, "valid_f1 =", valid_f1, "test_f1 =", test_f1
 
-        # also reduce learning rate if we can't even fit the training data
-        if train_f1 == 0.0:
-            params['clr'] *= params['decay_factor']
+            if valid_f1 > best_f1:
+                best_rnn = copy.deepcopy(rnn)
+                best_f1 = valid_f1
 
-        if params['clr'] < 1e-5:
-            break
+                if params['verbose']:
+                    print('NEW BEST: epoch', e,
+                          'valid f1', valid_f1,
+                          'best test f1', test_f1)
 
-        if best_f1 == 1.0:
-            break
+                params['tr_f1'] = train_f1
+                params['te_f1'] = test_f1
+                params['v_f1'] = valid_f1
+                params['be'] = e            # store the current epoch as a new best
 
-    best_rnn.print_embeddings()
+            # learning rate decay if no improvement in a given number of epochs
+            if abs(params['be']-params['ce']) >= params['decay_delay']:
+                params['clr'] *= params['decay_factor']
+                print "Reverting to current best; new learning rate = ", params['clr']
+                # also reset to the previous best
+                rnn = best_rnn
 
-    if params['save_model']:
-        predictions_valid = [best_rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
-        best_rnn.save(output_dir)
-        common.write_predictions(datasets, predictions_valid, dev_items, output_dir)
+            # also reduce learning rate if we can't even fit the training data
+            if train_f1 == 0.0:
+                params['clr'] *= params['decay_factor']
 
-    print('BEST RESULT: epoch', params['be'],
-          'train F1 ', params['tr_f1'],
-          'valid F1', params['v_f1'],
-          'best test F1', params['te_f1'],
-          'with the model', output_dir)
+            if params['clr'] < 1e-5:
+                break
+
+            if best_f1 == 1.0:
+                break
+
+        best_rnn.print_embeddings()
+
+        if params['save_model']:
+            predictions_valid = [best_rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
+            best_rnn.save(output_dir)
+            common.write_predictions(datasets, predictions_valid, dev_items, output_dir)
+
+        print('BEST RESULT: epoch', params['be'],
+              'train F1 ', params['tr_f1'],
+              'valid F1', params['v_f1'],
+              'best test F1', params['te_f1'],
+              'with the model', output_dir)
 
 
 
