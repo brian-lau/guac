@@ -244,7 +244,7 @@ def main():
     best = fmin(call_experiment,
                 space=space,
                 algo=tpe.suggest,
-                max_evals=50,
+                max_evals=100,
                 trials=trials)
 
     print space_eval(space, best)

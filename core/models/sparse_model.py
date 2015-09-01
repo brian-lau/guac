@@ -68,7 +68,7 @@ class SparseModel:
         elif model_type == 'MNB':
             if 'alpha' not in self.params:
                 self.params['alpha'] = 1.0
-            self.model = MultinomialNB(alpha=1/float(self.params['alpha']), fit_prior=True)
+            self.model = MultinomialNB(alpha=self.params['alpha'], fit_prior=True)
         elif model_type == 'myMNB':
             if 'alpha' not in self.params:
                 self.params['alpha'] = 1.0
@@ -84,7 +84,7 @@ class SparseModel:
         elif self.model_type == 'SVM' or self.model_type == 'SVMNB':
             self.model.set_params(C=alpha)
         elif self.model_type == 'MNB':
-            self.model.set_params(alpha=1/float(alpha))
+            self.model.set_params(alpha=float(alpha))
 
     def fit(self, X, y):
         n_items, n_features = X.shape
@@ -99,8 +99,8 @@ class SparseModel:
             assert len(np.bincount(y)) == 2
             index_0 = np.array(y) == 0
             index_1 = np.array(y) == 1
-            p = np.sum(X.toarray()[index_1, :], axis=0) + 1/float(self.params['alpha'])
-            q = np.sum(X.toarray()[index_0, :], axis=0) + 1/float(self.params['alpha'])
+            p = np.sum(X.toarray()[index_1, :], axis=0) + float(self.params['alpha'])
+            q = np.sum(X.toarray()[index_0, :], axis=0) + float(self.params['alpha'])
             self.w = np.log((p / float(np.sum(np.abs(p)))) / (q / float(np.sum(np.abs(q)))))
             self.b = np.log(np.sum(index_1) / float(np.sum(index_0)))
             if np.isnan(self.w).any():
