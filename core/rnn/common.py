@@ -84,12 +84,14 @@ def load_embeddings(params, words2idx):
         print "Setting up initial embeddings"
 
         missing_count = 0
+        total_count = 0
         total_emb_dims = params['word2vec_dim']
         if params['add_OOV']:
             total_emb_dims += 1
         initial_embeddings = np.zeros([vocsize, total_emb_dims], dtype=float)
         for w in words2idx.keys():
             i = words2idx[w]
+            total_count += 1
             if w in vectors:
                 initial_embeddings[i, :params['word2vec_dim']] = vectors[w]
             # create a separate orthogonal dimension for OOV
@@ -101,6 +103,7 @@ def load_embeddings(params, words2idx):
                 initial_embeddings[i, :params['word2vec_dim']] = 0.05 * \
                     np.random.uniform(-1.0, 1.0, (1, params['word2vec_dim']))
 
+    print "total words =", total_count
     print "total words missing =", missing_count
     return initial_embeddings
 

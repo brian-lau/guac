@@ -2,33 +2,40 @@ import re
 import json
 import codecs
 
+from ..feature_extractors import tokenizer
 from ..util import defines
 from ..util import file_handling as fh
 
-token_dir = defines.data_token_dir
+input_filename = defines.data_normalized_text_file
+responses = fh.read_json(input_filename)
 
-input_filename = fh.make_filename(token_dir, 'ngrams_1_rnn', 'json')
-rnn_ngrams = fh.read_json(input_filename)
+exclude_questions = ['Current-Industry', 'Current-Occupation', 'Past-Industry', 'Past-Occupation', 'drld-synthetic']
 
-groups_filename = fh.make_filename(defines.resources_group_dir, 'group_drld', 'txt')
-groups = fh.read_text(groups_filename)
+output_filename = fh.make_filename(defines.resources_clusters_dir, 'anes_text', 'txt')
 
-industry_occupation_filename = fh.make_filename(defines.resources_group_dir, 'industry_and_occupation', 'txt')
-i_and_o_groups = fh.read_text(industry_occupation_filename)
+#comments_filename = fh.make_filename(reddit_dir, 'comments', 'json')
 
-output_filename = fh.make_filename(defines.resources_clusters_dir, 'drld_input', 'txt')
-
-comments_filename = fh.make_filename(reddit_dir, 'comments', 'json')
+#apos_words = {}
 
 with codecs.open(output_filename, 'w') as output_file:
-    keys = rnn_ngrams.keys()
+    keys = responses.keys()
+    keys.sort()
+    count = 0
     for k in keys:
-        question = k.split('_')[0]
-        text = ' '.join(rnn_ngrams[k])
-        # exclude the dem/rep dis/likes and industry/occupation text
-        if question not in groups and question not in i_and_o_groups:
-            output_file.write(text + '\n')
-
+        parts = k.split('_')
+        if parts[0] not in exclude_questions:
+            text = responses[k]
+            tokens = []
+            sentences = tokenizer.split_sentences(text)
+            for s in sentences:
+                sent_tokens = tokenizer.make_ngrams(s, 1, reattach=True, split_off_quotes=True)
+                tokens = tokens + sent_tokens
+                #for t in tokens:
+                #    if re.search("'", t):
+                #        apos_words[t] = 1
+            output_file.write(' '.join(tokens) + '\n')
+            count += 1
+    """
     total_count = 0
     success_count = 0
     with codecs.open(comments_filename, 'r') as input_file:
@@ -47,7 +54,11 @@ with codecs.open(output_filename, 'w') as output_file:
                                 output_file.write(p + '\n')
                     except Exception as inst:
                         pass
+    """
 
-print "Read", success_count, "out of", total_count, "comments."
 
-
+#print count
+#keys = apos_words.keys()
+#keys.sort()
+#for k in keys:
+#    print k

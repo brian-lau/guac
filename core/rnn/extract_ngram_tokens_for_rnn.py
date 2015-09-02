@@ -23,9 +23,13 @@ def prepare_data_for_rnn(min_threshold=1, n=1):
     token_counts = Counter()
     token_doc_counts = Counter()
 
+    exclude_questions = ['Current-Industry', 'Current-Occupation', 'Past-Industry', 'Past-Occupation']
+
     for rid in data.keys():
-        token_counts.update(data[rid])
-        token_doc_counts.update(set(data[rid]))
+        parts = rid.split('_')
+        if parts[0] not in exclude_questions:
+            token_counts.update(data[rid])
+            token_doc_counts.update(set(data[rid]))
 
     print "Vocabulary size before pruning:", len(token_counts)
 

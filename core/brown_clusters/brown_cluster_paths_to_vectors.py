@@ -3,7 +3,7 @@ import numpy as np
 from ..util import defines
 from ..util import file_handling as fh
 
-#input_filename = base_dir + 'Tools/NLP/Stanford/brown-cluster-master/drld_brown_input-c200-p1.out/paths'
+input_filename = '/Users/dcard/Tools/NLP/Stanford/brown-cluster-master/anes_text-c200-p1.out/paths'
 bc_dim = 200
 
 lines = fh.read_text(input_filename)
