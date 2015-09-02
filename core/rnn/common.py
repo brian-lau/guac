@@ -33,7 +33,7 @@ def load_data(datasets, test_fold, dev_subfold, min_doc_thresh):
     basename = extract_ngram_tokens_for_rnn.get_feature_name(n=1, m=min_doc_thresh)
     all_lex_filename = fh.make_filename(defines.data_rnn_dir, basename, 'json')
     if not os.path.exists(all_lex_filename):
-        extract_ngram_tokens_for_rnn.prepare_data_for_rnn(n=1, m=min_doc_thresh)
+        extract_ngram_tokens_for_rnn.prepare_data_for_rnn(n=1, min_threshold=min_doc_thresh)
 
     # load word indices for all sentences
     all_lex = fh.read_json(fh.make_filename(defines.data_rnn_dir, basename + '_indices', 'json'))
@@ -69,19 +69,24 @@ def load_embeddings(params, words2idx):
     initial_embeddings = None
     vocsize = len(words2idx.keys())
     if params['initialize_word_vectors']:
-        if params['custom_word2vec']:
+        if params['vectors'] == 'drld_word2vec':
             # my word2vec vectors
+
             print "Loading custom word2vec vectors"
             vector_file = defines.my_word2vec_filename
             vectors = gensim.models.Word2Vec.load(vector_file)
-        else:
+        elif params['vectors'] == 'default_word2vec':
             # standard word2vec
             print "Loading standard word2vec vectors"
             vector_file = defines.word2vec_vectors_filename
             vectors = gensim.models.Word2Vec.load_word2vec_format(vector_file, binary=True)
 
         print "Setting up initial embeddings"
-        total_emb_dims = params['word2vec_dim'] + params['extra_dims']
+
+        missing_count = 0
+        total_emb_dims = params['word2vec_dim']
+        if params['add_OOV']:
+            total_emb_dims += 1
         initial_embeddings = np.zeros([vocsize, total_emb_dims], dtype=float)
         for w in words2idx.keys():
             i = words2idx[w]
@@ -89,12 +94,14 @@ def load_embeddings(params, words2idx):
                 initial_embeddings[i, :params['word2vec_dim']] = vectors[w]
             # create a separate orthogonal dimension for OOV
             elif w == '__OOV__':
-                initial_embeddings[i, -1] = 1
+                initial_embeddings[i, params['word2vec_dim']] = 1
             else:
                 print "no vector for", w
+                missing_count += 1
                 initial_embeddings[i, :params['word2vec_dim']] = 0.05 * \
                     np.random.uniform(-1.0, 1.0, (1, params['word2vec_dim']))
 
+    print "total words missing =", missing_count
     return initial_embeddings
 
 

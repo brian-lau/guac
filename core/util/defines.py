@@ -46,7 +46,7 @@ vectors_dir = os.path.join(resources_dir, 'vectors')
 non_distributional_vectors_dir = os.path.join(vectors_dir, 'non-distributional')
 word2vec_vectors_filename = os.path.join(vectors_dir, 'GoogleNews-vectors-negative300.bin')
 brown_augmented_word2vec_filename = os.path.join(vectors_dir, 'brown_augmented_word2vec_300.csv')
-my_word2vec_filename = os.path.join(vectors_dir, 'drld_reddit_word2vec_300.bin')
+my_word2vec_filename = os.path.join(vectors_dir, 'drld_word2vec_300.bin')
 
 data_subsets_dir = os.path.join(data_dir, 'subsets')
 

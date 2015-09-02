@@ -1,11 +1,13 @@
 # adapted from https://github.com/lisa-lab/DeepLearningTutorials
 
-
 from collections import OrderedDict
 import copy
 import os
+import re
 import random
 import timeit
+
+from hyperopt import STATUS_OK
 
 import numpy as np
 
@@ -62,6 +64,7 @@ class RNN(object):
     def __init__(self, nh, nc, ne, de, cs, init_scale=0.2, initial_embeddings=None,
                  rnn_type='basic',      # 'basic', 'GRU', or 'LSTM'
                  pooling_method='max',  #'max', 'mean', 'attention1' or 'attention2',
+                 add_DRLD=False,
                  bidirectional=True, bi_combine='concat'   # 'concat', 'sum', or 'mean'
                 ):
         '''
@@ -73,6 +76,8 @@ class RNN(object):
         '''
 
         # initialize parameters
+        dx = de * cs
+
         bi = 1
         if bidirectional and bi_combine == 'concat':
             bi = 2
@@ -84,8 +89,11 @@ class RNN(object):
         else:
             self.emb = theano.shared(name='embeddings', value=initial_embeddings.astype(theano.config.floatX))
 
+        if add_DRLD:
+            self.W_drld = theano.shared(name='W_drld', value=init_scale * np.random.uniform(-1.0, 1.0, (1, nh))
+                                        .astype(theano.config.floatX))
         # common paramters (feeding into hidden node)
-        self.W_xh = theano.shared(name='W_xh', value=init_scale * np.random.uniform(-1.0, 1.0, (de * cs, nh))
+        self.W_xh = theano.shared(name='W_xh', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
                                   .astype(theano.config.floatX))
         self.W_hh = theano.shared(name='W_hh', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                   .astype(theano.config.floatX))
@@ -111,12 +119,12 @@ class RNN(object):
 
         # GRU parameters
         if rnn_type == 'GRU':
-            self.W_xr = theano.shared(name='W_xr', value=init_scale * np.random.uniform(-1.0, 1.0, (de * cs, nh))
+            self.W_xr = theano.shared(name='W_xr', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
                                       .astype(theano.config.floatX))
             self.W_hr = theano.shared(name='W_hr', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                       .astype(theano.config.floatX))
             self.b_r = theano.shared(name='b_r', value=np.zeros(nh, dtype=theano.config.floatX))
-            self.W_xz = theano.shared(name='W_xz', value=init_scale * np.random.uniform(-1.0, 1.0, (de * cs, nh))
+            self.W_xz = theano.shared(name='W_xz', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
                                       .astype(theano.config.floatX))
             self.W_hz = theano.shared(name='W_hz', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                       .astype(theano.config.floatX))
@@ -125,7 +133,7 @@ class RNN(object):
         # LSTM paramters
         if rnn_type == 'LSTM':
             # forget gate (needs special initialization)
-            self.W_xf = theano.shared(name='W_xf', value=init_scale * np.random.uniform(-1.0, 1.0, (de * cs, nh))
+            self.W_xf = theano.shared(name='W_xf', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
                                       .astype(theano.config.floatX))
             self.W_hf = theano.shared(name='W_hf', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                       .astype(theano.config.floatX))
@@ -134,7 +142,7 @@ class RNN(object):
             self.b_f = theano.shared(name='b_f', value=np.array(np.random.uniform(0.0, 1.0, nh),
                                                                 dtype=theano.config.floatX))
             # input gate
-            self.W_xi = theano.shared(name='W_xi', value=init_scale * np.random.uniform(-1.0, 1.0, (de * cs, nh))
+            self.W_xi = theano.shared(name='W_xi', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
                                       .astype(theano.config.floatX))
             self.W_hi = theano.shared(name='W_hi', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                       .astype(theano.config.floatX))
@@ -143,7 +151,7 @@ class RNN(object):
             self.b_i = theano.shared(name='b_i', value=np.zeros(nh, dtype=theano.config.floatX))
 
             # output gate
-            self.W_xo = theano.shared(name='W_xo', value=init_scale * np.random.uniform(-1.0, 1.0, (de * cs, nh))
+            self.W_xo = theano.shared(name='W_xo', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
                                       .astype(theano.config.floatX))
             self.W_ho = theano.shared(name='W_ho', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                       .astype(theano.config.floatX))
@@ -162,6 +170,8 @@ class RNN(object):
                        self.W_xh, self.W_hh, self.b_h,
                        self.W_s, self.b_s,
                        self.h_i_f]
+        #if add_DRLD:
+        #    self.params += [self.W_drld]
         if pooling_method == 'attention':
             self.params += [self.W_a, self.b_a]
         if rnn_type == 'GRU':
@@ -179,13 +189,14 @@ class RNN(object):
 
         # create an X object based on the size of the object at the index [elements, emb_dim * window]
         idxs = T.imatrix()
-        x = self.emb[idxs].reshape((idxs.shape[0], de*cs))
+        x = self.emb[idxs].reshape((idxs.shape[0], ne*cs))
 
         # create a vector for y
         y = T.ivector('y')
 
         def recurrence_basic(x_t, h_tm1):
-            h_t = T.nnet.sigmoid(T.dot(x_t, self.W_xh) + T.dot(h_tm1, self.W_hh) + self.b_h)
+            temp = T.dot(x_t, self.W_xh) + T.dot(h_tm1, self.W_hh) + self.b_h
+            h_t = T.nnet.sigmoid(temp)
             return h_t
 
         def recurrence_basic_reverse(x_t, h_tp1):
@@ -223,7 +234,6 @@ class RNN(object):
             o_t = T.nnet.sigmoid(T.dot(x_t, self.W_xo) + T.dot(h_tp1, self.W_ho) + T.dot(c_t, self.W_co) + self.b_o)
             h_t = o_t * c_t
             return [h_t, c_t]
-
 
         h_r = None
 
@@ -292,7 +302,7 @@ class RNN(object):
 
         # theano functions to compile
         self.classify = theano.function(inputs=[idxs], outputs=y_pred)
-        self.get_element_weights = theano.function(inputs=[idxs], outputs=element_weights)
+        #self.get_element_weights = theano.function(inputs=[idxs], outputs=element_weights)
         self.sentence_train = theano.function(inputs=[idxs, y, lr, lr_emb_fac],
                                               outputs=sentence_nll,
                                               updates=sentence_updates)
@@ -302,7 +312,7 @@ class RNN(object):
         if pooling_method == 'attention1' or pooling_method == 'attention2':
             self.a_sum_check = theano.function(inputs=[idxs], outputs=a_sum)
 
-    def train(self, x, y, window_size, learning_rate, emb_lr_factor):
+    def train(self, x, likes, y, window_size, learning_rate, emb_lr_factor):
         # concatenate words in a window
         cwords = contextwin(x, window_size)
         # make an array of these windows
@@ -336,10 +346,11 @@ def main(params=None):
             'n_dev_folds': 5,
             'min_doc_thresh': 1,
             'initialize_word_vectors': True,
-            'custom_word2vec': True,
-            'extra_dims': 1,            # could use for many things, including __OOV__
+            'vectors': 'drld_word2vec', # default_word2vec, drld_word2vec ...
             'word2vec_dim': 300,
-            'win': 3,                   # size of context window
+            'add_OOV': True,
+            'add_DRLD': True,
+            'win': 1,                   # size of context window
             'init_scale': 0.2,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
             'pooling_method': 'max',    # max, mean, or attention1/2
@@ -350,17 +361,19 @@ def main(params=None):
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 60,
+            'n_epochs': 20,
             'save_model': True,
             'seed': 42,
-            'verbose': 1}
+            'verbose': 1,
+            'reuse': False,
+            'T_orig': 0.04,
+            'tau': 0.01
+        }
     print params
 
     # seed the random number generators
     np.random.seed(params['seed'])
     random.seed(params['seed'])
-
-    output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'])
 
     datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
 
@@ -370,7 +383,10 @@ def main(params=None):
     for dev_fold in range(params['n_dev_folds']):
         print "dev fold =", dev_fold
 
-        all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], dev_fold)
+        output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
+
+        all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], dev_fold,
+                                                                  params['min_doc_thresh'])
         train_xy, valid_xy, test_xy = all_data
         train_lex, train_y = train_xy
         valid_lex, valid_y = valid_xy
@@ -378,13 +394,11 @@ def main(params=None):
         train_items, dev_items, test_items = items
         vocsize = len(words2idx.keys())
         idx2words = dict((k, v) for v, k in words2idx.iteritems())
-        total_emb_dims = params['word2vec_dim'] + params['extra_dims']
+
         n_sentences = len(train_lex)
         print "vocsize = ", vocsize, 'n_train', n_sentences
 
         n_items, n_codes = all_labels.shape
-
-
 
         # get the words in the sentences for the test and validation sets
         words_valid = [map(lambda x: idx2words[x], w) for w in valid_lex]
@@ -392,13 +406,18 @@ def main(params=None):
         words_test = [map(lambda x: idx2words[x], w) for w in test_lex]
 
         initial_embeddings = common.load_embeddings(params, words2idx)
+        emb_dim = initial_embeddings.shape[0]
+
+        best_valid_f1s = []
+        best_test_f1s = []
 
         print "Building RNN"
         rnn = RNN(nh=params['nhidden'],
                   nc=n_codes,
                   ne=vocsize,
-                  de=total_emb_dims,
+                  de=emb_dim,
                   cs=params['win'],
+                  add_DRLD=params['add_DRLD'],
                   initial_embeddings=initial_embeddings,
                   init_scale=params['init_scale'],
                   rnn_type=params['rnn_type'],
@@ -413,12 +432,16 @@ def main(params=None):
         for e in xrange(params['n_epochs']):
             # shuffle
 
-            shuffle([train_lex, train_y], params['seed'])   # shuffle the input data
+            shuffle([train_lex, train_y, train_items], params['seed'])   # shuffle the input data
             params['ce'] = e                # store the current epoch
             tic = timeit.default_timer()
 
             for i, (x, y) in enumerate(zip(train_lex, train_y)):
-                rnn.train(x, y, params['win'], params['clr'], params['lr_emb_fac'])
+                if re.search('Likes', train_items[i]) is not None:
+                    likes = 1
+                else:
+                    likes = 0
+                rnn.train(x, likes, y, params['win'], params['clr'], params['lr_emb_fac'])
                 print '[learning] epoch %i >> %2.2f%%' % (
                     e, (i + 1) * 100. / float(n_sentences)),
                 print 'completed in %.2f (sec) <<\r' % (timeit.default_timer() - tic),
@@ -498,6 +521,15 @@ def main(params=None):
               'best test F1', params['te_f1'],
               'with the model', output_dir)
 
+        best_valid_f1s.append(params['v_f1'])
+        best_test_f1s.append(params['te_f1'])
+
+    return {'loss': -np.max(best_valid_f1s),
+            'mean_valid_f1': np.mean(best_valid_f1s),
+            'valid_f1s': best_valid_f1s,
+            'test_f1s': best_test_f1s,
+            'status': STATUS_OK
+            }
 
 
 if __name__ == '__main__':
