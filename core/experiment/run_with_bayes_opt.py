@@ -58,7 +58,15 @@ space = {
                     'b_min_doc_threshold': hp.choice('b_min_doc_threshold', [1,2,3,4,5])
                 }
             ] ),
-
+        'dataset':
+            hp.choice('dataset', [
+                {
+                    'use': False
+                },
+                {
+                    'use': True,
+                }
+            ] ),
         'like-dislike':
             hp.choice('like-dislike', [
                 {
@@ -138,6 +146,9 @@ def call_experiment(args):
                   ',binarize=' + args['features']['bigrams']['b_binarize'] + \
                   ',min_doc_threshold=' + str(args['features']['bigrams']['b_min_doc_threshold'])
         feature_list.append(bigrams)
+    if args['features']['dataset']['use']:
+        dataset = 'dataset'
+        feature_list.append(dataset)
     if args['features']['like-dislike']['use']:
         base = 'ngrams' + \
                ',binarize=' + args['features']['like-dislike']['ld_binarize'] + \
@@ -163,7 +174,7 @@ def call_experiment(args):
         ner = 'ngrams,source=NER'
         feature_list.append(ner)
     if args['features']['brown_vectors']['use']:
-        brown = 'brown,clusters=anes,binarize=' + args['features']['brown_vectors']['bc_binarize']
+        brown = 'brown,clusters=d,binarize=' + args['features']['brown_vectors']['bc_binarize']
         feature_list.append(brown)
 
     datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']

@@ -118,6 +118,8 @@ class FeatureExtractorCountsNgrams(FeatureExtractorCounts):
                 tokens = tokens + sent_tokens
 
             tokens = [self.get_prefix() + t for t in tokens]
+            if self.params['source'] != 'normalized':
+                tokens = [t + '_<' + self.params['source'] + '>' for t in tokens]
             if self.params['append_dataset']:
                 tokens = [t + '_' + dataset for t in tokens]
             token_dict[rid] = tokens

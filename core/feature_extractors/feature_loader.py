@@ -3,6 +3,7 @@ from optparse import OptionParser
 
 from feature_extractor_counts_ngrams import FeatureExtractorCountsNgrams
 from feature_extractor_counts_brownclusters import FeatureExtractorCountsBrownClusters
+from feature_extractor_dataset import FeatureExtractorDataset
 
 from ..util import file_handling as fh
 
@@ -20,6 +21,9 @@ def load_feature(feature_description, index_to_load, verbose=1):
         extractor = extractor_factory(FeatureExtractorCountsNgrams, kwargs_list_to_dict(parts[1:]))
     elif feature_name == 'brown':
         extractor = extractor_factory(FeatureExtractorCountsBrownClusters, kwargs_list_to_dict(parts[1:]))
+    elif feature_name == 'dataset':
+        extractor = extractor_factory(FeatureExtractorDataset, kwargs_list_to_dict(parts[1:]))
+
 
     if not os.path.exists(extractor.dirname):
         if verbose > 0:

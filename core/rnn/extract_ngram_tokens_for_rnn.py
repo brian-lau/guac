@@ -6,7 +6,7 @@ from ..feature_extractors import vocabulary, tokenizer
 from ..util import file_handling as fh, defines
 
 
-def prepare_data_for_rnn(min_threshold=1, n=1):
+def prepare_data_for_rnn(datasets, min_threshold=1, n=1):
     input_filename = defines.data_normalized_text_file
     responses = fh.read_json(input_filename)
 
@@ -23,11 +23,12 @@ def prepare_data_for_rnn(min_threshold=1, n=1):
     token_counts = Counter()
     token_doc_counts = Counter()
 
-    exclude_questions = ['Current-Industry', 'Current-Occupation', 'Past-Industry', 'Past-Occupation']
+    #exclude_questions = ['Current-Industry', 'Current-Occupation', 'Past-Industry', 'Past-Occupation',
+    #                     'drld-synthetic']
 
     for rid in data.keys():
         parts = rid.split('_')
-        if parts[0] not in exclude_questions:
+        if parts[0] in datasets:
             token_counts.update(data[rid])
             token_doc_counts.update(set(data[rid]))
 

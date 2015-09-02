@@ -153,7 +153,7 @@ def write_tagged_text(parsed_filename, output_filename):
                 lemma = token.get('lemma', '__MISSING__')
                 NER = token.get('NER', '__MISSING__')
                 #tagged = word + '_' + POS
-                tagged = NER
+                tagged = POS + '_POS_'
                 tagged_tokens.append(tagged)
             tagged_sentence = ' '.join(tagged_tokens)
             tagged_sentences.append(tagged_sentence)
@@ -179,7 +179,7 @@ def main():
     parsed_filename = fh.make_filename(output_dir, 'parsed', 'json')
 
     final_output_dir = defines.data_processed_text_dir
-    output_filename = fh.make_filename(final_output_dir, 'NER', 'json')
+    output_filename = fh.make_filename(final_output_dir, 'POS_tags', 'json')
     write_tagged_text(parsed_filename, output_filename)
 
 

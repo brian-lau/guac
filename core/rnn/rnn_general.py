@@ -23,6 +23,7 @@ from ..util import file_handling as fh
 import sys
 sys.setrecursionlimit(5000)
 
+THEANO_FLAGS='floatX=float32'
 
 # utils functions
 def shuffle(lol, seed=None):
@@ -77,7 +78,8 @@ class RNN(object):
 
         # initialize parameters
         dx = de * cs
-
+        if add_DRLD:
+            dx += 1
         bi = 1
         if bidirectional and bi_combine == 'concat':
             bi = 2
@@ -189,14 +191,17 @@ class RNN(object):
 
         # create an X object based on the size of the object at the index [elements, emb_dim * window]
         idxs = T.imatrix()
-        x = self.emb[idxs].reshape((idxs.shape[0], ne*cs))
+        likes = T.imatrix()
+        #likes = T.imatrix()
+        #x = self.emb[idxs].reshape((idxs.shape[0], de*cs))
+        x = T.concatenate([self.emb[idxs].reshape((idxs.shape[0], de*cs)),
+                           T.repeat(likes, idxs.shape[0], axis=0)], axis=1)
 
         # create a vector for y
         y = T.ivector('y')
 
         def recurrence_basic(x_t, h_tm1):
-            temp = T.dot(x_t, self.W_xh) + T.dot(h_tm1, self.W_hh) + self.b_h
-            h_t = T.nnet.sigmoid(temp)
+            h_t = T.nnet.sigmoid(T.dot(x_t, self.W_xh) + T.dot(h_tm1, self.W_hh) + self.b_h)
             return h_t
 
         def recurrence_basic_reverse(x_t, h_tp1):
@@ -301,9 +306,9 @@ class RNN(object):
                                                                             + sentence_gradients[1:]))
 
         # theano functions to compile
-        self.classify = theano.function(inputs=[idxs], outputs=y_pred)
+        self.sentence_classify = theano.function(inputs=[idxs, likes], outputs=y_pred)
         #self.get_element_weights = theano.function(inputs=[idxs], outputs=element_weights)
-        self.sentence_train = theano.function(inputs=[idxs, y, lr, lr_emb_fac],
+        self.sentence_train = theano.function(inputs=[idxs, likes, y, lr, lr_emb_fac],
                                               outputs=sentence_nll,
                                               updates=sentence_updates)
         self.normalize = theano.function(inputs=[],
@@ -312,13 +317,16 @@ class RNN(object):
         if pooling_method == 'attention1' or pooling_method == 'attention2':
             self.a_sum_check = theano.function(inputs=[idxs], outputs=a_sum)
 
+    def classify(self, x, likes):
+        return self.sentence_classify(x, likes)
+
     def train(self, x, likes, y, window_size, learning_rate, emb_lr_factor):
         # concatenate words in a window
         cwords = contextwin(x, window_size)
         # make an array of these windows
         words = map(lambda x: np.asarray(x).astype('int32'), cwords)
         # train on these sentences and normalize
-        self.sentence_train(words, y, learning_rate, emb_lr_factor)
+        self.sentence_train(words, likes, y, learning_rate, emb_lr_factor)
         self.normalize()
 
     def save(self, output_dir):
@@ -406,7 +414,8 @@ def main(params=None):
         words_test = [map(lambda x: idx2words[x], w) for w in test_lex]
 
         initial_embeddings = common.load_embeddings(params, words2idx)
-        emb_dim = initial_embeddings.shape[0]
+        emb_dim = initial_embeddings.shape[1]
+        print 'emb_dim =', emb_dim
 
         best_valid_f1s = []
         best_test_f1s = []
@@ -438,9 +447,9 @@ def main(params=None):
 
             for i, (x, y) in enumerate(zip(train_lex, train_y)):
                 if re.search('Likes', train_items[i]) is not None:
-                    likes = 1
+                    likes = np.array(1).astype('int32').reshape((1, 1))
                 else:
-                    likes = 0
+                    likes = np.array(0).astype('int32').reshape((1, 1))
                 rnn.train(x, likes, y, params['win'], params['clr'], params['lr_emb_fac'])
                 print '[learning] epoch %i >> %2.2f%%' % (
                     e, (i + 1) * 100. / float(n_sentences)),
@@ -449,8 +458,8 @@ def main(params=None):
 
             # evaluation // back into the real world : idx -> words
             print ""
-
-            print rnn.classify(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
+            likes = np.array(1).astype('int32').reshape((1, 1))
+            print rnn.classify((np.asarray(contextwin(train_lex[0], params['win'])).astype('int32')), likes)
             #print rnn.get_element_weights(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
             if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
                 print rnn.a_sum_check(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
@@ -464,9 +473,9 @@ def main(params=None):
                                  for x in valid_lex]
             """
 
-            predictions_train = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in train_lex]
-            predictions_test = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in test_lex]
-            predictions_valid = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
+            predictions_train = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in train_lex]
+            predictions_test = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in test_lex]
+            predictions_valid = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in valid_lex]
 
             train_f1 = common.calc_mean_f1(predictions_train, train_y)
             test_f1 = common.calc_mean_f1(predictions_test, test_y)

@@ -33,7 +33,7 @@ def load_data(datasets, test_fold, dev_subfold, min_doc_thresh):
     basename = extract_ngram_tokens_for_rnn.get_feature_name(n=1, m=min_doc_thresh)
     all_lex_filename = fh.make_filename(defines.data_rnn_dir, basename, 'json')
     if not os.path.exists(all_lex_filename):
-        extract_ngram_tokens_for_rnn.prepare_data_for_rnn(n=1, min_threshold=min_doc_thresh)
+        extract_ngram_tokens_for_rnn.prepare_data_for_rnn(datasets, n=1, min_threshold=min_doc_thresh)
 
     # load word indices for all sentences
     all_lex = fh.read_json(fh.make_filename(defines.data_rnn_dir, basename + '_indices', 'json'))
