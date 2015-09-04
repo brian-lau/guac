@@ -65,7 +65,7 @@ class RNN(object):
     def __init__(self, nh, nc, ne, de, cs, init_scale=0.2, initial_embeddings=None,
                  rnn_type='basic',      # 'basic', 'GRU', or 'LSTM'
                  pooling_method='max',  #'max', 'mean', 'attention1' or 'attention2',
-                 add_DRLD=False,
+                 extra_input_dims=0,
                  bidirectional=True, bi_combine='concat'   # 'concat', 'sum', or 'mean'
                 ):
         '''
@@ -78,8 +78,8 @@ class RNN(object):
 
         # initialize parameters
         dx = de * cs
-        if add_DRLD:
-            dx += 2
+        if extra_input_dims > 0:
+            dx += extra_input_dims
         bi = 1
         if bidirectional and bi_combine == 'concat':
             bi = 2
@@ -91,7 +91,7 @@ class RNN(object):
         else:
             self.emb = theano.shared(name='embeddings', value=initial_embeddings.astype(theano.config.floatX))
 
-        if add_DRLD:
+        if extra_input_dims > 0:
             self.W_drld = theano.shared(name='W_drld', value=init_scale * np.random.uniform(-1.0, 1.0, (1, nh))
                                         .astype(theano.config.floatX))
         # common paramters (feeding into hidden node)
@@ -172,8 +172,6 @@ class RNN(object):
                        self.W_xh, self.W_hh, self.b_h,
                        self.W_s, self.b_s,
                        self.h_i_f]
-        #if add_DRLD:
-        #    self.params += [self.W_drld]
         if pooling_method == 'attention':
             self.params += [self.W_a, self.b_a]
         if rnn_type == 'GRU':
@@ -191,13 +189,10 @@ class RNN(object):
 
         # create an X object based on the size of the object at the index [elements, emb_dim * window]
         idxs = T.imatrix()
-        if add_DRLD:
-            likes = T.imatrix()
-            dem = T.imatrix()
+        if extra_input_dims:
+            extra = T.imatrix()
             x = T.concatenate([self.emb[idxs].reshape((idxs.shape[0], de*cs)),
-                               T.repeat(likes, idxs.shape[0], axis=0),
-                               T.repeat(dem, idxs.shape[0], axis=0)],
-                              axis=1)
+                               T.repeat(extra, idxs.shape[0], axis=0)], axis=1)
         else:
             x = self.emb[idxs].reshape((idxs.shape[0], de*cs))
 
@@ -263,11 +258,14 @@ class RNN(object):
                                      go_backwards=True)
 
         if bidirectional:
+            # reverse the second hidden layer so it lines up with the first
+            h_r = h_r[::-1, :]
             if bi_combine == 'max':
                 h = T.maximum(h_f, h_r)
             elif bi_combine == 'mean':
                 h = (h_f + h_r) / 2.0
             else:  # concatenate
+                #h = theano.printing.Print('h:')(T.concatenate([h_fp, h_rp], axis=1))
                 h = T.concatenate([h_f, h_r], axis=1)
         else:
             h = h_f
@@ -310,9 +308,9 @@ class RNN(object):
                                                                             + sentence_gradients[1:]))
 
         # theano functions to compile
-        if add_DRLD:
-            self.sentence_classify = theano.function(inputs=[idxs, likes, dem], outputs=y_pred)
-            self.sentence_train = theano.function(inputs=[idxs, likes, dem, y, lr, lr_emb_fac],
+        if extra_input_dims > 0:
+            self.sentence_classify = theano.function(inputs=[idxs, extra], outputs=y_pred)
+            self.sentence_train = theano.function(inputs=[idxs, extra, y, lr, lr_emb_fac],
                                                        outputs=sentence_nll,
                                                        updates=sentence_updates)
         else:
@@ -326,30 +324,28 @@ class RNN(object):
         if pooling_method == 'attention1' or pooling_method == 'attention2':
             self.a_sum_check = theano.function(inputs=[idxs], outputs=a_sum)
 
-    def classify(self, x, likes, dem, window_size, add_DRLD):
-        likes = np.array(likes).astype('int32').reshape((1, 1))
-        dem = np.array(dem).astype('int32').reshape((1, 1))
+    def classify(self, x, window_size, extra_input_dims=0, extra=None):
+
         cwords = contextwin(x, window_size)
         # make an array of these windows
-
         words = map(lambda x: np.asarray(x).astype('int32'), cwords)
-        if add_DRLD:
-            return self.sentence_classify(words, likes, dem)
+
+        if extra_input_dims > 0:
+            extra = np.array(extra).astype('int32').reshape((1, extra_input_dims))
+            return self.sentence_classify(words, extra)
         else:
             return self.sentence_classify(words)
 
-    def train(self, x, likes, dem, y, window_size, learning_rate, emb_lr_factor, add_DRLD):
+    def train(self, x, y, window_size, learning_rate, emb_lr_factor, extra_input_dims=0, extra=None):
         # concatenate words in a window
         cwords = contextwin(x, window_size)
         # make an array of these windows
         words = map(lambda x: np.asarray(x).astype('int32'), cwords)
 
-        likes = np.array(likes).astype('int32').reshape((1, 1))
-        dem = np.array(dem).astype('int32').reshape((1, 1))
-
         # train on these sentences and normalize
-        if add_DRLD:
-            self.sentence_train(words, likes, dem, y, learning_rate, emb_lr_factor)
+        if extra_input_dims > 0:
+            extra = np.array(extra).astype('int32').reshape((1, extra_input_dims))
+            self.sentence_train(words, extra, y, learning_rate, emb_lr_factor)
         else:
             self.sentence_train(words, y, learning_rate, emb_lr_factor)
         self.normalize()
@@ -379,22 +375,22 @@ def main(params=None):
             'n_dev_folds': 5,
             'min_doc_thresh': 1,
             'initialize_word_vectors': True,
-            'vectors': 'drld_word2vec', # default_word2vec, drld_word2vec ...
+            'vectors': 'anes_word2vec', # default_word2vec, anes_word2vec ...
             'word2vec_dim': 300,
-            'add_OOV': True,
-            'add_DRLD': False,
-            'win': 1,                   # size of context window
             'init_scale': 0.2,
+            'add_OOV': True,
+            'win': 1,                   # size of context window
+            'add_DRLD': False,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
+            'n_hidden': 300,             # size of hidden units
             'pooling_method': 'max',    # max, mean, or attention1/2
-            'bidirectional': False,
+            'bidirectional': True,
             'bi_combine': 'concat',        # concat, max, or mean
-            'nhidden': 50,             # size of hidden units
             'lr': 0.1,                  # learning rate
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 20,
+            'n_epochs': 100,
             'save_model': True,
             'seed': 42,
             'verbose': 1,
@@ -402,7 +398,11 @@ def main(params=None):
             'T_orig': 0.04,
             'tau': 0.01
         }
-    print params
+
+    keys = params.keys()
+    keys.sort()
+    for key in keys:
+        print key, ':', params[key]
 
     # seed the random number generators
     np.random.seed(params['seed'])
@@ -413,7 +413,10 @@ def main(params=None):
     np.random.seed(params['seed'])
     random.seed(params['seed'])
 
-    for dev_fold in range(params['n_dev_folds']):
+    best_valid_f1s = []
+    best_test_f1s = []
+
+    for dev_fold in range(params['n_dev_folds'])[0:1]:
         print "dev fold =", dev_fold
 
         output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
@@ -442,16 +445,17 @@ def main(params=None):
         emb_dim = initial_embeddings.shape[1]
         print 'emb_dim =', emb_dim
 
-        best_valid_f1s = []
-        best_test_f1s = []
+        extra_input_dims = 0
+        if params['add_DRLD']:
+            extra_input_dims = 2
 
         print "Building RNN"
-        rnn = RNN(nh=params['nhidden'],
+        rnn = RNN(nh=params['n_hidden'],
                   nc=n_codes,
                   ne=vocsize,
                   de=emb_dim,
                   cs=params['win'],
-                  add_DRLD=params['add_DRLD'],
+                  extra_input_dims=extra_input_dims,
                   initial_embeddings=initial_embeddings,
                   init_scale=params['init_scale'],
                   rnn_type=params['rnn_type'],
@@ -468,29 +472,28 @@ def main(params=None):
         dev_dem = [1 if re.search('Democrat', i) else 0 for i in dev_items]
         test_dem = [1 if re.search('Democrat', i) else 0 for i in test_items]
 
+        train_extra = [[train_likes[i], train_dem[i]] for i, t in enumerate(train_items)]
+        dev_extra = [[dev_likes[i], dev_dem[i]] for i, t in enumerate(dev_items)]
+        test_extra = [[test_likes[i], test_dem[i]] for i, t in enumerate(test_items)]
+
         # train with early stopping on validation set
         best_f1 = -np.inf
         params['clr'] = params['lr']
         for e in xrange(params['n_epochs']):
             # shuffle
-
-            shuffle([train_lex, train_y, train_likes, train_dem], params['seed'])   # shuffle the input data
+            shuffle([train_lex, train_y, train_extra], params['seed'])   # shuffle the input data
             params['ce'] = e                # store the current epoch
             tic = timeit.default_timer()
 
             #for i, (x, y) in enumerate(zip(train_lex, train_y)):
             for i, x in enumerate(train_lex):
+                #print train_items[i]
+                #print ' '.join([idx2words[index] for index in x])
                 y = train_y[i]
-                likes = train_likes[i]
-                dem = train_dem[i]
+                extra = train_extra[i]
 
-                #if re.search('Likes', train_items[i]) is not None:
-                #    likes = np.array([1]).astype('int32').reshape((1, 1))
-                #else:
-                #    likes = np.array([0]).astype('int32').reshape((1, 1))
-
-                rnn.train(x, likes, dem, y, params['win'], params['clr'], params['lr_emb_fac'],
-                          params['add_DRLD'])
+                rnn.train(x, y, params['win'], params['clr'], params['lr_emb_fac'],
+                          extra_input_dims, extra)
                 print '[learning] epoch %i >> %2.2f%%' % (
                     e, (i + 1) * 100. / float(n_sentences)),
                 print 'completed in %.2f (sec) <<\r' % (timeit.default_timer() - tic),
@@ -500,10 +503,12 @@ def main(params=None):
             print ""
 
             #print rnn.classify((np.asarray(contextwin(train_lex[0], params['win'])).astype('int32')), train_likes[0], params['win'])
-            print rnn.classify(train_lex[0], train_likes[0], train_dem[0], params['win'], params['add_DRLD'])
+            print rnn.classify(train_lex[0], params['win'], extra_input_dims, train_extra[0])
             #print rnn.get_element_weights(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
             if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
-                print rnn.a_sum_check(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
+                if extra_input_dims == 0:
+                    r = np.random.randint(0, len(train_lex))
+                    print r, rnn.a_sum_check(np.asarray(contextwin(train_lex[r], params['win'])).astype('int32'))
 
             """
             predictions_train = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
@@ -518,17 +523,12 @@ def main(params=None):
             #predictions_test = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in test_lex]
             #predictions_valid = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in valid_lex]
 
-            predictions_train = [rnn.classify(x, train_likes[i],
-                                              train_dem[i], params['win'],
-                                              params['add_DRLD']) for i, x in enumerate(train_lex)]
-            predictions_test = [rnn.classify(x, test_likes[i],
-                                             test_dem[i], params['win'],
-                                             params['add_DRLD']) for i, x in enumerate(test_lex)]
-            predictions_valid = [rnn.classify(x, dev_likes[i],
-                                              dev_dem[i], params['win'],
-                                              params['add_DRLD']) for i, x in enumerate(valid_lex)]
-
-
+            predictions_train = [rnn.classify(x, params['win'],
+                                              extra_input_dims, train_extra[i]) for i, x in enumerate(train_lex)]
+            predictions_test = [rnn.classify(x, params['win'],
+                                             extra_input_dims, test_extra[i]) for i, x in enumerate(test_lex)]
+            predictions_valid = [rnn.classify(x, params['win'],
+                                              extra_input_dims, dev_extra[i]) for i, x in enumerate(valid_lex)]
 
             train_f1 = common.calc_mean_f1(predictions_train, train_y)
             test_f1 = common.calc_mean_f1(predictions_test, test_y)
@@ -570,12 +570,15 @@ def main(params=None):
             if best_f1 == 1.0:
                 break
 
-        best_rnn.print_embeddings()
+        #best_rnn.print_embeddings()
 
         if params['save_model']:
-            predictions_valid = [best_rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
+            predictions_valid = [rnn.classify(x, params['win'],
+                                              extra_input_dims, dev_extra[i]) for i, x in enumerate(valid_lex)]
+
+            #predictions_valid = [best_rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
             best_rnn.save(output_dir)
-            common.write_predictions(datasets, predictions_valid, dev_items, output_dir)
+            common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_valid, dev_items, output_dir)
 
         print('BEST RESULT: epoch', params['be'],
               'train F1 ', params['tr_f1'],

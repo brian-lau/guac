@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import glob
 import codecs
 import datetime
@@ -20,27 +21,6 @@ reuse = None
 search_alpha = None
 
 space = {
-    'model': hp.choice('model', [
-        {
-            'model': 'SVM',
-            'kernel': hp.choice('ktype', [
-                {'ktype': 'linear'},
-                {'ktype': 'poly', 'degree': hp.choice('degree', [2, 3, 4])},
-                {'ktype': 'rbf'}
-            ] )
-        },
-        {
-            'model': 'LR',
-            'regularization': hp.choice('regularization', ['l1', 'l2'])
-        },
-        {
-            'model': 'MNB'
-        },
-        {
-            'model': 'SVMNB',
-            'beta': hp.uniform('beta', 0, 1)
-        } ]
-    ),
     'features': {
         'unigrams':
             {
@@ -118,7 +98,7 @@ space = {
                     'bc_binarize': hp.choice('bc_binarize', ['True', 'False'])
                 }
             ] )
-    },
+    }
 }
 
 
@@ -218,6 +198,8 @@ def main():
 
     usage = "%prog"
     parser = OptionParser(usage=usage)
+    parser.add_option('-m', dest='model', default='LR',
+                      help='Model: (LR|SVM|MNB|SVMNB); default=%default')
     parser.add_option('-o', dest='output_dirname', default='bayes_opt',
                       help='Output directory name')
     parser.add_option('--reuse', dest='reuse', action="store_true", default=False,
@@ -229,11 +211,42 @@ def main():
 
     (options, args) = parser.parse_args()
 
-    global output_dirname, output_filename, reuse, search_alpha
+    global output_dirname, output_filename, reuse, search_alpha, space
     reuse = options.reuse
     search_alpha = options.alpha
     n_codes = int(options.n_codes)
     output_dirname = options.output_dirname
+    model = options.model
+
+    # allow user to specfiy a particular choice of model
+    if model == 'LR':
+        space['model'] = {
+            'model': 'LR',
+            'regularization': hp.choice('regularization', ['l1', 'l2'])
+        }
+    elif model == 'SVM':
+        space['model'] = {
+            'model': 'SVM',
+            'kernel': hp.choice('ktype', [
+                {'ktype': 'linear'},
+                {'ktype': 'poly', 'degree': hp.choice('degree', [2, 3, 4])},
+                {'ktype': 'rbf'}
+            ]
+            )
+        }
+    elif model == 'MNB':
+        space['model'] = {
+            'model': 'MNB'
+        }
+    elif model == 'SVMNB':
+        space['model'] = {
+            'model': 'SVMNB',
+            'beta': hp.uniform('beta', 0, 1)
+        }
+    else:
+        sys.exit('Choice of model not supported!')
+
+    output_dirname += '_' + model
 
     if search_alpha:
         space['alphas'] = []

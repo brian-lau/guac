@@ -69,7 +69,7 @@ def load_embeddings(params, words2idx):
     initial_embeddings = None
     vocsize = len(words2idx.keys())
     if params['initialize_word_vectors']:
-        if params['vectors'] == 'drld_word2vec':
+        if params['vectors'] == 'anes_word2vec':
             # my word2vec vectors
 
             print "Loading custom word2vec vectors"
@@ -95,7 +95,7 @@ def load_embeddings(params, words2idx):
             if w in vectors:
                 initial_embeddings[i, :params['word2vec_dim']] = vectors[w]
             # create a separate orthogonal dimension for OOV
-            elif w == '__OOV__':
+            elif w == '__OOV__' and params['add_OOV']:
                 initial_embeddings[i, params['word2vec_dim']] = 1
             else:
                 print "no vector for", w
@@ -108,7 +108,7 @@ def load_embeddings(params, words2idx):
     return initial_embeddings
 
 
-def write_predictions(datasets, predictions, items, output_dir):
+def write_predictions(datasets, test_fold, dev_fold, predictions, items, output_dir):
     true_labels = labels.get_datset_labels(datasets[0])
     predictions_df = pd.DataFrame(np.zeros([len(items), len(true_labels.columns)]),
                                   index=items, columns=true_labels.columns)
@@ -119,7 +119,7 @@ def write_predictions(datasets, predictions, items, output_dir):
         predictions_df.loc[item] = predictions[i]
     count = 0
     for d in datasets:
-        dev_items = ds.get_dev_documents(d, 0, 0)
+        dev_items = ds.get_dev_documents(d, test_fold, dev_fold)
         true_labels = labels.get_datset_labels(d)
         print count, len(dev_items)
         output_df = predictions_df.loc[dev_items]
