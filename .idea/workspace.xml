@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_general.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_general.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -51,8 +50,8 @@
       <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.15373766">
-              <caret line="114" column="4" selection-start-line="114" selection-start-column="4" selection-end-line="114" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.35825107">
+              <caret line="88" column="50" selection-start-line="88" selection-start-column="50" selection-end-line="88" selection-end-column="50" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -913,7 +912,13 @@
       <option name="project" value="LOCAL" />
       <updated>1441334153027</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="reset some testing params to normal values">
+      <created>1441337111724</created>
+      <option name="number" value="00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1441337111724</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -979,7 +984,8 @@
     <MESSAGE value="added dataset as an explicit feature" />
     <MESSAGE value="got dis/like and dem/rep added to rnn general" />
     <MESSAGE value="got bayes opt working for RNNs" />
-    <option name="LAST_COMMIT_MESSAGE" value="got bayes opt working for RNNs" />
+    <MESSAGE value="reset some testing params to normal values" />
+    <option name="LAST_COMMIT_MESSAGE" value="reset some testing params to normal values" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1396,8 +1402,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15373766">
-          <caret line="114" column="4" selection-start-line="114" selection-start-column="4" selection-end-line="114" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.35825107">
+          <caret line="88" column="50" selection-start-line="88" selection-start-column="50" selection-end-line="88" selection-end-column="50" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
