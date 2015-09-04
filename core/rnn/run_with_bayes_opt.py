@@ -59,7 +59,6 @@ def call_experiment(args):
 
     params = {}
 
-    params['exp_name'] = basename
     params['test_fold'] = 0
     params['n_dev_folds'] = 5
     params['min_doc_thresh'] = args['input']['min_doc_thresh']
@@ -87,10 +86,9 @@ def call_experiment(args):
     params['lr_emb_fac'] = args['training']['lr_emb_fac']
     params['decay_delay'] = args['training']['decay_delay']
     params['decay_factor'] = args['training']['decay_factor']
-    #params['n_epochs'] = args['training']['n_epohcs']
-    params['n_epochs'] = 2
+    params['n_epochs'] = args['training']['n_epohcs']
 
-    params['seed'] = np.random.randint(0, 4294967295)
+    params['seed'] = np.random.randint(0, 4294967294)
     params['verbose'] = 1
     params['reuse'] = False
     params['save_model'] = True
@@ -111,6 +109,8 @@ def call_experiment(args):
                 max_num = num
 
     name = fh.get_basename(output_filename) + '_' + str(max_num + 1)
+
+    params['exp_name'] = name
 
     result = rnn_general.main(params)
 

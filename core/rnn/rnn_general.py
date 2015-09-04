@@ -416,7 +416,7 @@ def main(params=None):
     best_valid_f1s = []
     best_test_f1s = []
 
-    for dev_fold in range(params['n_dev_folds'])[0:1]:
+    for dev_fold in range(params['n_dev_folds']):
         print "dev fold =", dev_fold
 
         output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
