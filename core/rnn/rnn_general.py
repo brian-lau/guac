@@ -375,22 +375,22 @@ def main(params=None):
             'n_dev_folds': 5,
             'min_doc_thresh': 1,
             'initialize_word_vectors': True,
-            'vectors': 'anes_word2vec', # default_word2vec, anes_word2vec ...
+            'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
             'word2vec_dim': 300,
             'init_scale': 0.2,
             'add_OOV': True,
             'win': 1,                   # size of context window
             'add_DRLD': False,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
-            'n_hidden': 300,             # size of hidden units
+            'n_hidden': 100,             # size of hidden units
             'pooling_method': 'max',    # max, mean, or attention1/2
-            'bidirectional': True,
+            'bidirectional': False,
             'bi_combine': 'concat',        # concat, max, or mean
             'lr': 0.1,                  # learning rate
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 100,
+            'n_epochs': 60,
             'save_model': True,
             'seed': 42,
             'verbose': 1,
@@ -416,7 +416,7 @@ def main(params=None):
     best_valid_f1s = []
     best_test_f1s = []
 
-    for dev_fold in range(params['n_dev_folds']):
+    for dev_fold in range(params['n_dev_folds'])[0:1]:
         print "dev fold =", dev_fold
 
         output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
