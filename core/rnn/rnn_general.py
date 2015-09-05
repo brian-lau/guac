@@ -380,8 +380,6 @@ def main(params=None):
             'word2vec_dim': 300,
             'init_scale': 0.2,
             'add_OOV': True,
-            'add_OOV_noise': False,
-            'OOV_noise_prob': 0.01,
             'win': 1,                   # size of context window
             'add_DRLD': False,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
@@ -394,6 +392,8 @@ def main(params=None):
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
             'n_epochs': 60,
+            'add_OOV_noise': False,
+            'OOV_noise_prob': 0.01,
             'save_model': True,
             'seed': 42,
             'verbose': 1,

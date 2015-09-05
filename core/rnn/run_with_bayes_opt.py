@@ -46,7 +46,9 @@ space = {
         'lr_emb_fac': hp.uniform('lr_emb_fac', 0, 1),
         'decay_delay': hp.choice('decay_delay', [3, 4, 5, 6, 7, 8]),
         'decay_factor': hp.uniform('decay_factor', 0, 1),
-        'n_epochs': hp.choice('n_epochs', [40, 60, 80])
+        'n_epochs': hp.choice('n_epochs', [40, 60, 80]),
+        'add_OOV_noise': hp.choice('add_OOV_noise', [False, True]),
+        'OOV_noise_prob': hp.loguniform('OOV_noise_prob', -6, -3)
     }
     # 'regularization': {'dropout'... 'add_noise'..., 'corruption'...}
 }
@@ -87,10 +89,16 @@ def call_experiment(args):
     params['decay_delay'] = args['training']['decay_delay']
     params['decay_factor'] = args['training']['decay_factor']
     params['n_epochs'] = args['training']['n_epochs']
+    params['add_OOV_noise'] = args['training']['add_OOV_noise']
+    params['OOV_noise_prob'] = args['training']['OOV_noise_prob']
+
+    if reuse:
+        params['reuse'] = True
+    else:
+        params['reuse'] = False
 
     params['seed'] = np.random.randint(0, 4294967294)
     params['verbose'] = 1
-    params['reuse'] = False
     params['save_model'] = True
 
     #'reuse': False,
