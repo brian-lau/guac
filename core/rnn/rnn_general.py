@@ -314,16 +314,19 @@ class RNN(object):
             self.sentence_train = theano.function(inputs=[idxs, extra, y, lr, lr_emb_fac],
                                                        outputs=sentence_nll,
                                                        updates=sentence_updates)
+            if pooling_method == 'attention1' or pooling_method == 'attention2':
+                self.a_sum_check = theano.function(inputs=[idxs, extra], outputs=a_sum)
         else:
             self.sentence_classify = theano.function(inputs=[idxs], outputs=y_pred)
             self.sentence_train = theano.function(inputs=[idxs, y, lr, lr_emb_fac],
                                                   outputs=sentence_nll,
                                                   updates=sentence_updates)
+            if pooling_method == 'attention1' or pooling_method == 'attention2':
+                self.a_sum_check = theano.function(inputs=[idxs], outputs=a_sum)
+
         self.normalize = theano.function(inputs=[],
                                          updates={self.emb: self.emb / T.sqrt((self.emb**2).sum(axis=1))
                                          .dimshuffle(0, 'x')})
-        if pooling_method == 'attention1' or pooling_method == 'attention2':
-            self.a_sum_check = theano.function(inputs=[idxs], outputs=a_sum)
 
     def classify(self, x, window_size, extra_input_dims=0, extra=None):
 
@@ -374,31 +377,31 @@ def main(params=None):
             'exp_name': 'test',
             'test_fold': 0,
             'n_dev_folds': 5,
-            'min_doc_thresh': 1,
+            'min_doc_thresh': 2,
             'initialize_word_vectors': True,
             'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
             'word2vec_dim': 300,
             'init_scale': 0.2,
-            'add_OOV': True,
+            'add_OOV': False,
             'win': 1,                   # size of context window
-            'add_DRLD': False,
+            'add_DRLD': True,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
-            'n_hidden': 100,             # size of hidden units
-            'pooling_method': 'max',    # max, mean, or attention1/2
-            'bidirectional': False,
-            'bi_combine': 'concat',        # concat, max, or mean
+            'n_hidden': 15.0,             # size of hidden units
+            'pooling_method': 'attention1',    # max, mean, or attention1/2
+            'bidirectional': True,
+            'bi_combine': 'mean',        # concat, max, or mean
             'lr': 0.1,                  # learning rate
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
             'n_epochs': 60,
-            'add_OOV_noise': False,
+            'add_OOV_noise': True,
             'OOV_noise_prob': 0.01,
             'save_model': True,
             'seed': 42,
             'verbose': 1,
-            'reuse': False,
-            'T_orig': 0.04,
+            'reuse': True,
+            'orig_T': 0.04,
             'tau': 0.01
         }
 
@@ -424,7 +427,7 @@ def main(params=None):
     best_valid_f1s = []
     best_test_f1s = []
 
-    for dev_fold in range(params['n_dev_folds'])[0:1]:
+    for dev_fold in range(params['n_dev_folds']):
         print "dev fold =", dev_fold
 
         output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
@@ -605,8 +608,8 @@ def main(params=None):
         best_valid_f1s.append(params['v_f1'])
         best_test_f1s.append(params['te_f1'])
 
-    return {'loss': -np.max(best_valid_f1s),
-            'mean_valid_f1': np.mean(best_valid_f1s),
+    return {'loss': -np.median(best_valid_f1s),
+            'median_test_f1': np.median(best_test_f1s),
             'valid_f1s': best_valid_f1s,
             'test_f1s': best_test_f1s,
             'status': STATUS_OK

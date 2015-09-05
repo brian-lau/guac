@@ -46,9 +46,11 @@ space = {
         'lr_emb_fac': hp.uniform('lr_emb_fac', 0, 1),
         'decay_delay': hp.choice('decay_delay', [3, 4, 5, 6, 7, 8]),
         'decay_factor': hp.uniform('decay_factor', 0, 1),
-        'n_epochs': hp.choice('n_epochs', [40, 60, 80]),
-        'add_OOV_noise': hp.choice('add_OOV_noise', [False, True]),
-        'OOV_noise_prob': hp.loguniform('OOV_noise_prob', -6, -3)
+        'OOV_noise': hp.choice('OOV_noise', [
+            {'OOV_noise': False},
+            {'OOV_noise': True, 'noise_prob': hp.loguniform('noise_prob', -6, -3)}
+        ]
+        ),
     }
     # 'regularization': {'dropout'... 'add_noise'..., 'corruption'...}
 }
@@ -62,7 +64,6 @@ def call_experiment(args):
     params = {}
 
     params['test_fold'] = 0
-    params['n_dev_folds'] = 5
     params['min_doc_thresh'] = args['input']['min_doc_thresh']
     params['initialize_word_vectors'] = True
     if args['init']['vectors'] == 'word2vec':
@@ -88,22 +89,26 @@ def call_experiment(args):
     params['lr_emb_fac'] = args['training']['lr_emb_fac']
     params['decay_delay'] = args['training']['decay_delay']
     params['decay_factor'] = args['training']['decay_factor']
-    params['n_epochs'] = args['training']['n_epochs']
-    params['add_OOV_noise'] = args['training']['add_OOV_noise']
-    params['OOV_noise_prob'] = args['training']['OOV_noise_prob']
+    if args['training']['OOV_noise']['OOV_noise']:
+        params['add_OOV_noise'] = True
+        params['OOV_noise_prob'] = args['training']['OOV_noise']['noise_prob']
+    else:
+        params['add_OOV_noise'] = False
+    params['OOV_noise_prob'] = args['training']
+
+    params['n_dev_folds'] = 2
+    params['n_epochs'] = 2
 
     if reuse:
         params['reuse'] = True
+        params['orig_T'] = 0.04
+        params['tau'] = 0.01
     else:
         params['reuse'] = False
 
     params['seed'] = np.random.randint(0, 4294967294)
     params['verbose'] = 1
     params['save_model'] = True
-
-    #'reuse': False,
-    #'T_orig': 0.04,
-    #'tau': 0.01
 
     base_dir = fh.makedirs(defines.exp_dir, 'rnn')
     basename = fh.get_basename(output_dirname)
@@ -124,7 +129,7 @@ def call_experiment(args):
 
     with codecs.open(output_filename, 'a') as output_file:
         output_file.write(str(datetime.datetime.now()) + '\t' + name + '\t' +
-                          str(result['loss']) + '\t' + str(np.mean(result['test_f1s'])) + '\n')
+                          str(-result['loss']) + '\t' + str((result['median_test_f1'])) + '\n')
         output_file.write('valid_f1s:' + '\t' + str(result['valid_f1s']) + '\n')
         output_file.write('test_f1s:' + '\t' + str(result['test_f1s']) + '\n')
 
