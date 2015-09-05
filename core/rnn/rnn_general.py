@@ -17,6 +17,7 @@ from theano import tensor as T
 import common
 from ..util import defines
 from ..util import file_handling as fh
+from ..experiment import reusable_holdout
 
 
 # Otherwise the deepcopy fails
@@ -379,6 +380,8 @@ def main(params=None):
             'word2vec_dim': 300,
             'init_scale': 0.2,
             'add_OOV': True,
+            'add_OOV_noise': False,
+            'OOV_noise_prob': 0.01,
             'win': 1,                   # size of context window
             'add_DRLD': False,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
@@ -398,6 +401,11 @@ def main(params=None):
             'T_orig': 0.04,
             'tau': 0.01
         }
+
+    reuser = None
+    if params['reuse']:
+        reuser = reusable_holdout.ReuseableHoldout(T=params['orig_T'], tau=params['tau'])
+
 
     keys = params.keys()
     keys.sort()
@@ -442,6 +450,7 @@ def main(params=None):
         words_test = [map(lambda x: idx2words[x], w) for w in test_lex]
 
         initial_embeddings = common.load_embeddings(params, words2idx)
+        OOV_index = words2idx['__OOV__']
         emb_dim = initial_embeddings.shape[1]
         print 'emb_dim =', emb_dim
 
@@ -486,9 +495,13 @@ def main(params=None):
             tic = timeit.default_timer()
 
             #for i, (x, y) in enumerate(zip(train_lex, train_y)):
-            for i, x in enumerate(train_lex):
-                #print train_items[i]
-                #print ' '.join([idx2words[index] for index in x])
+            for i, orig_x in enumerate(train_lex):
+                n_words = len(orig_x)
+                if params['add_OOV_noise']:
+                    draws = np.random.rand(n_words)
+                    x = [OOV_index if draws[i] < params['OOV_noise_prob'] else orig_x[i] for i in range(n_words)]
+                else:
+                    x = orig_x
                 y = train_y[i]
                 extra = train_extra[i]
 
@@ -533,6 +546,9 @@ def main(params=None):
             train_f1 = common.calc_mean_f1(predictions_train, train_y)
             test_f1 = common.calc_mean_f1(predictions_test, test_y)
             valid_f1 = common.calc_mean_f1(predictions_valid, valid_y)
+
+            if reuser is not None:
+                valid_f1 = reuser.mask_value(valid_f1, train_f1)
 
             question_f1s = []
             question_pps = []
