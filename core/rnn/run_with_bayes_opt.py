@@ -96,8 +96,8 @@ def call_experiment(args):
         params['add_OOV_noise'] = False
     params['OOV_noise_prob'] = args['training']
 
-    params['n_dev_folds'] = 2
-    params['n_epochs'] = 2
+    params['n_dev_folds'] = 5
+    params['n_epochs'] = 40
 
     if reuse:
         params['reuse'] = True
