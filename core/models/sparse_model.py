@@ -194,7 +194,6 @@ class SparseModel:
         self.trained = False
         return valid_f1_summary, best_alpha
 
-
     def get_coefs(self):
         if self.model_type == 'default' or self.model_type == 'SVM':
             return None
