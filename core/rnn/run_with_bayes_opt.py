@@ -35,6 +35,7 @@ space = {
     'arch': {
         'window': hp.choice('window', [1, 3]),
         'add_DRLD': hp.choice('add_DRLD', [True, False]),
+        'train_embeddings': hp.choice('train_embeddings', [True, False]),
         'pooling_method': hp.choice('pooling_method', ['max', 'mean', 'attention1', 'attention2']),
         'bidirectional': hp.choice('bidirectional', [
             {'bidirectional': False},
@@ -75,6 +76,7 @@ def call_experiment(args):
     params['add_OOV'] = args['init']['add_OOV']
     params['init_scale'] = args['init']['init_scale']
     params['win'] = args['arch']['window']
+    params['train_embeddings'] = args['arch']['train_embeddings']
     params['add_DRLD'] = args['arch']['add_DRLD']
     params['rnn_type'] = args['arch']['unit']
     params['n_hidden'] = args['arch']['n_hidden']
@@ -96,7 +98,8 @@ def call_experiment(args):
         params['add_OOV_noise'] = False
     params['OOV_noise_prob'] = args['training']
 
-    params['n_dev_folds'] = 5
+    params['ensemble'] = False
+    params['n_dev_folds'] = 1
     params['n_epochs'] = 40
 
     if reuse:

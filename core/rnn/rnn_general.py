@@ -10,6 +10,9 @@ import timeit
 from hyperopt import STATUS_OK
 
 import numpy as np
+import pandas as pd
+from scipy import stats
+
 
 import theano
 from theano import tensor as T
@@ -18,6 +21,7 @@ import common
 from ..util import defines
 from ..util import file_handling as fh
 from ..experiment import reusable_holdout
+from ..experiment import evaluation
 
 
 # Otherwise the deepcopy fails
@@ -66,7 +70,7 @@ class RNN(object):
     def __init__(self, nh, nc, ne, de, cs, init_scale=0.2, initial_embeddings=None,
                  rnn_type='basic',      # 'basic', 'GRU', or 'LSTM'
                  pooling_method='max',  #'max', 'mean', 'attention1' or 'attention2',
-                 extra_input_dims=0,
+                 extra_input_dims=0, train_embeddings=True,
                  bidirectional=True, bi_combine='concat'   # 'concat', 'sum', or 'mean'
                 ):
         '''
@@ -169,10 +173,11 @@ class RNN(object):
             if bidirectional:
                 self.c_i_r = theano.shared(name='c_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
 
-        self.params = [self.emb,
-                       self.W_xh, self.W_hh, self.b_h,
+        self.params = [self.W_xh, self.W_hh, self.b_h,
                        self.W_s, self.b_s,
                        self.h_i_f]
+        if train_embeddings:
+            self.params += [self.emb]
         if pooling_method == 'attention':
             self.params += [self.W_a, self.b_a]
         if rnn_type == 'GRU':
@@ -374,10 +379,10 @@ def main(params=None):
 
     if params is None:
         params = {
-            'exp_name': 'test',
+            'exp_name': 'ensemble_test',
             'test_fold': 0,
-            'n_dev_folds': 5,
-            'min_doc_thresh': 2,
+            'n_dev_folds': 3,
+            'min_doc_thresh': 1,
             'initialize_word_vectors': True,
             'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
             'word2vec_dim': 300,
@@ -386,21 +391,23 @@ def main(params=None):
             'win': 1,                   # size of context window
             'add_DRLD': True,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
-            'n_hidden': 15.0,             # size of hidden units
-            'pooling_method': 'attention1',    # max, mean, or attention1/2
-            'bidirectional': True,
+            'n_hidden': 50,             # size of hidden units
+            'pooling_method': 'max',    # max, mean, or attention1/2
+            'bidirectional': False,
             'bi_combine': 'mean',        # concat, max, or mean
+            'train_embeddings': True,
             'lr': 0.1,                  # learning rate
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 60,
-            'add_OOV_noise': True,
+            'n_epochs': 3,
+            'add_OOV_noise': False,
             'OOV_noise_prob': 0.01,
+            'ensemble': False,
             'save_model': True,
             'seed': 42,
             'verbose': 1,
-            'reuse': True,
+            'reuse': False,
             'orig_T': 0.04,
             'tau': 0.01
         }
@@ -427,6 +434,12 @@ def main(params=None):
     best_valid_f1s = []
     best_test_f1s = []
 
+    test_prediction_arrays = []
+
+    output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'])
+    output_filename = fh.make_filename(output_dir, 'params', 'txt')
+    fh.write_to_json(params, output_filename)
+
     for dev_fold in range(params['n_dev_folds']):
         print "dev fold =", dev_fold
 
@@ -441,10 +454,12 @@ def main(params=None):
         train_items, dev_items, test_items = items
         vocsize = len(words2idx.keys())
         idx2words = dict((k, v) for v, k in words2idx.iteritems())
+        best_test_predictions = None
 
         n_sentences = len(train_lex)
         print "vocsize = ", vocsize, 'n_train', n_sentences
 
+        codes = all_labels.columns
         n_items, n_codes = all_labels.shape
 
         # get the words in the sentences for the test and validation sets
@@ -471,6 +486,7 @@ def main(params=None):
                   initial_embeddings=initial_embeddings,
                   init_scale=params['init_scale'],
                   rnn_type=params['rnn_type'],
+                  train_embeddings=params['train_embeddings'],
                   pooling_method=params['pooling_method'],
                   bidirectional=params['bidirectional'],
                   bi_combine=params['bi_combine']
@@ -561,6 +577,7 @@ def main(params=None):
             if valid_f1 > best_f1:
                 best_rnn = copy.deepcopy(rnn)
                 best_f1 = valid_f1
+                best_test_predictions = predictions_test
 
                 if params['verbose']:
                     print('NEW BEST: epoch', e,
@@ -589,8 +606,6 @@ def main(params=None):
             if best_f1 == 1.0:
                 break
 
-        #best_rnn.print_embeddings()
-
         if params['save_model']:
             predictions_valid = [rnn.classify(x, params['win'],
                                               extra_input_dims, dev_extra[i]) for i, x in enumerate(valid_lex)]
@@ -608,8 +623,16 @@ def main(params=None):
         best_valid_f1s.append(params['v_f1'])
         best_test_f1s.append(params['te_f1'])
 
+        test_prediction_arrays.append(np.array(best_test_predictions, dtype=int))
+
+    test_predictions_stack = np.dstack(test_prediction_arrays)
+    final_predictions = stats.mode(test_predictions_stack, axis=2)[0][:, :, 0]
+    predicted_df = pd.DataFrame(final_predictions, index=test_items, columns=codes)
+    true_df = pd.DataFrame(np.array(test_y), index=test_items, columns=codes)
+    final_test_f1, final_test_pp = evaluation.calc_macro_mean_f1_pp(true_df, predicted_df)
+
     return {'loss': -np.median(best_valid_f1s),
-            'median_test_f1': np.median(best_test_f1s),
+            'final_test_f1': final_test_f1,
             'valid_f1s': best_valid_f1s,
             'test_f1s': best_test_f1s,
             'status': STATUS_OK
@@ -617,4 +640,5 @@ def main(params=None):
 
 
 if __name__ == '__main__':
-    main()
+    report = main()
+    print report

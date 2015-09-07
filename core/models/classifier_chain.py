@@ -87,3 +87,5 @@ class ClassifierChain(MultilabelModel):
 
         return log_probs
 
+    def save_models(self):
+        pass

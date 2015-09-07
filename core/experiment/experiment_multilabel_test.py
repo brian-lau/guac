@@ -13,6 +13,7 @@ from . import reusable_holdout
 from ..models.sparse_model import SparseModel
 from ..models.multilabel_model import MultilabelModel
 from ..models.classifier_chain import ClassifierChain
+from ..models.ecc import ECC
 from ..experiment import evaluation
 from ..util import file_handling as fh, defines
 from ..feature_extractors import feature_loader
@@ -144,13 +145,14 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
         X_train = X[train_indices, :]
         y_train = all_y.loc[train_items, :]
 
-        multilabel_model = ClassifierChain(model_type=model_type, codes=codes, feature_names=column_names,
+        multilabel_model = ECC(model_type=model_type, codes=codes, feature_names=column_names,
                                            **kwargs)
-        best_alphas = multilabel_model.tune_by_cv(X_train, y_train, alphas, td_split_list, n_dev_folds,
+        multilabel_model.tune_by_cv(X_train, y_train, alphas, td_split_list, n_dev_folds,
                                                         reuser=reuser, verbose=verbose)
+        #best_alphas = np.repeat(0, len(codes))
 
     else:
-        multilabel_model = ClassifierChain(model_type=model_type, codes=codes, feature_names=column_names,
+        multilabel_model = ECC(model_type=model_type, codes=codes, feature_names=column_names,
                                            alphas=best_alphas, reuse=True, **kwargs)
 
     # re-run above, with best lambda, to get predictions (to estimate expected dev performance)
@@ -165,10 +167,15 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
         print "fold", dev_fold
         train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, dev_fold)
 
-        pred_train, pred_valid, \
-        pred_train_prob, pred_valid_prob = train_and_predict(datasets, X, index, column_names, all_y,
-                                                             train_dict, valid_dict, multilabel_model,
-                                                             verbose=verbose)
+        #pred_train, pred_valid, \
+        #pred_train_prob, pred_valid_prob = train_and_predict(datasets, X, index, column_names, all_y,
+        #                                                     train_dict, valid_dict, multilabel_model,
+        #                                                     verbose=verbose)
+
+        pred_train, pred_valid = train_and_predict(datasets, X, index, column_names, all_y,
+                                                   train_dict, valid_dict, multilabel_model,
+                                                   verbose=verbose)
+
 
         evaluate_predictions(train_cv_summary, datasets, pred_train, all_y, train_dict, 'dev_fold_' + str(dev_fold))
         evaluate_predictions(valid_cv_summary, datasets, pred_valid, all_y, valid_dict, 'dev_fold_' + str(dev_fold))
@@ -200,16 +207,20 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
         n_train = np.sum([len(train_dict[f]) for f in datasets])
         print ' n_train =', n_train, '; n_features =', len(column_names)
 
-    pred_train, pred_test,\
-    pred_train_prob, pred_test_prob = train_and_predict(datasets, X, index, column_names,
-                                                        all_y, train_dict, test_dict,
-                                                        multilabel_model, verbose=verbose)
+    #pred_train, pred_test,\
+    #pred_train_prob, pred_test_prob = train_and_predict(datasets, X, index, column_names,
+    #                                                    all_y, train_dict, test_dict,
+    #                                                    multilabel_model, verbose=verbose)
+
+    pred_train, pred_test = train_and_predict(datasets, X, index, column_names, all_y, train_dict, test_dict,
+                                              multilabel_model, verbose=verbose)
+
 
     for f in datasets:
         pred_train[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'train', 'csv'))
         pred_test[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'test', 'csv'))
-        pred_train_prob[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'train_prob', 'csv'))
-        pred_test_prob[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'test_prob', 'csv'))
+        #pred_train_prob[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'train_prob', 'csv'))
+        #pred_test_prob[f].to_csv(fh.make_filename(make_prediction_dir(exp_dir), f + '_' + 'test_prob', 'csv'))
 
     evaluate_predictions(train_summary, datasets, pred_train, all_y, train_dict, 'train')
     evaluate_predictions(test_summary,  datasets, pred_test,  all_y, test_dict,  'test')
@@ -223,7 +234,7 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
         summary_per_code[f].to_csv(output_filename)
 
 
-    multilabel_model.save_models(make_models_dir(exp_dir))
+    #multilabel_model.save_models(make_models_dir(exp_dir))
 
     print {'valid_f1': valid_cv_summary['macrof1']['overall'].mean(),
            'test_f1': test_summary['macrof1'].loc['test', 'overall']}
@@ -288,8 +299,8 @@ def train_and_predict(datasets, X, index, column_names, all_y, train_dict, valid
     # create empty prediction matrices
     prediction_matrices_train = create_prediction_matrices(datasets, train_dict)
     prediction_matrices_valid = create_prediction_matrices(datasets, valid_dict)
-    prediction_matrices_train_prob = create_prediction_matrices(datasets, train_dict, dtype=float)
-    prediction_matrices_valid_prob = create_prediction_matrices(datasets, valid_dict, dtype=float)
+    #prediction_matrices_train_prob = create_prediction_matrices(datasets, train_dict, dtype=float)
+    #prediction_matrices_valid_prob = create_prediction_matrices(datasets, valid_dict, dtype=float)
 
     X_train = X[train_indices, :]
     X_valid = X[valid_indices, :]
@@ -299,21 +310,21 @@ def train_and_predict(datasets, X, index, column_names, all_y, train_dict, valid
 
     predictions_train = multilabel_model.predict(X_train, train_items, codes)
     predictions_valid = multilabel_model.predict(X_valid, valid_items, codes)
-    predictions_train_prob = multilabel_model.predict_log_probs(X_train, train_items, codes)
-    predictions_valid_prob = multilabel_model.predict_log_probs(X_valid, valid_items, codes)
+    #predictions_train_prob = multilabel_model.predict_log_probs(X_train, train_items, codes)
+    #predictions_valid_prob = multilabel_model.predict_log_probs(X_valid, valid_items, codes)
 
     for code_index, code in enumerate(codes):
         for f in datasets:
             #f_train_indices = [train_items.index(i) for i in train_dict[f]]
             #f_valid_indices = [valid_items.index(i) for i in valid_dict[f]]
             prediction_matrices_train[f][code] = predictions_train.loc[train_dict[f], code]
-            prediction_matrices_train_prob[f][code] = predictions_train_prob.loc[train_dict[f], code]
+            #prediction_matrices_train_prob[f][code] = predictions_train_prob.loc[train_dict[f], code]
             if len(valid_dict[f]) > 0:
                 prediction_matrices_valid[f][code] = predictions_valid.loc[valid_dict[f], code]
-                prediction_matrices_valid_prob[f][code] = predictions_valid_prob.loc[valid_dict[f], code]
+                #prediction_matrices_valid_prob[f][code] = predictions_valid_prob.loc[valid_dict[f], code]
 
-    return prediction_matrices_train, prediction_matrices_valid, prediction_matrices_train_prob, prediction_matrices_valid_prob
-
+    #return prediction_matrices_train, prediction_matrices_valid, prediction_matrices_train_prob, prediction_matrices_valid_prob
+    return prediction_matrices_train, prediction_matrices_valid
 
 
 def create_prediction_matrices(datasets, items_dict, dtype=int):
@@ -365,13 +376,14 @@ def evaluate_predictions(output_dfs, datasets, predictions, true, item_dict, row
     output_dfs['pp'].loc[rowname, 'overall'] = pp
 
 
-def create_summary_dfs_per_code(datasets, codes, true, test_fold, best_lambdas):
+def create_summary_dfs_per_code(datasets, codes, true, test_fold, best_lambdas=None):
     dfs = {}
     for f in datasets:
         all_items = ds.get_all_documents(f)
         df = pd.DataFrame(columns=codes)
         df.loc['true_y_sum'] = true.loc[all_items].sum(axis=0)
-        df.loc['lambdas'] = best_lambdas.loc['alpha', :]
+        #if best_lambdas is not None:
+        #    df.loc['lambdas'] = best_lambdas
         dfs[f] = df
     return dfs
 
