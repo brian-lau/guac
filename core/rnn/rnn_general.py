@@ -381,7 +381,7 @@ def main(params=None):
         params = {
             'exp_name': 'ensemble_test',
             'test_fold': 0,
-            'n_dev_folds': 3,
+            'n_dev_folds': 1,
             'min_doc_thresh': 1,
             'initialize_word_vectors': True,
             'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
@@ -392,7 +392,7 @@ def main(params=None):
             'add_DRLD': True,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
             'n_hidden': 50,             # size of hidden units
-            'pooling_method': 'max',    # max, mean, or attention1/2
+            'pooling_method': 'attention2',    # max, mean, or attention1/2
             'bidirectional': False,
             'bi_combine': 'mean',        # concat, max, or mean
             'train_embeddings': True,
@@ -596,10 +596,6 @@ def main(params=None):
                 # also reset to the previous best
                 rnn = best_rnn
 
-            # also reduce learning rate if we can't even fit the training data
-            if train_f1 == 0.0:
-                params['clr'] *= params['decay_factor']
-
             if params['clr'] < 1e-5:
                 break
 
@@ -625,11 +621,14 @@ def main(params=None):
 
         test_prediction_arrays.append(np.array(best_test_predictions, dtype=int))
 
-    test_predictions_stack = np.dstack(test_prediction_arrays)
-    final_predictions = stats.mode(test_predictions_stack, axis=2)[0][:, :, 0]
-    predicted_df = pd.DataFrame(final_predictions, index=test_items, columns=codes)
-    true_df = pd.DataFrame(np.array(test_y), index=test_items, columns=codes)
-    final_test_f1, final_test_pp = evaluation.calc_macro_mean_f1_pp(true_df, predicted_df)
+    if params['ensemble']:
+        test_predictions_stack = np.dstack(test_prediction_arrays)
+        final_predictions = stats.mode(test_predictions_stack, axis=2)[0][:, :, 0]
+        predicted_df = pd.DataFrame(final_predictions, index=test_items, columns=codes)
+        true_df = pd.DataFrame(np.array(test_y), index=test_items, columns=codes)
+        final_test_f1, final_test_pp = evaluation.calc_macro_mean_f1_pp(true_df, predicted_df)
+    else:
+        final_test_f1 = np.median(best_test_f1s)
 
     return {'loss': -np.median(best_valid_f1s),
             'final_test_f1': final_test_f1,
