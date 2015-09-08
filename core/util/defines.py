@@ -52,3 +52,5 @@ data_subsets_dir = os.path.join(data_dir, 'subsets')
 
 exp_dir = os.path.join(data_dir, '..', 'experiments')
 
+data_dir_20ng = os.path.join(base_dir, '20ng')
+

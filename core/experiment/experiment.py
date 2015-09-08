@@ -16,6 +16,8 @@ from ..util import file_handling as fh, defines
 from ..feature_extractors import feature_loader
 from ..preprocessing import data_splitting as ds, labels
 
+import matplotlib.pyplot as plt
+
 
 def main():
     # Handle input options and arguments
@@ -155,13 +157,13 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
             models[code] = SparseModel(model_type=model_type, column_names=column_names,
                                        alpha=float(best_alphas[code_index]), **kwargs)
 
+    summary_per_code = create_summary_dfs_per_code(datasets, codes, all_y, test_fold, best_alphas)
+
     # re-run above, with best lambda, to get predictions (to estimate expected dev performance)
     print "Estimating hold-out performance"
     train_cv_summary = create_summary_dfs(datasets)
     valid_cv_summary = create_summary_dfs(datasets)
     masked_valid_cv_summary = create_summary_dfs(datasets)
-
-    summary_per_code = create_summary_dfs_per_code(datasets, codes, all_y, test_fold, best_alphas)
 
     for dev_fold in range(n_dev_folds):
         print "fold", dev_fold
@@ -179,6 +181,7 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
 
         evaluate_predictions_per_code(summary_per_code, datasets, pred_valid, all_y, valid_dict, 'f1_dev_fold_'
                                       + str(dev_fold))
+
 
     if verbose > 0:
         print "Train CV summary:"
@@ -231,6 +234,9 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
 
     print {'valid_f1': valid_cv_summary['macrof1']['overall'].mean(),
            'test_f1': test_summary['macrof1'].loc['test', 'overall']}
+
+    knn_test(pred_train_prob, pred_test_prob, all_y)
+
     return {'loss': -valid_cv_summary['macrof1']['overall'].mean(),
             'test_f1': test_summary['macrof1'].loc['test', 'overall'],
             'status': STATUS_OK
@@ -410,6 +416,69 @@ def mask_valid_f1(dev_f1, train_f1, orig_T, T_hat, tau):
         return dev_f1 + xi, T_hat
     else:
         return train_f1, T_hat
+
+
+def knn_test(train_probs, test_probs, true):
+    train_probs_dfs = train_probs.values()
+    train_probs_all = pd.concat(train_probs_dfs, axis=0)
+    train_probs_vals = np.exp(train_probs_all.values)
+
+    test_probs_dfs = test_probs.values()
+    test_probs_all = pd.concat(test_probs_dfs, axis=0)
+    test_probs_vals = np.exp(test_probs_all.values)
+
+    train_items = train_probs_all.index
+    test_items = test_probs_all.index
+
+    train_norm = np.linalg.norm(train_probs_vals, axis=1)
+
+    f1s = []
+    accs = []
+    first_sims = []
+    second_sims = []
+    ratios = []
+
+    print "Running similarity"
+
+    for i, item in enumerate(test_items):
+        test_norm = np.linalg.norm(test_probs_vals[i, :])
+        sims = np.dot(test_probs_vals[i, :], train_probs_vals.T) / train_norm / test_norm
+
+        order = np.argsort(sims)[::-1]
+
+        closest = train_items[order[0]]
+        prediction = true.loc[closest, :]
+        closest_truth = true.loc[item, :]
+        f1, acc = evaluation.calc_f1_and_acc_for_column(closest_truth, prediction)
+        f1s.append(f1)
+        accs.append(acc)
+        first_sim = sims[order[0]]
+        first_sims.append(first_sim)
+        j = 0
+        second = true.loc[train_items[order[j]], :]
+        while (second == prediction).all():
+            j += 1
+            second = true.loc[train_items[order[j]], :]
+        second_sim = sims[order[j]]
+        second_sims.append(second_sim)
+
+        if second_sim != 0:
+            ratios.append(first_sim / second_sim)
+        else:
+            ratios.append(1.0)
+
+    print "mean = ", np.mean(f1s)
+
+    order = np.argsort(ratios)
+    good_f1s = []
+    for i in order:
+        print f1s[i], accs[i], first_sims[i], second_sims[i], ratios[i]
+        if ratios[i] > 1.05:
+            good_f1s.append(f1s[i])
+
+    print "good mean = ", np.mean(good_f1s)
+
+
 
 """ CHECK
 # do baseline predictions

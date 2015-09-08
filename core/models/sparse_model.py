@@ -214,8 +214,9 @@ class SparseModel:
 
     def predict_log_probs(self, X):
         n, p = X.shape
-        if self.model == 'LR' or self.model == 'MNB':
-            log_probs = self.model.predict_log_proba(X)
+
+        if self.model_type == 'LR' or self.model_type == 'MNB':
+            log_probs = self.model.predict_log_proba(X)[:, 1]
         else:
             log_probs = np.zeros(shape=[n, 1])
         return log_probs
