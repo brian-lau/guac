@@ -330,7 +330,7 @@ def train_and_predict(datasets, X, index, column_names, all_y, train_dict, valid
 def create_prediction_matrices(datasets, items_dict, dtype=int):
     prediction_matrices = {}
     for dataset in datasets:
-        y = labels.get_datset_labels(dataset)
+        y = labels.get_dataset_labels(dataset)
         prediction_matrices[dataset] = pd.DataFrame(np.zeros([len(items_dict[dataset]), len(y.columns)],
                                                     dtype=dtype), index=items_dict[dataset],
                                                     columns=y.columns)

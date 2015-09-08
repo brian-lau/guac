@@ -25,7 +25,7 @@ def make_label_metaindex():
     return label_index
 
 
-def get_datset_labels(dataset):
+def get_dataset_labels(dataset):
     input_dir = defines.data_raw_labels_dir
     input_filename = fh.make_filename(input_dir, fh.get_basename(dataset), 'csv')
     label_data = pd.read_csv(input_filename, header=0, index_col=0)
@@ -35,7 +35,7 @@ def get_datset_labels(dataset):
 def get_labels(datasets):
     all_labels = []
     for f in datasets:
-        labels = get_datset_labels(f)
+        labels = get_dataset_labels(f)
         all_labels.append(labels)
 
     return pd.concat(all_labels, axis=0)

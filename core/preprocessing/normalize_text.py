@@ -13,7 +13,10 @@ def normalize_text():
     normalized_text = {}
     data = fh.read_json(input_filename)
     for key, line in data.items():
-        line = normalizer.fix_basic_punctuation(line)
+        #line = normalizer.fix_basic_punctuation(line)
+        line = normalizer.fix_basic_punctuation(line, remove_angle_brackets=False, remove_double_quotes=False,
+                                                remove_backticks=False, split_on_dashes=False,
+                                                replace_underscores=False, sentence_split_on_slashes=False)
         normalized_text[key] = line
 
     fh.write_to_json(normalized_text, output_filename)
