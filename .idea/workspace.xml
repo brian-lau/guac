@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="partly added knn thing; no clear advantage yet">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/preprocessing/20ng.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/util/defines.py" afterPath="$PROJECT_DIR$/core/util/defines.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/experiment.py" afterPath="$PROJECT_DIR$/core/experiment/experiment.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run_test2.py" afterPath="$PROJECT_DIR$/run_test2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/models/sparse_model.py" afterPath="$PROJECT_DIR$/core/models/sparse_model.py" />
+    <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -29,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="experiment.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="experiment.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.86725664">
-              <caret line="480" column="0" selection-start-line="480" selection-start-column="0" selection-end-line="480" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="469" column="33" selection-start-line="469" selection-start-column="33" selection-end-line="469" selection-end-column="33" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -45,9 +41,21 @@
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="590" column="0" selection-start-line="590" selection-start-column="0" selection-end-line="590" selection-end-column="0" />
+              <caret line="633" column="26" selection-start-line="633" selection-start-column="13" selection-end-line="633" selection-end-column="26" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.36504424">
+              <caret line="124" column="29" selection-start-line="124" selection-start-column="29" selection-end-line="124" selection-end-column="29" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -156,7 +164,6 @@
         <option value="$PROJECT_DIR$/core/models/multilabel_model.py" />
         <option value="$PROJECT_DIR$/core/models/classifier_chain.py" />
         <option value="$PROJECT_DIR$/core/experiment/experiment_multilabel_test.py" />
-        <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
         <option value="$PROJECT_DIR$/core/models/ecc.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_general.py" />
         <option value="$PROJECT_DIR$/run_test2.py" />
@@ -164,6 +171,7 @@
         <option value="$PROJECT_DIR$/core/models/sparse_model.py" />
         <option value="$PROJECT_DIR$/core/preprocessing/20ng.py" />
         <option value="$PROJECT_DIR$/core/experiment/experiment.py" />
+        <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       </list>
     </option>
   </component>
@@ -256,6 +264,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="guac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="guac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rnn" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -885,7 +911,13 @@
       <option name="project" value="LOCAL" />
       <updated>1441662789586</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="partly added knn thing; no clear advantage yet">
+      <created>1441681746296</created>
+      <option name="number" value="00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1441681746296</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -930,7 +962,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="fixed typo" />
     <MESSAGE value="fixed some minor errors" />
     <MESSAGE value="fixed printing error" />
     <MESSAGE value="fixed setting alpha for MNB" />
@@ -955,7 +986,8 @@
     <MESSAGE value="got classifier chains working!" />
     <MESSAGE value="added ensembles of RNNs and of classifier chains" />
     <MESSAGE value="removed lr reduction after train f1 = 0" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed lr reduction after train f1 = 0" />
+    <MESSAGE value="partly added knn thing; no clear advantage yet" />
+    <option name="LAST_COMMIT_MESSAGE" value="partly added knn thing; no clear advantage yet" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1269,16 +1301,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="102" column="27" selection-start-line="102" selection-start-column="27" selection-end-line="102" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/experiment_multilabel_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1341,16 +1363,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="590" column="0" selection-start-line="590" selection-start-column="0" selection-end-line="590" selection-end-column="0" />
-          <folding>
-            <element signature="e#66#101#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/util/defines.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1403,8 +1415,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.86725664">
-          <caret line="480" column="0" selection-start-line="480" selection-start-column="0" selection-end-line="480" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="469" column="33" selection-start-line="469" selection-start-column="33" selection-end-line="469" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="633" column="26" selection-start-line="633" selection-start-column="13" selection-end-line="633" selection-end-column="26" />
+          <folding>
+            <element signature="e#66#101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36504424">
+          <caret line="124" column="29" selection-start-line="124" selection-start-column="29" selection-end-line="124" selection-end-column="29" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

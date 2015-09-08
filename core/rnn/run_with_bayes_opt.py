@@ -132,7 +132,7 @@ def call_experiment(args):
 
     with codecs.open(output_filename, 'a') as output_file:
         output_file.write(str(datetime.datetime.now()) + '\t' + name + '\t' +
-                          str(-result['loss']) + '\t' + str((result['median_test_f1'])) + '\n')
+                          str(-result['loss']) + '\t' + str(result['final_test_f1']) + '\n')
         output_file.write('valid_f1s:' + '\t' + str(result['valid_f1s']) + '\n')
         output_file.write('test_f1s:' + '\t' + str(result['test_f1s']) + '\n')
 
