@@ -253,10 +253,11 @@ class RNN(object):
                 h_r, _ = theano.scan(fn=recurrence_gru_reverse, sequences=x, outputs_info=[self.h_i_r],
                                      go_backwards=True)
         elif rnn_type == 'LSTM':
-            h_f, _ = theano.scan(fn=recurrence_lstm, sequences=x, outputs_info=[self.h_i_f, self.c_i_f], n_steps=x.shape[0])
+            [h_f, c_f], _ = theano.scan(fn=recurrence_lstm, sequences=x,
+                                        outputs_info=[self.h_i_f, self.c_i_f], n_steps=x.shape[0])
             if bidirectional:
-                h_r, _ = theano.scan(fn=recurrence_lstm_reverse, sequences=x, outputs_info=[self.h_i_r, self.c_i_r],
-                                     go_backwards=True)
+                [h_r, c_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=x,
+                                            outputs_info=[self.h_i_r, self.c_i_r], go_backwards=True)
         else:
             h_f, _ = theano.scan(fn=recurrence_basic, sequences=x, outputs_info=[self.h_i_f], n_steps=x.shape[0])
             if bidirectional:
@@ -390,10 +391,10 @@ def main(params=None):
             'add_OOV': False,
             'win': 1,                   # size of context window
             'add_DRLD': True,
-            'rnn_type': 'basic',        # basic, GRU, or LSTM
+            'rnn_type': 'LSTM',        # basic, GRU, or LSTM
             'n_hidden': 50,             # size of hidden units
             'pooling_method': 'attention2',    # max, mean, or attention1/2
-            'bidirectional': False,
+            'bidirectional': True,
             'bi_combine': 'mean',        # concat, max, or mean
             'train_embeddings': True,
             'lr': 0.1,                  # learning rate
@@ -401,7 +402,7 @@ def main(params=None):
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
             'n_epochs': 3,
-            'add_OOV_noise': False,
+            'add_OOV_noise': True,
             'OOV_noise_prob': 0.01,
             'ensemble': False,
             'save_model': True,

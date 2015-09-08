@@ -12,6 +12,7 @@ assert parts[1] == 'guac'
 
 print "Base directory:", base_dir
 
+#data_dir = os.path.join(base_dir, '20ng')
 data_dir = os.path.join(base_dir, 'data')
 features_dir = os.path.join(base_dir, 'features')
 resources_dir = os.path.join(base_dir, 'resources')

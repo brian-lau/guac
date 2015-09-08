@@ -96,7 +96,6 @@ def call_experiment(args):
         params['OOV_noise_prob'] = args['training']['OOV_noise']['noise_prob']
     else:
         params['add_OOV_noise'] = False
-    params['OOV_noise_prob'] = args['training']
 
     params['ensemble'] = False
     params['n_dev_folds'] = 1
