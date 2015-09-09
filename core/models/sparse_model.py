@@ -215,16 +215,29 @@ class SparseModel:
             predictions = self.model.predict(X)
         return predictions
 
-    def predict_log_probs(self, X):
+    def predict_p_y_eq_1(self, X):
         n, p = X.shape
         if self.model_type == 'LR' or self.model_type == 'MNB':
-            #log_probs = self.model.predict_log_proba(X)[:, 1]
-            log_probs = self.model.predict_log_proba(X)
-            log_probs = log_probs[:, 1] - log_probs[:, 0]
+            log_probs = self.model.predict_log_proba(X)[:, 1]
         else:
             log_probs = np.zeros(shape=[n, 1])
         return log_probs
 
+    def get_nonconformity_scores(self, X, y):
+        n, p = X.shape
+
+        if self.model_type == 'LR':
+            scores = np.dot(X.toarray(), self.model.coef_[0]) + self.model.intercept_[0]
+            # multiple the scores for y == 1 by -1
+            scores *= -(y*2-1)
+
+        else:
+            scores = np.zeros(shape=[n, 1])
+        return scores
+
+
+
+    """
     def get_scores(self, X):
         n, p = X.shape
         if self.model_type == 'LR' or self.model_type == 'MNB':
@@ -233,6 +246,7 @@ class SparseModel:
         else:
             scores = np.zeros(shape=[n, 1])
         return scores
+    """
 
     def eval_f1_acc(self, X, y):
         predicted = self.predict(X)

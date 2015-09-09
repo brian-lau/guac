@@ -236,8 +236,6 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
     print {'valid_f1': valid_cv_summary['macrof1']['overall'].mean(),
            'test_f1': test_summary['macrof1'].loc['test', 'overall']}
 
-    knn_test(pred_train_prob, pred_test_prob, all_y)
-
     return {'loss': -valid_cv_summary['macrof1']['overall'].mean(),
             'test_f1': test_summary['macrof1'].loc['test', 'overall'],
             'status': STATUS_OK
@@ -311,8 +309,8 @@ def train_and_predict(datasets, X, index, column_names, all_y, train_dict, valid
         # make predictions
         predictions_train = model.predict(X[train_indices, :])
         predictions_valid = model.predict(X[valid_indices, :])
-        predictions_train_prob = model.predict_log_probs(X[train_indices, :])
-        predictions_valid_prob = model.predict_log_probs(X[valid_indices, :])
+        predictions_train_prob = model.predict_p_y_eq_1(X[train_indices, :])
+        predictions_valid_prob = model.predict_p_y_eq_1(X[valid_indices, :])
 
         # write predictions back to the corresponding code for each question
         for f in datasets:

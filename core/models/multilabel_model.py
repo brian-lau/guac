@@ -59,7 +59,7 @@ class MultilabelModel():
         n, p = X.shape
         log_probs = pd.DataFrame(np.zeros([n, len(codes)], dtype=float), index=index, columns=codes)
         for code in codes:
-            log_probs[code] = self.models[code].predict_log_probs(X)
+            log_probs[code] = self.models[code].predict_p_y_eq_1(X)
         return log_probs
 
     def calc_codewise_f1_acc(self, predictions, true):

@@ -81,7 +81,7 @@ class ClassifierChain(MultilabelModel):
 
         for i, code in enumerate(self.order):
             model = self.models[code]
-            log_probs[code] = model.predict_log_probs(X)
+            log_probs[code] = model.predict_p_y_eq_1(X)
             predictions = sparse.csc_matrix(model.predict(X))
             X = sparse.csr_matrix(sparse.hstack([X, predictions.T]))
 

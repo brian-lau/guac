@@ -39,7 +39,6 @@ def load_feature(feature_description, index_to_load, verbose=1):
     indices_to_load = index.loc[index_to_load, 'index']
     return counts[indices_to_load, :], column_names
 
-
 def kwargs_list_to_dict(list_of_kwargs):
     kwargs = {}
     for kwarg in list_of_kwargs:

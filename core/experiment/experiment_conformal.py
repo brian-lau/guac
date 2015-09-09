@@ -79,7 +79,7 @@ def main():
         print group
         result = run_group_experiment(name, group, test_fold, feature_list, model_type,
                              reuse=reuse_holdout, orig_T=reuseable_T, tau=reuseable_tau, verbose=1,
-                                      min_alpha_exp=0, max_alpha_exp=0)
+                                      min_alpha_exp=0, max_alpha_exp=3)
 
 
 
@@ -127,6 +127,7 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
 
     # if alpha values were not provided, choose them by cross-validation + grid search
     models = {}
+    calibration = False
     if best_alphas is None:
         print "Tuning hyperparameters"
         # choose the values of alpha to try based on the input
@@ -136,9 +137,9 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
         train_f1s = {}
         valid_f1s = {}
 
-        train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, None)
+        train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, None, calibration)
         train_items, train_indices = get_items_and_indices(datasets, train_dict, index)
-        td_split_list = np.array(ds.get_td_split_list(datasets, test_fold))
+        td_split_list = np.array(ds.get_td_split_list(datasets, test_fold, calibration))
 
         best_alphas = []
         X_train = X[train_indices, :]
@@ -166,9 +167,10 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
     valid_cv_summary = create_summary_dfs(datasets)
     masked_valid_cv_summary = create_summary_dfs(datasets)
 
+    """
     for dev_fold in range(n_dev_folds):
         print "fold", dev_fold
-        train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, dev_fold)
+        train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, dev_fold, calibration)
 
         pred_train, pred_valid, \
         pred_train_prob, pred_valid_prob = train_and_predict(datasets, X, index, column_names, all_y,
@@ -183,7 +185,6 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
         evaluate_predictions_per_code(summary_per_code, datasets, pred_valid, all_y, valid_dict, 'f1_dev_fold_'
                                       + str(dev_fold))
 
-
     if verbose > 0:
         print "Train CV summary:"
         print train_cv_summary['macrof1']
@@ -194,14 +195,21 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
     write_summary_dfs_to_file(exp_dir, 'train_cv', train_cv_summary)
     write_summary_dfs_to_file(exp_dir, 'valid_cv', valid_cv_summary)
     write_summary_dfs_to_file(exp_dir, 'masked_valid_cv', masked_valid_cv_summary)
+    """
 
     # finally, train one full model and evaluate on the test data
     print "Training final model"
     train_summary = create_summary_dfs(datasets)
     test_summary = create_summary_dfs(datasets)
     dev_subfold = None
-    train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, dev_subfold)
-    #X, column_names = load_features(feature_list, test_fold, dev_subfold, index)
+    train_dict, valid_dict, test_dict = get_item_dicts(datasets, test_fold, dev_subfold, calibration)
+
+    calibration_dict, _, _ = get_item_dicts(datasets, test_fold, dev_subfold, calibration=True)
+
+    train_calibrate_and_predict(datasets, X, index, column_names, all_y, train_dict, test_dict, calibration_dict,
+                                models, 'Code 25', verbose)
+    sys.exit()
+
     if verbose > 0:
         n_train = np.sum([len(train_dict[f]) for f in datasets])
         print ' n_train =', n_train, '; n_features =', len(column_names)
@@ -235,8 +243,6 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
 
     print {'valid_f1': valid_cv_summary['macrof1']['overall'].mean(),
            'test_f1': test_summary['macrof1'].loc['test', 'overall']}
-
-    knn_test(pred_train_prob, pred_test_prob, all_y)
 
     return {'loss': -valid_cv_summary['macrof1']['overall'].mean(),
             'test_f1': test_summary['macrof1'].loc['test', 'overall'],
@@ -311,8 +317,8 @@ def train_and_predict(datasets, X, index, column_names, all_y, train_dict, valid
         # make predictions
         predictions_train = model.predict(X[train_indices, :])
         predictions_valid = model.predict(X[valid_indices, :])
-        predictions_train_prob = model.predict_log_probs(X[train_indices, :])
-        predictions_valid_prob = model.predict_log_probs(X[valid_indices, :])
+        predictions_train_prob = model.predict_p_y_eq_1(X[train_indices, :])
+        predictions_valid_prob = model.predict_p_y_eq_1(X[valid_indices, :])
 
         # write predictions back to the corresponding code for each question
         for f in datasets:
@@ -326,6 +332,130 @@ def train_and_predict(datasets, X, index, column_names, all_y, train_dict, valid
 
     return prediction_matrices_train, prediction_matrices_valid, prediction_matrices_train_prob, prediction_matrices_valid_prob
 
+
+
+def train_calibrate_and_predict(datasets, X, index, column_names, all_y, train_dict, test_dict,
+                                calibration_dict, models, code, verbose=1):
+    codes = all_y.columns
+
+    # get a list of training and validation items for this dev fold
+    train_items, train_indices = get_items_and_indices(datasets, train_dict, index)
+    test_items, test_indices = get_items_and_indices(datasets, test_dict, index)
+    calib_items, calib_indices = get_items_and_indices(datasets, calibration_dict, index)
+
+    # create empty prediction matrices
+    #prediction_matrices_train = create_prediction_matrices(datasets, train_dict)
+    #prediction_matrices_valid = create_prediction_matrices(datasets, valid_dict)
+
+    #prediction_matrices_train_prob = create_prediction_matrices(datasets, train_dict, dtype=float)
+    #prediction_matrices_valid_prob = create_prediction_matrices(datasets, valid_dict, dtype=float)
+
+    conf_prod = np.zeros([len(codes), len(test_items)])
+    error_counts = np.zeros(len(test_items))
+    overall_colors = np.zeros(len(test_items))
+
+    for code_index, code in enumerate(codes):
+
+        y_train = all_y.loc[train_items, code].as_matrix()
+        y_calib = all_y.loc[calib_items, code].as_matrix()
+        model = models[code]
+        model.fit(X[train_indices, :], y_train)
+
+        nc_scores_calibration = model.get_nonconformity_scores(X[calib_indices, :], y_calib)
+
+        predictions_test = model.predict(X[test_indices, :])
+        predictions_test_prob = model.predict_p_y_eq_1(X[test_indices, :])
+
+        nc_scores_test_0 = model.get_nonconformity_scores(X[test_indices, :], np.zeros(len(test_indices)))
+        nc_scores_test_1 = model.get_nonconformity_scores(X[test_indices, :], np.ones(len(test_indices)))
+
+        p_vals_0 = [np.mean(nc_scores_calibration > i) for i in nc_scores_test_0]
+        p_vals_1 = [np.mean(nc_scores_calibration > i) for i in nc_scores_test_1]
+
+        temp = []
+        n_mistakes = 0
+        n_useless = 0
+        n_empty = 0
+        for i, item in enumerate(test_items):
+            if all_y.loc[item, code] != predictions_test[i]:
+                error_counts[i] += 1
+
+            if p_vals_0[i] > 0.05 and p_vals_1[i] > 0.05:
+                temp.append(np.exp(predictions_test_prob[i]))
+                n_useless += 1
+            elif p_vals_0[i] <= 0.05 and p_vals_1[i] <= 0.05:
+
+                n_empty += 1
+            else:
+                if all_y.loc[item, code] != predictions_test[i]:
+                    n_mistakes += 1
+
+        print code, all_y[code].sum(),\
+            " mistakes={:.3f}, useless={:.3f}, empty={:.3f}".format(n_mistakes / float(len(test_items)),
+                                                                    n_useless / float(len(test_items)),
+                                                                    n_empty / float(len(test_items)))
+
+        confs = []
+        creds = []
+        colors = []
+        for i, item in enumerate(test_items):
+            confs.append(1-np.min([p_vals_0[i], p_vals_1[i]]))
+            creds.append(np.max([p_vals_0[i], p_vals_1[i]]))
+            if p_vals_0[i] > 0.05 and p_vals_1[i] > 0.05:
+                colors.append(1)
+                overall_colors[i] = 1
+            elif p_vals_0[i] <= 0.05 and p_vals_1[i] <= 0.05:
+                colors.append(2)
+                overall_colors[i] = 1
+            else:
+                if all_y.loc[item, code] != predictions_test[i]:
+                    colors.append(3)
+                else:
+                    colors.append(4)
+
+        conf_prod[code_index, :] = np.log(confs)
+
+        # PLOT CONFIDENCE vs. CREDIBILITY
+        """
+        CS = plt.scatter(confs, creds, c=colors)
+        plt.xlabel('conf')
+        plt.ylabel('cred')
+        plt.colorbar(CS)
+        plt.show()
+        """
+
+    # take the log of the product of confidences across all codes
+    overall_conf = np.min(conf_prod, axis=0)
+    plt.hist(np.exp(overall_conf))
+    plt.show()
+
+    plt.scatter(np.exp(overall_conf), error_counts, c=overall_colors)
+    plt.show()
+
+    order = np.argsort(overall_conf)
+    for i in order[0:20]:
+        print test_items[i], np.exp(overall_conf[i])
+
+
+    # make predictions
+    """
+    predictions_train = model.predict(X[train_indices, :])
+    predictions_valid = model.predict(X[valid_indices, :])
+    predictions_train_prob = model.predict_p_y_eq_1(X[train_indices, :])
+    predictions_valid_prob = model.predict_p_y_eq_1(X[valid_indices, :])
+
+    # write predictions back to the corresponding code for each question
+    for f in datasets:
+        f_train_indices = [train_items.index(i) for i in train_dict[f]]
+        f_valid_indices = [valid_items.index(i) for i in valid_dict[f]]
+        prediction_matrices_train[f][code] = predictions_train[f_train_indices]
+        prediction_matrices_train_prob[f][code] = predictions_train_prob[f_train_indices]
+        if len(f_valid_indices) > 0:
+            prediction_matrices_valid[f][code] = predictions_valid[f_valid_indices]
+            prediction_matrices_valid_prob[f][code] = predictions_valid_prob[f_valid_indices]
+
+    return prediction_matrices_train, prediction_matrices_valid, prediction_matrices_train_prob, prediction_matrices_valid_prob
+    """
 
 def create_prediction_matrices(datasets, items_dict, dtype=int):
     prediction_matrices = {}

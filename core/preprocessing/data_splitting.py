@@ -124,7 +124,7 @@ def get_dev_documents(input_filename, test_fold, dev_subfold, calibration=None):
         return dev_list
     else:
         return []
-
+    
 
 def get_test_documents(input_filename, test_fold):
     input_dir = defines.data_subsets_dir
