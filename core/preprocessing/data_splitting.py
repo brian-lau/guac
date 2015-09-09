@@ -96,7 +96,7 @@ def get_all_splits(test_fold, dev_subfold):
     return train, dev, test
 
 
-def get_train_documents(input_filename, test_fold, dev_subfold):
+def get_train_documents(input_filename, test_fold, dev_subfold, calibration=None):
     input_dir = defines.data_subsets_dir
     filename = fh.make_filename(input_dir, input_filename, 'csv')
     df = pd.read_csv(filename, header=0, index_col=0)
@@ -105,17 +105,21 @@ def get_train_documents(input_filename, test_fold, dev_subfold):
         train_df = temp_df[temp_df['minor_split'] != dev_subfold]
     else:
         train_df = temp_df
+    if calibration is not None:
+        train_df = train_df[train_df['calibration'] == int(calibration)]
     train_list = train_df.index.tolist()
     return train_list
 
 
-def get_dev_documents(input_filename, test_fold, dev_subfold):
+def get_dev_documents(input_filename, test_fold, dev_subfold, calibration=None):
     if dev_subfold is not None:
         input_dir = defines.data_subsets_dir
         filename = fh.make_filename(input_dir, input_filename, 'csv')
         df = pd.read_csv(filename, header=0, index_col=0)
         temp_df = df[df['major_split'] != test_fold]
         dev_df = temp_df[temp_df['minor_split'] == dev_subfold]
+        if calibration is not None:
+            dev_df = dev_df[dev_df['calibration'] == int(calibration)]
         dev_list = dev_df.index.tolist()
         return dev_list
     else:
@@ -130,11 +134,13 @@ def get_test_documents(input_filename, test_fold):
     test_list = test_df.index.tolist()
     return test_list
 
-def get_nontest_documents(input_filename, test_fold):
+def get_nontest_documents(input_filename, test_fold, calibration=None):
     input_dir = defines.data_subsets_dir
     filename = fh.make_filename(input_dir, input_filename, 'csv')
     df = pd.read_csv(filename, header=0, index_col=0)
     test_df = df[df['major_split'] != test_fold]
+    if calibration is not None:
+        test_df = test_df[test_df['calibration'] == int(calibration)]
     test_list = test_df.index.tolist()
     return test_list
 
@@ -150,12 +156,14 @@ def get_n_dev_folds(input_filename):
     df = pd.read_csv(filename, header=0, index_col=0)
     return df['minor_split'].max()+1
 
-def get_td_split_list(datasets, test_fold):
+def get_td_split_list(datasets, test_fold, calibration=None):
     df = get_tdt_splits(datasets)
     df = df[df['major_split'] != test_fold]
+    if calibration is not None:
+        df = df[df['calibration'] == int(calibration)]
     return df['minor_split'].tolist()
 
-def get_tdt_splits(datasets):
+def get_tdt_splits(datasets, calibration=None):
     input_dir = defines.data_subsets_dir
     dataframes = []
     for f in datasets:
