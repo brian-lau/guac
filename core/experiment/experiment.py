@@ -78,7 +78,8 @@ def main():
     for group in groups:
         print group
         result = run_group_experiment(name, group, test_fold, feature_list, model_type,
-                             reuse=reuse_holdout, orig_T=reuseable_T, tau=reuseable_tau, verbose=1)
+                             reuse=reuse_holdout, orig_T=reuseable_T, tau=reuseable_tau, verbose=1,
+                                      min_alpha_exp=0, max_alpha_exp=0)
 
 
 
@@ -93,7 +94,7 @@ def write_log(exp_dir, names_list, values_list):
 # Run an experiment on a group of questions
 def run_group_experiment(name, datasets, test_fold, feature_list, model_type, unique_name=False,
                          min_alpha_exp=-1, max_alpha_exp=8, alpha_exp_base=np.sqrt(10),
-                         reuse=False, orig_T=0.04, tau=0.01, verbose=1, best_alphas=None,
+                         reuse=True, orig_T=0.04, tau=0.01, verbose=1, best_alphas=None,
                          **kwargs):
     print model_type
     # create experiments directory and save the parameters for this experiment
@@ -473,7 +474,7 @@ def knn_test(train_probs, test_probs, true):
     good_f1s = []
     for i in order:
         print f1s[i], accs[i], first_sims[i], second_sims[i], ratios[i]
-        if ratios[i] > 1.05:
+        if ratios[i] > 1.001:
             good_f1s.append(f1s[i])
 
     print "good mean = ", np.mean(good_f1s)

@@ -163,6 +163,9 @@ class SparseModel:
             train_f1s.append(f1_train)
             valid_f1s.append(f1_valid)
 
+            if verbose > 1:
+                print alpha, f1_train, f1_valid
+
         self.trained = False
 
         return train_f1s, valid_f1s
@@ -214,12 +217,23 @@ class SparseModel:
 
     def predict_log_probs(self, X):
         n, p = X.shape
-
         if self.model_type == 'LR' or self.model_type == 'MNB':
-            log_probs = self.model.predict_log_proba(X)[:, 1]
+            #log_probs = self.model.predict_log_proba(X)[:, 1]
+            log_probs = self.model.predict_log_proba(X)
+            log_probs = log_probs[:, 1] - log_probs[:, 0]
         else:
             log_probs = np.zeros(shape=[n, 1])
         return log_probs
+
+    def get_scores(self, X):
+        n, p = X.shape
+        if self.model_type == 'LR' or self.model_type == 'MNB':
+            log_probs = self.model.predict_log_proba(X)
+            scores = log_probs[:, 1] - log_probs[:, 0]
+        else:
+            scores = np.zeros(shape=[n, 1])
+        return scores
+
 
     def eval_f1_acc(self, X, y):
         predicted = self.predict(X)
