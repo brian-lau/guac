@@ -3,6 +3,7 @@ import codecs
 import random
 from optparse import OptionParser
 
+import numpy as np
 import pandas as pd
 
 from ..util import file_handling as fh, defines
@@ -41,7 +42,7 @@ def main():
         assign_data_split(f, t, v)
 
 
-def assign_data_split(input_filename, t, v):
+def assign_data_split(input_filename, t, v, calib_prop=0.5):
     output_dir = fh.makedirs(defines.data_subsets_dir)
 
     # get basename of input file
@@ -53,21 +54,35 @@ def assign_data_split(input_filename, t, v):
 
     random.shuffle(articles)
 
+    rids = []
+    majors = []
+    minors = []
+    calibs = []
+
+    i = 0
+    j = 0
+    for article in articles:
+        majors.append(i)
+        minors.append(j)
+        if np.random.rand() <= calib_prop:
+            calibs.append(0)
+        else:
+            calibs.append(1)
+        i += 1
+        if i >= t:
+            i = 0
+            j += 1
+            if j >= v:
+                j = 0
+
+    df_out = pd.DataFrame(index=articles, columns=['major_split', 'minor_split', 'calibration'])
+    df_out['major_split'] = majors
+    df_out['minor_split'] = minors
+    df_out['calibration'] = calibs
+
     output_filename = fh.make_filename(output_dir, basename, 'csv')
-    with codecs.open(output_filename, 'w') as output_file:
-        writer = csv.writer(output_file)
-        header = ['rid', 'major_split', 'minor_split']
-        writer.writerow(header)
-        i = 0
-        j = 0
-        for article in articles:
-            writer.writerow([article, i, j])
-            i += 1
-            if i >= t:
-                i = 0
-                j += 1
-                if j >= v:
-                    j = 0
+    df_out.to_csv(output_filename)
+
 
 def get_all_splits(test_fold, dev_subfold):
     label_files = fh.get_label_files()

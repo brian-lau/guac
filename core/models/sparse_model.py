@@ -234,7 +234,6 @@ class SparseModel:
             scores = np.zeros(shape=[n, 1])
         return scores
 
-
     def eval_f1_acc(self, X, y):
         predicted = self.predict(X)
         if np.isnan(predicted).any() or np.isnan(y).any():
