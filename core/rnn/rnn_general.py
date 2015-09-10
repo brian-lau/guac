@@ -383,30 +383,30 @@ def main(params=None):
             'exp_name': 'LSTM_test',
             'test_fold': 0,
             'n_dev_folds': 1,
-            'min_doc_thresh': 2,
+            'min_doc_thresh': 1,
             'initialize_word_vectors': True,
             'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
             'word2vec_dim': 300,
-            'init_scale': 0.01872229254157698,
+            'init_scale': 0.681393408902,
             'add_OOV': True,
-            'win': 1,                   # size of context window
+            'win': 3,                   # size of context window
             'add_DRLD': False,
             'rnn_type': 'LSTM',        # basic, GRU, or LSTM
-            'n_hidden': 20,             # size of hidden units
-            'pooling_method': 'max',    # max, mean, or attention1/2
+            'n_hidden': 60,             # size of hidden units
+            'pooling_method': 'attention2',    # max, mean, or attention1/2
             'bidirectional': False,
             'bi_combine': 'mean',        # concat, max, or mean
-            'train_embeddings': False,
-            'lr': 0.01903554800793334,                  # learning rate
-            'lr_emb_fac': 0.8794545186596017,            # factor to modify learning rate for embeddings
-            'decay_delay': 7,           # number of epochs with no improvement before decreasing learning rate
-            'decay_factor': 0.13140086801827977,        # factor by which to multiply learning rate in case of delay
+            'train_embeddings': True,
+            'lr': 0.0333532464861,                  # learning rate
+            'lr_emb_fac': 0.118640166689,            # factor to modify learning rate for embeddings
+            'decay_delay': 8,           # number of epochs with no improvement before decreasing learning rate
+            'decay_factor': 0.12877847594,        # factor by which to multiply learning rate in case of delay
             'n_epochs': 40,
-            'add_OOV_noise': False,
-            'OOV_noise_prob': 0.01,
+            'add_OOV_noise': True,
+            'OOV_noise_prob': 0.0239872082239,
             'ensemble': False,
             'save_model': True,
-            'seed': 1682250958,
+            'seed': 412186161,
             'verbose': 1,
             'reuse': False,
             'orig_T': 0.04,
