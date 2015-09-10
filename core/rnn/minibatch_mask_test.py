@@ -64,14 +64,29 @@ def contextwin(l, win):
     return out
 
 
+def generate_data(n, nVocab=2, seqMin=3, seqMax=10):
+    x = []
+    y = []
+    for i in range(n):
+        seqLen = np.random.randint(seqMin, seqMax)
+        seq = list(np.random.randint(0, nVocab, seqLen))
+        x.append(seq)
+        pairs = [[seq[i], seq[i+1]] for (i, v) in enumerate(seq[:-1])]
+        if [1, 1] in pairs:
+            y.append([1])
+        else:
+            y.append([0])
+
+    return x, y
+
 
 class RNN(object):
     ''' elman neural net model '''
     def __init__(self, nh, nc, ne, de, cs, init_scale=0.2, initial_embeddings=None,
                  rnn_type='basic',      # 'basic', 'GRU', or 'LSTM'
                  pooling_method='max',  #'max', 'mean', 'attention1' or 'attention2',
-                 extra_input_dims=0, train_embeddings=True,
-                 bidirectional=True, bi_combine='concat'   # 'concat', 'sum', or 'mean'
+                 extra_input_dims=0, train_embeddings=False,
+                 bidirectional=False, bi_combine='concat'   # 'concat', 'sum', or 'mean'
                 ):
         '''
         nh :: dimension of the hidden layer
@@ -113,7 +128,7 @@ class RNN(object):
         self.b_s = theano.shared(name='b_s', value=np.zeros(nc, dtype=theano.config.floatX))
 
         # temporary parameters
-        self.h_i_f = theano.shared(name='h_i_f', value=np.zeros(nh, dtype=theano.config.floatX))
+        #self.h_i_f = theano.shared(name='h_i_f', value=np.zeros(nh, dtype=theano.config.floatX))
 
         if bidirectional:
             self.h_i_r = theano.shared(name='h_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
@@ -174,8 +189,7 @@ class RNN(object):
                 self.c_i_r = theano.shared(name='c_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
 
         self.params = [self.W_xh, self.W_hh, self.b_h,
-                       self.W_s, self.b_s,
-                       self.h_i_f]
+                       self.W_s, self.b_s]
         if train_embeddings:
             self.params += [self.emb]
         if pooling_method == 'attention':
@@ -259,7 +273,9 @@ class RNN(object):
                 [h_r, c_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=x,
                                             outputs_info=[self.h_i_r, self.c_i_r], go_backwards=True)
         else:
-            h_f, _ = theano.scan(fn=recurrence_basic, sequences=x, outputs_info=[self.h_i_f], n_steps=x.shape[0])
+            h_f, _ = theano.scan(fn=recurrence_basic, sequences=x,
+                                 outputs_info=[T.alloc(np.asarray(0., dtype=T.config.floatX), nh)],
+                                 n_steps=x.shape[0])
             if bidirectional:
                 h_r, _ = theano.scan(fn=recurrence_basic_reverse, sequences=x, outputs_info=[self.h_i_r],
                                      go_backwards=True)
@@ -297,11 +313,18 @@ class RNN(object):
             p_y_given_x_sentence = T.mean(s, axis=0)
             y_pred = p_y_given_x_sentence > 0.5
             element_weights = s
-        else:  # pooling_method == 'max'
+        elif pooling_method == 'max':
             s = T.nnet.sigmoid((T.dot(h, self.W_s) + self.b_s))  # [n_elements, nc] in R(0,1)
             p_y_given_x_sentence = T.max(s, axis=0)
             y_pred = p_y_given_x_sentence > 0.5
             element_weights = s
+        elif pooling_method == 'last':
+            s = T.nnet.sigmoid((T.dot(h, self.W_s) + self.b_s))  # [n_elements, nc] in R(0,1)
+            p_y_given_x_sentence = s[-1, :]
+            y_pred = p_y_given_x_sentence > 0.5
+            element_weights = s
+        else:
+            sys.exit("Pooling method not recognized")
 
 
         # cost and gradients and learning rate
@@ -313,6 +336,8 @@ class RNN(object):
         sentence_updates = OrderedDict((p, p - lr * g) for p, g in zip(self.params, [lr_emb_fac *
                                                                             sentence_gradients[0]]
                                                                             + sentence_gradients[1:]))
+
+        self.print_gradients = theano.function(inputs=[idxs, y], outputs=sentence_gradients)
 
         # theano functions to compile
         if extra_input_dims > 0:
@@ -368,11 +393,16 @@ class RNN(object):
         for param in self.params:
             param.set_value(np.load(os.path.join(input_dir, param.name + '.npy')))
 
-    def print_embeddings(self):
+    def print_params(self):
         for param in self.params:
             print param.name, param.get_value()
 
 
+    def print_all_gradients(self, x, y):
+        cwords = contextwin(x, 1)
+        # make an array of these windows
+        words = map(lambda x: np.asarray(x).astype('int32'), cwords)
+        print self.print_gradients(words, y)
 
 
 
@@ -380,33 +410,33 @@ def main(params=None):
 
     if params is None:
         params = {
-            'exp_name': 'LSTM_test',
+            'exp_name': 'ensemble_test',
             'test_fold': 0,
             'n_dev_folds': 1,
-            'min_doc_thresh': 2,
+            'min_doc_thresh': 1,
             'initialize_word_vectors': True,
             'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
             'word2vec_dim': 300,
-            'init_scale': 0.01872229254157698,
+            'init_scale': 0.2,
             'add_OOV': True,
             'win': 1,                   # size of context window
             'add_DRLD': False,
-            'rnn_type': 'LSTM',        # basic, GRU, or LSTM
-            'n_hidden': 20,             # size of hidden units
-            'pooling_method': 'max',    # max, mean, or attention1/2
+            'rnn_type': 'basic',        # basic, GRU, or LSTM
+            'n_hidden': 2,             # size of hidden units
+            'pooling_method': 'max',    # max, mean, last, or attention1/2
             'bidirectional': False,
             'bi_combine': 'mean',        # concat, max, or mean
             'train_embeddings': False,
-            'lr': 0.01903554800793334,                  # learning rate
-            'lr_emb_fac': 0.8794545186596017,            # factor to modify learning rate for embeddings
-            'decay_delay': 7,           # number of epochs with no improvement before decreasing learning rate
-            'decay_factor': 0.13140086801827977,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 40,
+            'lr': 0.01,                  # learning rate
+            'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
+            'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
+            'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
+            'n_epochs': 5,
             'add_OOV_noise': False,
             'OOV_noise_prob': 0.01,
             'ensemble': False,
             'save_model': True,
-            'seed': 1682250958,
+            'seed': 42,
             'verbose': 1,
             'reuse': False,
             'orig_T': 0.04,
@@ -418,73 +448,49 @@ def main(params=None):
         reuser = reusable_holdout.ReuseableHoldout(T=params['orig_T'], tau=params['tau'])
 
 
-    keys = params.keys()
-    keys.sort()
-    for key in keys:
-        print key, ':', params[key]
-
-    # seed the random number generators
-    np.random.seed(params['seed'])
-    random.seed(params['seed'])
-
-    datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
-
-    np.random.seed(params['seed'])
-    random.seed(params['seed'])
-
-    best_valid_f1s = []
-    best_test_f1s = []
-
-    test_prediction_arrays = []
-
-    output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'])
-    output_filename = fh.make_filename(output_dir, 'params', 'txt')
-    fh.write_to_json(params, output_filename)
+    n_dev_folds = 1
 
     for dev_fold in range(params['n_dev_folds']):
         print "dev fold =", dev_fold
 
-        output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
+        #output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
 
-        all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], dev_fold,
-                                                                  params['min_doc_thresh'])
-        train_xy, valid_xy, test_xy = all_data
-        train_lex, train_y = train_xy
-        valid_lex, valid_y = valid_xy
-        test_lex, test_y = test_xy
-        train_items, dev_items, test_items = items
-        vocsize = len(words2idx.keys())
-        idx2words = dict((k, v) for v, k in words2idx.iteritems())
-        best_test_predictions = None
+        #all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], dev_fold,
+        #                                                          params['min_doc_thresh'])
+        #train_xy, valid_xy, test_xy = all_data
+        #train_lex, train_y = train_xy
+        #valid_lex, valid_y = valid_xy
+        #test_lex, test_y = test_xy
+        #train_items, dev_items, test_items = items
+        #vocsize = len(words2idx.keys())
+        #idx2words = dict((k, v) for v, k in words2idx.iteritems())
+        #best_test_predictions = None
+
+        extra_input_dims = 0
+
+        vocsize = 2
+        seq_min = 3
+        seq_max = 5
+        train_lex, train_y = generate_data(60, vocsize, seq_min, seq_max)
+        valid_lex, valid_y = generate_data(60, vocsize, seq_min, seq_max)
+        test_lex, test_y = generate_data(60, vocsize, seq_min, seq_max)
+
+        #init_embed = np.reshape(np.array([0, 1]), [2, 1])
+        init_embed = np.eye(2)
+        vs, de = init_embed.shape
+        assert vs == vocsize
 
         n_sentences = len(train_lex)
         print "vocsize = ", vocsize, 'n_train', n_sentences
 
-        codes = all_labels.columns
-        n_items, n_codes = all_labels.shape
-
-        # get the words in the sentences for the test and validation sets
-        words_valid = [map(lambda x: idx2words[x], w) for w in valid_lex]
-        groundtruth_test = test_y[:]
-        words_test = [map(lambda x: idx2words[x], w) for w in test_lex]
-
-        initial_embeddings = common.load_embeddings(params, words2idx)
-        OOV_index = words2idx['__OOV__']
-        emb_dim = initial_embeddings.shape[1]
-        print 'emb_dim =', emb_dim
-
-        extra_input_dims = 0
-        if params['add_DRLD']:
-            extra_input_dims = 2
 
         print "Building RNN"
         rnn = RNN(nh=params['n_hidden'],
-                  nc=n_codes,
+                  nc=1,
                   ne=vocsize,
-                  de=emb_dim,
+                  de=de,
                   cs=params['win'],
-                  extra_input_dims=extra_input_dims,
-                  initial_embeddings=initial_embeddings,
+                  initial_embeddings=init_embed,
                   init_scale=params['init_scale'],
                   rnn_type=params['rnn_type'],
                   train_embeddings=params['train_embeddings'],
@@ -493,75 +499,53 @@ def main(params=None):
                   bi_combine=params['bi_combine']
                   )
 
-        train_likes = [1 if re.search('Likes', i) else 0 for i in train_items]
-        dev_likes = [1 if re.search('Likes', i) else 0 for i in dev_items]
-        test_likes = [1 if re.search('Likes', i) else 0 for i in test_items]
-
-        train_dem = [1 if re.search('Democrat', i) else 0 for i in train_items]
-        dev_dem = [1 if re.search('Democrat', i) else 0 for i in dev_items]
-        test_dem = [1 if re.search('Democrat', i) else 0 for i in test_items]
-
-        train_extra = [[train_likes[i], train_dem[i]] for i, t in enumerate(train_items)]
-        dev_extra = [[dev_likes[i], dev_dem[i]] for i, t in enumerate(dev_items)]
-        test_extra = [[test_likes[i], test_dem[i]] for i, t in enumerate(test_items)]
-
         # train with early stopping on validation set
         best_f1 = -np.inf
         params['clr'] = params['lr']
         for e in xrange(params['n_epochs']):
             # shuffle
-            shuffle([train_lex, train_y, train_extra], params['seed'])   # shuffle the input data
+            shuffle([train_lex, train_y], params['seed'])   # shuffle the input data
             params['ce'] = e                # store the current epoch
             tic = timeit.default_timer()
+            test_f1 = 0
+            valid_f1 = 0
 
-            #for i, (x, y) in enumerate(zip(train_lex, train_y)):
-            for i, orig_x in enumerate(train_lex):
-                n_words = len(orig_x)
-                if params['add_OOV_noise']:
-                    draws = np.random.rand(n_words)
-                    x = [OOV_index if draws[i] < params['OOV_noise_prob'] else orig_x[i] for i in range(n_words)]
-                else:
-                    x = orig_x
+            print "epoch = ", e
+
+            for i, x in enumerate(train_lex):
+                n_words = len(x)
                 y = train_y[i]
-                extra = train_extra[i]
+                y_hat_pre = rnn.classify(x, params['win'])
 
-                rnn.train(x, y, params['win'], params['clr'], params['lr_emb_fac'],
-                          extra_input_dims, extra)
-                print '[learning] epoch %i >> %2.2f%%' % (
-                    e, (i + 1) * 100. / float(n_sentences)),
-                print 'completed in %.2f (sec) <<\r' % (timeit.default_timer() - tic),
-                sys.stdout.flush()
+                #rnn.print_params()
+
+                #print x, y
+                #rnn.print_all_gradients(x, y)
+
+                rnn.train(x, y, params['win'], params['clr'], params['lr_emb_fac'])
+                #print '[learning] epoch %i >> %2.2f%%' % (e, (i + 1) * 100. / float(n_sentences))
+                #print 'completed in %.2f (sec) <<\r' % (timeit.default_timer() - tic)
+
+                y_hat_post = rnn.classify(x, params['win'])
+                predictions_test = [rnn.classify(t, params['win'],
+                                                 extra_input_dims, None) for t in test_lex]
+                predictions_valid = [rnn.classify(t, params['win'],
+                                                  extra_input_dims, None) for t in valid_lex]
+
+                test_f1 = common.calc_mean_f1(predictions_test, test_y)
+                valid_f1 = common.calc_mean_f1(predictions_valid, valid_y)
+
+                #sys.stdout.flush()
+                print x, y, y_hat_pre, y_hat_post, test_f1, valid_f1
+
 
             # evaluation // back into the real world : idx -> words
-            print ""
-
-            #print rnn.classify((np.asarray(contextwin(train_lex[0], params['win'])).astype('int32')), train_likes[0], params['win'])
-            print rnn.classify(train_lex[0], params['win'], extra_input_dims, train_extra[0])
-            #print rnn.get_element_weights(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
-            if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
-                if extra_input_dims == 0:
-                    r = np.random.randint(0, len(train_lex))
-                    print r, rnn.a_sum_check(np.asarray(contextwin(train_lex[r], params['win'])).astype('int32'))
-
-            """
-            predictions_train = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
-                                 for x in train_lex]
-            predictions_test = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
-                                for x in test_lex]
-            predictions_valid = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
-                                 for x in valid_lex]
-            """
-
-            #predictions_train = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in train_lex]
-            #predictions_test = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in test_lex]
-            #predictions_valid = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in valid_lex]
-
             predictions_train = [rnn.classify(x, params['win'],
-                                              extra_input_dims, train_extra[i]) for i, x in enumerate(train_lex)]
+                                              extra_input_dims, None) for i, x in enumerate(train_lex)]
             predictions_test = [rnn.classify(x, params['win'],
-                                             extra_input_dims, test_extra[i]) for i, x in enumerate(test_lex)]
+                                             extra_input_dims, None) for i, x in enumerate(test_lex)]
             predictions_valid = [rnn.classify(x, params['win'],
-                                              extra_input_dims, dev_extra[i]) for i, x in enumerate(valid_lex)]
+                                              extra_input_dims, None) for i, x in enumerate(valid_lex)]
 
             train_f1 = common.calc_mean_f1(predictions_train, train_y)
             test_f1 = common.calc_mean_f1(predictions_test, test_y)
@@ -576,7 +560,7 @@ def main(params=None):
             print "train_f1 =", train_f1, "valid_f1 =", valid_f1, "test_f1 =", test_f1
 
             if valid_f1 > best_f1:
-                best_rnn = copy.deepcopy(rnn)
+                #best_rnn = copy.deepcopy(rnn)
                 best_f1 = valid_f1
                 best_test_predictions = predictions_test
 
@@ -590,53 +574,17 @@ def main(params=None):
                 params['v_f1'] = valid_f1
                 params['be'] = e            # store the current epoch as a new best
 
-            # learning rate decay if no improvement in a given number of epochs
-            if abs(params['be']-params['ce']) >= params['decay_delay']:
-                params['clr'] *= params['decay_factor']
-                print "Reverting to current best; new learning rate = ", params['clr']
-                # also reset to the previous best
-                rnn = best_rnn
-
-            if params['clr'] < 1e-5:
-                break
 
             if best_f1 == 1.0:
                 break
 
-        if params['save_model']:
-            predictions_valid = [rnn.classify(x, params['win'],
-                                              extra_input_dims, dev_extra[i]) for i, x in enumerate(valid_lex)]
-
-            #predictions_valid = [best_rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
-            best_rnn.save(output_dir)
-            common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_valid, dev_items, output_dir)
-
         print('BEST RESULT: epoch', params['be'],
               'train F1 ', params['tr_f1'],
               'valid F1', params['v_f1'],
-              'best test F1', params['te_f1'],
-              'with the model', output_dir)
+              'best test F1', params['te_f1'])
 
-        best_valid_f1s.append(params['v_f1'])
-        best_test_f1s.append(params['te_f1'])
-
-        test_prediction_arrays.append(np.array(best_test_predictions, dtype=int))
-
-    if params['ensemble']:
-        test_predictions_stack = np.dstack(test_prediction_arrays)
-        final_predictions = stats.mode(test_predictions_stack, axis=2)[0][:, :, 0]
-        predicted_df = pd.DataFrame(final_predictions, index=test_items, columns=codes)
-        true_df = pd.DataFrame(np.array(test_y), index=test_items, columns=codes)
-        final_test_f1, final_test_pp = evaluation.calc_macro_mean_f1_pp(true_df, predicted_df)
-    else:
-        final_test_f1 = np.median(best_test_f1s)
-
-    return {'loss': -np.median(best_valid_f1s),
-            'final_test_f1': final_test_f1,
-            'valid_f1s': best_valid_f1s,
-            'test_f1s': best_test_f1s,
-            'status': STATUS_OK
-            }
+        #best_rnn.print_params()
+        rnn.print_params()
 
 
 if __name__ == '__main__':

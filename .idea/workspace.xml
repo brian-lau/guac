@@ -2,14 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/models/classifier_chain.py" afterPath="$PROJECT_DIR$/core/models/classifier_chain.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/preprocessing/data_splitting.py" afterPath="$PROJECT_DIR$/core/preprocessing/data_splitting.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/experiment.py" afterPath="$PROJECT_DIR$/core/experiment/experiment.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/experiment_conformal.py" afterPath="$PROJECT_DIR$/core/experiment/experiment_conformal.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/feature_extractors/feature_loader.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_loader.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/models/multilabel_model.py" afterPath="$PROJECT_DIR$/core/models/multilabel_model.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run_test2.py" afterPath="$PROJECT_DIR$/run_test2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/models/sparse_model.py" afterPath="$PROJECT_DIR$/core/models/sparse_model.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/rnn/minibatch_mask_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/bidirectional_rnn.py" afterPath="$PROJECT_DIR$/core/rnn/bidirectional_rnn.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_general.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_general.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_gru_multitask.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_gru_multitask.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_lstm_multitask.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_lstm_multitask.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_multitask.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_multitask.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_multitask_attention.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_multitask_attention.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -32,18 +32,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="experiment.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="253" column="0" selection-start-line="253" selection-start-column="0" selection-end-line="253" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="data_splitting.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/preprocessing/data_splitting.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -56,10 +44,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="experiment_conformal.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="experiment_conformal.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/experiment/experiment_conformal.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8394161">
+            <state vertical-scroll-proportion="0.0">
               <caret line="435" column="25" selection-start-line="435" selection-start-column="25" selection-end-line="435" selection-end-column="25" />
               <folding />
             </state>
@@ -78,24 +66,54 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sparse_model.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/models/sparse_model.py">
+      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="231" column="30" selection-start-line="231" selection-start-column="30" selection-end-line="231" selection-end-column="30" />
+              <caret line="95" column="11" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="11" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run_test2.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/run_test2.py">
+      <file leaf-file-name="rnn_general.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <caret line="398" column="38" selection-start-line="398" selection-start-column="38" selection-end-line="398" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="minibatch_mask_test.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/rnn/minibatch_mask_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.8578275">
+              <caret line="539" column="0" selection-start-line="539" selection-start-column="0" selection-end-line="539" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="generate_synthetic_data_for_rnn.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/rnn/generate_synthetic_data_for_rnn.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
               <folding>
-                <element signature="e#0#38#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sparse_model.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/models/sparse_model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -126,8 +144,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/code/rnn/rnn_gru_multitask.py" />
-        <option value="$PROJECT_DIR$/code/rnn/rnn_lstm_multitask.py" />
         <option value="$PROJECT_DIR$/code/rnn/rnn_multitask.py" />
         <option value="$PROJECT_DIR$/code/rnn/rnn_multitask_attention.py" />
         <option value="$PROJECT_DIR$/code/semafor/semafor_collect_frames.py" />
@@ -163,7 +179,6 @@
         <option value="$PROJECT_DIR$/core/models/ecc.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts.py" />
         <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
-        <option value="$PROJECT_DIR$/core/rnn/rnn_general.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/normalizer.py" />
         <option value="$PROJECT_DIR$/core/preprocessing/normalize_text.py" />
         <option value="$PROJECT_DIR$/core/preprocessing/labels.py" />
@@ -177,6 +192,9 @@
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_loader.py" />
         <option value="$PROJECT_DIR$/core/models/sparse_model.py" />
         <option value="$PROJECT_DIR$/core/experiment/experiment_conformal.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_general.py" />
+        <option value="$PROJECT_DIR$/core/rnn/minibatch_mask_test.py" />
       </list>
     </option>
   </component>
@@ -194,10 +212,9 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1471" />
-    <option name="y" value="140" />
-    <option name="width" value="1265" />
-    <option name="height" value="822" />
+    <option name="y" value="45" />
+    <option name="width" value="1253" />
+    <option name="height" value="773" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -382,6 +399,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/core/rnn" />
       <recent name="$PROJECT_DIR$/core/experiment" />
       <recent name="$PROJECT_DIR$/core/feature_extractors" />
     </key>
@@ -1013,11 +1031,17 @@
       <option name="project" value="LOCAL" />
       <updated>1441812116581</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="started playing with conformal methods">
+      <created>1441835486406</created>
+      <option name="number" value="00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1441835486406</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1471" y="140" width="1265" height="822" extended-state="0" />
+    <frame x="0" y="45" width="1253" height="773" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1031,13 +1055,13 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24284546" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3251445" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24525186" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32305434" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39863014" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39484397" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1058,7 +1082,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="fixed directory naming in bayes opt" />
     <MESSAGE value="started adapting rnns to bayes opt" />
     <MESSAGE value="unflipped parameter for MNB" />
     <MESSAGE value="started messing around with RNNs again; things are not exactly working at the moment..." />
@@ -1083,7 +1106,8 @@
     <MESSAGE value="set up for some tests on 20 newsgroups" />
     <MESSAGE value="added calibration split to data_splitting" />
     <MESSAGE value="added calibration split to calls to get split lists" />
-    <option name="LAST_COMMIT_MESSAGE" value="added calibration split to calls to get split lists" />
+    <MESSAGE value="started playing with conformal methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="started playing with conformal methods" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1131,7 +1155,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="59" />
+      <option name="time" value="60" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1140,34 +1164,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/semafor/semafor_collect_pos_unigram_tokens.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_multitask_attention.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3179551">
-          <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/semafor/semafor_preprocessing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09351621">
-          <caret line="5" column="42" selection-start-line="5" selection-start-column="42" selection-end-line="5" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Applications/anaconda/lib/python2.7/site-packages/scipy/sparse/csr.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="224" column="0" selection-start-line="224" selection-start-column="0" selection-end-line="224" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Applications/anaconda/lib/python2.7/site-packages/pandas/core/indexing.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33247423">
@@ -1341,6 +1337,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#9#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1388,6 +1387,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="276" column="17" selection-start-line="276" selection-start-column="17" selection-end-line="276" selection-end-column="17" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1402,23 +1402,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="19" column="33" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33971292">
-          <caret line="95" column="11" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="259" column="44" selection-start-line="259" selection-start-column="44" selection-end-line="259" selection-end-column="44" />
-          <folding>
-            <element signature="e#66#101#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1504,16 +1487,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_loader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/preprocessing/data_splitting.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1524,18 +1497,78 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/models/sparse_model.py">
+    <entry file="file://$PROJECT_DIR$/core/experiment/experiment_conformal.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="231" column="30" selection-start-line="231" selection-start-column="30" selection-end-line="231" selection-end-column="30" />
+          <caret line="435" column="25" selection-start-line="435" selection-start-column="25" selection-end-line="435" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/experiment/experiment_conformal.py">
+    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_loader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8394161">
-          <caret line="435" column="25" selection-start-line="435" selection-start-column="25" selection-end-line="435" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="95" column="11" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/models/sparse_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/generate_synthetic_data_for_rnn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Applications/anaconda/lib/python2.7/site-packages/numpy/core/numeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.2618682">
+          <caret line="366" column="0" selection-start-line="366" selection-start-column="0" selection-end-line="366" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-202.22223">
+          <caret line="385" column="16" selection-start-line="385" selection-start-column="13" selection-end-line="385" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="398" column="38" selection-start-line="398" selection-start-column="38" selection-end-line="398" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/minibatch_mask_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8578275">
+          <caret line="539" column="0" selection-start-line="539" selection-start-column="0" selection-end-line="539" selection-end-column="0" />
           <folding />
         </state>
       </provider>

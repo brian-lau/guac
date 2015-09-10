@@ -513,7 +513,7 @@ def main(param=None):
         if best_f1 == 1.0:
             break
 
-    best_rnn.print_embeddings()
+    best_rnn.print_params()
 
     print('BEST RESULT: epoch', param['be'],
           'valid F1', param['vf1'],
