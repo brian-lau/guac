@@ -36,14 +36,14 @@ space = {
         'window': hp.choice('window', [1, 3]),
         'add_DRLD': hp.choice('add_DRLD', [True, False]),
         'train_embeddings': hp.choice('train_embeddings', [True, False]),
-        'pooling_method': hp.choice('pooling_method', ['max', 'mean', 'attention1', 'attention2']),
+        'pooling_method': hp.choice('pooling_method', ['max', 'mean', 'attention1', 'attention2', 'last']),
         'bidirectional': hp.choice('bidirectional', [
             {'bidirectional': False},
             {'bidirectional': True, 'combine': hp.choice('combine', ['concat', 'max', 'mean'])}
         ])
     },
     'training': {
-        'learning_rate': hp.loguniform('learning_rate', -4, 0),
+        'learning_rate': hp.loguniform('learning_rate', -4, -1),
         'lr_emb_fac': hp.uniform('lr_emb_fac', 0, 1),
         'decay_delay': hp.choice('decay_delay', [3, 4, 5, 6, 7, 8]),
         'decay_factor': hp.uniform('decay_factor', 0, 1),
@@ -68,7 +68,7 @@ def call_experiment(args):
     params['min_doc_thresh'] = args['input']['min_doc_thresh']
     params['initialize_word_vectors'] = True
     if args['init']['vectors'] == 'word2vec':
-        params['vectors'] = 'default_word2vec'
+        params['vectors']['vectors'] = 'default_word2vec'
         params['word2vec_dim'] = 300
     else:
         params['vectors'] = 'anes_word2vec'
@@ -160,13 +160,13 @@ def main():
 
     if model == 'basic':
         space['arch']['unit'] = 'basic'
-        space['arch']['n_hidden'] = hp.quniform('n_hidden', 5, 300, 5)
+        space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 300, 5)
     elif model == 'GRU':
         space['arch']['unit'] = 'GRU'
-        space['arch']['n_hidden'] = hp.quniform('n_hidden', 5, 100, 5)
+        space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 200, 5)
     elif model == 'LSTM':
         space['arch']['unit'] = 'LSTM'
-        space['arch']['n_hidden'] = hp.quniform('n_hidden', 5, 75, 5)
+        space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 100, 5)
     else:
         sys.exit('Model not supported!')
 

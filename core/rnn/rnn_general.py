@@ -531,17 +531,20 @@ def main(params=None):
                     e, (i + 1) * 100. / float(n_sentences)),
                 print 'completed in %.2f (sec) <<\r' % (timeit.default_timer() - tic),
                 sys.stdout.flush()
+                #if i == 0:
+                #    print ' '.join([idx2words[idx] for idx in orig_x])
+                #    print rnn.classify(orig_x, params['win'], extra_input_dims, extra)
 
             # evaluation // back into the real world : idx -> words
             print ""
 
             #print rnn.classify((np.asarray(contextwin(train_lex[0], params['win'])).astype('int32')), train_likes[0], params['win'])
-            print rnn.classify(train_lex[0], params['win'], extra_input_dims, train_extra[0])
+            #print rnn.classify(train_lex[0], params['win'], extra_input_dims, train_extra[0])
             #print rnn.get_element_weights(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
-            if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
-                if extra_input_dims == 0:
-                    r = np.random.randint(0, len(train_lex))
-                    print r, rnn.a_sum_check(np.asarray(contextwin(train_lex[r], params['win'])).astype('int32'))
+            #if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
+            #    if extra_input_dims == 0:
+            #        r = np.random.randint(0, len(train_lex))
+            #        print r, rnn.a_sum_check(np.asarray(contextwin(train_lex[r], params['win'])).astype('int32'))
 
             """
             predictions_train = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
