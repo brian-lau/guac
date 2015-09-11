@@ -611,6 +611,9 @@ def main(params=None):
             if best_f1 == 1.0:
                 break
 
+            if best_f1 == 0 and e > 10:
+                break
+
         if params['save_model']:
             predictions_valid = [rnn.classify(x, params['win'],
                                               extra_input_dims, dev_extra[i]) for i, x in enumerate(valid_lex)]

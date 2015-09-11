@@ -60,8 +60,8 @@
       <file leaf-file-name="rnn_general.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.51960784">
-              <caret line="414" column="9" selection-start-line="414" selection-start-column="9" selection-end-line="414" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.48284313">
+              <caret line="614" column="21" selection-start-line="614" selection-start-column="21" selection-end-line="614" selection-end-column="21" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
               </folding>
@@ -217,8 +217,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1495" />
-    <option name="y" value="117" />
+    <option name="x" value="55" />
+    <option name="y" value="22" />
     <option name="width" value="1215" />
     <option name="height" value="812" />
   </component>
@@ -1091,11 +1091,17 @@
       <option name="project" value="LOCAL" />
       <updated>1441987136604</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="removed debugging line">
+      <created>1441987270978</created>
+      <option name="number" value="00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1441987270978</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1495" y="117" width="1215" height="812" extended-state="0" />
+    <frame x="55" y="22" width="1215" height="812" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1136,7 +1142,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="fixed type" />
     <MESSAGE value="simplify a few things for debugging" />
     <MESSAGE value="added reusable holdout and OOV noising to RNN" />
     <MESSAGE value="added same options to bayes opt runner" />
@@ -1161,7 +1166,8 @@
     <MESSAGE value="seem to have got the discrepancy resolved; added some additional output" />
     <MESSAGE value="fixed small input problem" />
     <MESSAGE value="found a bug in decrementing learning rate" />
-    <option name="LAST_COMMIT_MESSAGE" value="found a bug in decrementing learning rate" />
+    <MESSAGE value="removed debugging line" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed debugging line" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1630,8 +1636,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51960784">
-          <caret line="414" column="9" selection-start-line="414" selection-start-column="9" selection-end-line="414" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.48284313">
+          <caret line="614" column="21" selection-start-line="614" selection-start-column="21" selection-end-line="614" selection-end-column="21" />
           <folding>
             <element signature="e#66#101#0" expanded="true" />
           </folding>
