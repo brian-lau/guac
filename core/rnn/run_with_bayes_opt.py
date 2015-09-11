@@ -67,8 +67,8 @@ def call_experiment(args):
     params['test_fold'] = 0
     params['min_doc_thresh'] = args['input']['min_doc_thresh']
     params['initialize_word_vectors'] = True
-    if args['init']['vectors'] == 'word2vec':
-        params['vectors']['vectors'] = 'default_word2vec'
+    if args['init']['vectors']['vectors'] == 'word2vec':
+        params['vectors'] = 'default_word2vec'
         params['word2vec_dim'] = 300
     else:
         params['vectors'] = 'anes_word2vec'
