@@ -4,6 +4,7 @@ from collections import OrderedDict
 import copy
 import os
 import re
+import codecs
 import random
 import timeit
 
@@ -380,51 +381,47 @@ def main(params=None):
 
     if params is None:
         params = {
-            'exp_name': 'LSTM_test',
+            'exp_name': 'basic_test',
             'test_fold': 0,
             'n_dev_folds': 1,
             'min_doc_thresh': 2,
             'initialize_word_vectors': True,
             'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
             'word2vec_dim': 300,
-            'init_scale': 0.6819814982239605,
+            'init_scale': 0.156613479115,
             'add_OOV': True,
             'win': 1,                   # size of context window
-            'add_DRLD': False,
+            'add_DRLD': True,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
-            'n_hidden': 200,             # size of hidden units
-            'pooling_method': 'mean',    # max, mean, or attention1/2
-            'bidirectional': True,
-            'bi_combine': 'max',        # concat, max, or mean
-            'train_embeddings': False,
-            'lr': 0.11461484090578326,                  # learning rate
-            'lr_emb_fac': 0.8542852971630212,            # factor to modify learning rate for embeddings
-            'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
-            'decay_factor': 0.533010514705554,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 40,
+            'n_hidden': 100.0,             # size of hidden units
+            'pooling_method': 'attention2',    # max, mean, or attention1/2
+            'bidirectional': False,
+            'bi_combine': None,        # concat, max, or mean
+            'train_embeddings': True,
+            'lr': 0.119838887743,                  # learning rate
+            'lr_emb_fac': 0.105267329539,            # factor to modify learning rate for embeddings
+            'decay_delay': 8,           # number of epochs with no improvement before decreasing learning rate
+            'decay_factor': 0.354472346367,        # factor by which to multiply learning rate in case of delay
+            'n_epochs': 3,
             'add_OOV_noise': True,
-            'OOV_noise_prob': 0.0027721088236559066,
+            'OOV_noise_prob': 0.00603875828056,
             'ensemble': False,
-            'save_model': True,
-            'seed': 3916889515,
+            'save_model': False,
+            'seed': 3736828149,
             'verbose': 1,
             'reuse': False,
             'orig_T': 0.04,
             'tau': 0.01
         }
 
-    params = fh.read_json('/nfs/nas-0-28/dcard/guac/experiments/rnn/bayes_opt_rnn_basic_20/params.txt')
-
-    params['exp_name'] += '_2'
     reuser = None
     if params['reuse']:
         reuser = reusable_holdout.ReuseableHoldout(T=params['orig_T'], tau=params['tau'])
 
-
     keys = params.keys()
     keys.sort()
     for key in keys:
-        print key, ':', params[key], type(params[key])
+        print key, ':', params[key]
 
     # seed the random number generators
     np.random.seed(params['seed'])
@@ -441,13 +438,14 @@ def main(params=None):
     test_prediction_arrays = []
 
     output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'])
-    output_filename = fh.make_filename(output_dir, 'params', 'txt')
+    output_filename = fh.make_filename(output_dir, 'params', 'json')
     fh.write_to_json(params, output_filename)
 
     for dev_fold in range(params['n_dev_folds']):
         print "dev fold =", dev_fold
 
         output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
+        results = []
 
         all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], dev_fold,
                                                                   params['min_doc_thresh'])
@@ -509,6 +507,8 @@ def main(params=None):
         test_extra = [[test_likes[i], test_dem[i]] for i, t in enumerate(test_items)]
 
         # train with early stopping on validation set
+
+
         best_f1 = -np.inf
         params['clr'] = params['lr']
         for e in xrange(params['n_epochs']):
@@ -580,6 +580,7 @@ def main(params=None):
             question_pps = []
 
             print "train_f1 =", train_f1, "valid_f1 =", valid_f1, "test_f1 =", test_f1
+            results.append((train_f1, valid_f1, test_f1))
 
             if valid_f1 > best_f1:
                 best_rnn = copy.deepcopy(rnn)
@@ -627,6 +628,12 @@ def main(params=None):
         best_test_f1s.append(params['te_f1'])
 
         test_prediction_arrays.append(np.array(best_test_predictions, dtype=int))
+
+        output_filename = fh.make_filename(output_dir, 'results', 'txt')
+        with codecs.open(output_filename, 'w') as output_file:
+            for e, result in enumerate(results):
+                output_file.write('epoch=' + str(e) + '; train_f1=' + str(result[0]) +
+                                  '; valid_f1=' + str(result[1]) + '; test_f1=' + str(result[2]) + '\n')
 
     if params['ensemble']:
         test_predictions_stack = np.dstack(test_prediction_arrays)
