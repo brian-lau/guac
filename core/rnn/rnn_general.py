@@ -383,30 +383,30 @@ def main(params=None):
             'exp_name': 'LSTM_test',
             'test_fold': 0,
             'n_dev_folds': 1,
-            'min_doc_thresh': 1,
+            'min_doc_thresh': 2,
             'initialize_word_vectors': True,
             'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
             'word2vec_dim': 300,
-            'init_scale': 0.681393408902,
+            'init_scale': 0.6819814982239605,
             'add_OOV': True,
-            'win': 3,                   # size of context window
+            'win': 1,                   # size of context window
             'add_DRLD': False,
-            'rnn_type': 'LSTM',        # basic, GRU, or LSTM
-            'n_hidden': 60,             # size of hidden units
-            'pooling_method': 'attention2',    # max, mean, or attention1/2
-            'bidirectional': False,
-            'bi_combine': 'mean',        # concat, max, or mean
-            'train_embeddings': True,
-            'lr': 0.0333532464861,                  # learning rate
-            'lr_emb_fac': 0.118640166689,            # factor to modify learning rate for embeddings
-            'decay_delay': 8,           # number of epochs with no improvement before decreasing learning rate
-            'decay_factor': 0.12877847594,        # factor by which to multiply learning rate in case of delay
+            'rnn_type': 'basic',        # basic, GRU, or LSTM
+            'n_hidden': 200,             # size of hidden units
+            'pooling_method': 'mean',    # max, mean, or attention1/2
+            'bidirectional': True,
+            'bi_combine': 'max',        # concat, max, or mean
+            'train_embeddings': False,
+            'lr': 0.11461484090578326,                  # learning rate
+            'lr_emb_fac': 0.8542852971630212,            # factor to modify learning rate for embeddings
+            'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
+            'decay_factor': 0.533010514705554,        # factor by which to multiply learning rate in case of delay
             'n_epochs': 40,
             'add_OOV_noise': True,
-            'OOV_noise_prob': 0.0239872082239,
+            'OOV_noise_prob': 0.0027721088236559066,
             'ensemble': False,
             'save_model': True,
-            'seed': 412186161,
+            'seed': 3916889515,
             'verbose': 1,
             'reuse': False,
             'orig_T': 0.04,
@@ -519,7 +519,7 @@ def main(params=None):
                 n_words = len(orig_x)
                 if params['add_OOV_noise']:
                     draws = np.random.rand(n_words)
-                    x = [OOV_index if draws[i] < params['OOV_noise_prob'] else orig_x[i] for i in range(n_words)]
+                    x = [OOV_index if draws[idx] < params['OOV_noise_prob'] else orig_x[idx] for idx in range(n_words)]
                 else:
                     x = orig_x
                 y = train_y[i]
