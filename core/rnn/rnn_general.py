@@ -414,6 +414,8 @@ def main(params=None):
             'tau': 0.01
         }
 
+    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/params.json')
+
     reuser = None
     if params['reuse']:
         reuser = reusable_holdout.ReuseableHoldout(T=params['orig_T'], tau=params['tau'])
@@ -600,6 +602,7 @@ def main(params=None):
             # learning rate decay if no improvement in a given number of epochs
             if abs(params['be']-params['ce']) >= params['decay_delay']:
                 params['clr'] *= params['decay_factor']
+                params['be'] = params['ce']
                 print "Reverting to current best; new learning rate = ", params['clr']
                 # also reset to the previous best
                 rnn = best_rnn
