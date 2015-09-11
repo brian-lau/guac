@@ -62,7 +62,7 @@
       <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.703704">
+            <state vertical-scroll-proportion="-18.25926">
               <caret line="116" column="23" selection-start-line="116" selection-start-column="21" selection-end-line="116" selection-end-column="23" />
               <folding />
             </state>
@@ -72,8 +72,8 @@
       <file leaf-file-name="rnn_general.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.80902255">
-              <caret line="416" column="23" selection-start-line="416" selection-start-column="23" selection-end-line="416" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.47368422">
+              <caret line="417" column="30" selection-start-line="417" selection-start-column="30" selection-end-line="417" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -215,8 +215,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1454" />
-    <option name="y" value="130" />
+    <option name="x" value="1440" />
+    <option name="y" value="41" />
     <option name="width" value="1280" />
     <option name="height" value="812" />
   </component>
@@ -1059,11 +1059,17 @@
       <option name="project" value="LOCAL" />
       <updated>1441921343612</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="another test">
+      <created>1441932169044</created>
+      <option name="number" value="00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1441932169044</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1454" y="130" width="1280" height="812" extended-state="0" />
+    <frame x="1440" y="41" width="1280" height="812" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1104,7 +1110,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="still having issues with negative values; switching to always use dtype=int32" />
     <MESSAGE value="added dataset as an explicit feature" />
     <MESSAGE value="got dis/like and dem/rep added to rnn general" />
     <MESSAGE value="got bayes opt working for RNNs" />
@@ -1129,7 +1134,8 @@
     <MESSAGE value="started switching to minibatches (on a test script), but ran into some difficulties; still testing..." />
     <MESSAGE value="minor fixes" />
     <MESSAGE value="adjusted params for debugging" />
-    <option name="LAST_COMMIT_MESSAGE" value="adjusted params for debugging" />
+    <MESSAGE value="another test" />
+    <option name="LAST_COMMIT_MESSAGE" value="another test" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1579,7 +1585,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.703704">
+        <state vertical-scroll-proportion="-18.25926">
           <caret line="116" column="23" selection-start-line="116" selection-start-column="21" selection-end-line="116" selection-end-column="23" />
           <folding />
         </state>
@@ -1587,8 +1593,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.80902255">
-          <caret line="416" column="23" selection-start-line="416" selection-start-column="23" selection-end-line="416" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.47368422">
+          <caret line="417" column="30" selection-start-line="417" selection-start-column="30" selection-end-line="417" selection-end-column="30" />
           <folding />
         </state>
       </provider>

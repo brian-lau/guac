@@ -413,6 +413,9 @@ def main(params=None):
             'tau': 0.01
         }
 
+    params = fh.read_json('/nfs/nas-0-28/dcard/guac/experiments/rnn/bayes_opt_rnn_basic_20/params.txt')
+
+    params['exp_name'] += '_2'
     reuser = None
     if params['reuse']:
         reuser = reusable_holdout.ReuseableHoldout(T=params['orig_T'], tau=params['tau'])
@@ -421,7 +424,7 @@ def main(params=None):
     keys = params.keys()
     keys.sort()
     for key in keys:
-        print key, ':', params[key]
+        print key, ':', params[key], type(params[key])
 
     # seed the random number generators
     np.random.seed(params['seed'])
