@@ -60,8 +60,8 @@
       <file leaf-file-name="rnn_general.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6666667">
-              <caret line="603" column="55" selection-start-line="603" selection-start-column="55" selection-end-line="603" selection-end-column="55" />
+            <state vertical-scroll-proportion="0.51960784">
+              <caret line="414" column="9" selection-start-line="414" selection-start-column="9" selection-end-line="414" selection-end-column="9" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
               </folding>
@@ -1085,7 +1085,13 @@
       <option name="project" value="LOCAL" />
       <updated>1441981438491</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="found a bug in decrementing learning rate">
+      <created>1441987136603</created>
+      <option name="number" value="00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1441987136604</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1130,7 +1136,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="reset some testing params to normal values" />
     <MESSAGE value="fixed type" />
     <MESSAGE value="simplify a few things for debugging" />
     <MESSAGE value="added reusable holdout and OOV noising to RNN" />
@@ -1155,7 +1160,8 @@
     <MESSAGE value="another day, another test" />
     <MESSAGE value="seem to have got the discrepancy resolved; added some additional output" />
     <MESSAGE value="fixed small input problem" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed small input problem" />
+    <MESSAGE value="found a bug in decrementing learning rate" />
+    <option name="LAST_COMMIT_MESSAGE" value="found a bug in decrementing learning rate" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1624,8 +1630,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6666667">
-          <caret line="603" column="55" selection-start-line="603" selection-start-column="55" selection-end-line="603" selection-end-column="55" />
+        <state vertical-scroll-proportion="0.51960784">
+          <caret line="414" column="9" selection-start-line="414" selection-start-column="9" selection-end-line="414" selection-end-column="9" />
           <folding>
             <element signature="e#66#101#0" expanded="true" />
           </folding>

@@ -414,8 +414,6 @@ def main(params=None):
             'tau': 0.01
         }
 
-    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/params.json')
-
     reuser = None
     if params['reuse']:
         reuser = reusable_holdout.ReuseableHoldout(T=params['orig_T'], tau=params['tau'])
