@@ -381,7 +381,7 @@ def main(params=None):
 
     if params is None:
         params = {
-            'exp_name': 'basic_test',
+            'exp_name': 'lstm_test',
             'test_fold': 0,
             'n_dev_folds': 1,
             'min_doc_thresh': 2,

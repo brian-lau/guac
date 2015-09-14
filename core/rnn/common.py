@@ -63,6 +63,25 @@ def load_data(datasets, test_fold, dev_subfold, min_doc_thresh):
 
     return data, words2idx, items, all_labels
 
+# this creates masks such that all input sequences are the same length
+def prepare_data(all_x):
+    lengths = [len(x) for x in all_x]
+    max_len = np.max(lengths)
+
+    long_xs = []
+    masks = []
+
+    for i, x in enumerate(all_x):
+        long_x = np.zeros(max_len).astype('int32')
+        mask = np.zeros(max_len).astype('int32')
+        long_x[:len(x)] = x
+        mask[:len(x)] = 1
+        long_xs.append(long_x)
+        masks.append(mask)
+
+    return long_xs, masks
+
+
 
 def load_embeddings(params, words2idx):
     # load word vectors
