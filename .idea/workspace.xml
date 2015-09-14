@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/rnn/deeplearning_imdb.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/rnn/deeplearning_lstm.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_lstm.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/common.py" afterPath="$PROJECT_DIR$/core/rnn/common.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_general.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_general.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_lstm.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -29,21 +26,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="run_with_bayes_opt_lstm.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt_lstm.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="rnn_minibatch.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="385" column="16" selection-start-line="385" selection-start-column="13" selection-end-line="385" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6948229">
+              <caret line="169" column="71" selection-start-line="169" selection-start-column="71" selection-end-line="169" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -121,7 +118,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/code/semafor/semafor_collect_frames.py" />
         <option value="$PROJECT_DIR$/code/semafor/semafor_collect_pos_unigram_tokens.py" />
         <option value="$PROJECT_DIR$/code/semafor/semafor_preprocessing.py" />
         <option value="$PROJECT_DIR$/run_test.py" />
@@ -166,12 +162,13 @@
         <option value="$PROJECT_DIR$/core/experiment/experiment_conformal.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
         <option value="$PROJECT_DIR$/core/rnn/minibatch_mask_test.py" />
-        <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
         <option value="$PROJECT_DIR$/run_test2.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_general.py" />
         <option value="$PROJECT_DIR$/core/rnn/deeplearning_lstm.py" />
         <option value="$PROJECT_DIR$/core/rnn/deeplearning_imdb.py" />
         <option value="$PROJECT_DIR$/core/rnn/common.py" />
+        <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_lstm.py" />
+        <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       </list>
     </option>
   </component>
@@ -775,12 +772,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00003" summary="refactored to move self tuning by cv into model, and started working on a multilabel model (experiment code currently broken)">
-      <created>1440729307345</created>
-      <option name="number" value="00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1440729307345</updated>
-    </task>
     <task id="LOCAL-00004" summary="get experiments working again, and wrote some code to bring in the stanford pipeline and decorated unigrams">
       <created>1440811340820</created>
       <option name="number" value="00004" />
@@ -1069,7 +1060,13 @@
       <option name="project" value="LOCAL" />
       <updated>1442260329959</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="added some code to mask the input for minibatches">
+      <created>1442262593999</created>
+      <option name="number" value="00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1442262594000</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1114,7 +1111,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="added same options to bayes opt runner" />
     <MESSAGE value="finessed some details" />
     <MESSAGE value="reset to test parameters" />
     <MESSAGE value="got classifier chains working!" />
@@ -1139,7 +1135,8 @@
     <MESSAGE value="removed debugging line" />
     <MESSAGE value="added early quit for no gains" />
     <MESSAGE value="changed some defaults for a test" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed some defaults for a test" />
+    <MESSAGE value="added some code to mask the input for minibatches" />
+    <option name="LAST_COMMIT_MESSAGE" value="added some code to mask the input for minibatches" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1181,12 +1178,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py</url>
-          <line>62</line>
+          <line>61</line>
           <option name="timeStamp" value="60" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py</url>
-          <line>69</line>
+          <line>68</line>
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
@@ -1460,7 +1457,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1478,7 +1475,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1604,14 +1601,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="385" column="16" selection-start-line="385" selection-start-column="13" selection-end-line="385" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/deeplearning_imdb.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1630,18 +1619,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.095368">
-          <caret line="48" column="57" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="385" column="16" selection-start-line="385" selection-start-column="13" selection-end-line="385" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt_lstm.py">
+    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.6948229">
+          <caret line="169" column="71" selection-start-line="169" selection-start-column="71" selection-end-line="169" selection-end-column="71" />
           <folding />
         </state>
       </provider>

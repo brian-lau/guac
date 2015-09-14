@@ -43,7 +43,6 @@ space = {
         ])
     },
     'training': {
-        'learning_rate': hp.loguniform('learning_rate', -4, -1),
         'lr_emb_fac': hp.uniform('lr_emb_fac', 0, 1),
         'decay_delay': hp.choice('decay_delay', [3, 4, 5, 6, 7, 8]),
         'decay_factor': hp.uniform('decay_factor', 0, 1),
@@ -161,12 +160,15 @@ def main():
     if model == 'basic':
         space['arch']['unit'] = 'basic'
         space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 300, 5)
+        space['training']['learning_rate'] = hp.loguniform('learning_rate', -4, -1),
     elif model == 'GRU':
         space['arch']['unit'] = 'GRU'
         space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 200, 5)
+        space['training']['learning_rate'] = hp.loguniform('learning_rate', -4, -1),
     elif model == 'LSTM':
         space['arch']['unit'] = 'LSTM'
         space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 100, 5)
+        space['training']['learning_rate'] = hp.loguniform('learning_rate', -6, -2),
     else:
         sys.exit('Model not supported!')
 
