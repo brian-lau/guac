@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_lstm.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/common.py" afterPath="$PROJECT_DIR$/core/rnn/common.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -30,8 +31,20 @@
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="385" column="16" selection-start-line="385" selection-start-column="13" selection-end-line="385" selection-end-column="16" />
+              <caret line="362" column="0" selection-start-line="362" selection-start-column="0" selection-end-line="362" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rnn_general.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="383" column="29" selection-start-line="383" selection-start-column="29" selection-end-line="383" selection-end-column="29" />
+              <folding>
+                <element signature="e#66#101#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -39,8 +52,8 @@
       <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6948229">
-              <caret line="169" column="71" selection-start-line="169" selection-start-column="71" selection-end-line="169" selection-end-column="71" />
+            <state vertical-scroll-proportion="0.71389645">
+              <caret line="90" column="55" selection-start-line="90" selection-start-column="55" selection-end-line="90" selection-end-column="55" />
               <folding />
             </state>
           </provider>
@@ -50,7 +63,7 @@
         <entry file="file://$PROJECT_DIR$/core/rnn/common.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="81" column="25" selection-start-line="81" selection-start-column="25" selection-end-line="81" selection-end-column="25" />
+              <caret line="68" column="38" selection-start-line="68" selection-start-column="38" selection-end-line="68" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -75,18 +88,6 @@
               <caret line="654" column="0" selection-start-line="654" selection-start-column="0" selection-end-line="654" selection-end-column="0" />
               <folding>
                 <element signature="e#41#76#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="deeplearning_imdb.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/rnn/deeplearning_imdb.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="46" column="0" selection-start-line="41" selection-start-column="4" selection-end-line="46" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -160,14 +161,14 @@
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_loader.py" />
         <option value="$PROJECT_DIR$/core/models/sparse_model.py" />
         <option value="$PROJECT_DIR$/core/experiment/experiment_conformal.py" />
-        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
         <option value="$PROJECT_DIR$/core/rnn/minibatch_mask_test.py" />
         <option value="$PROJECT_DIR$/run_test2.py" />
-        <option value="$PROJECT_DIR$/core/rnn/rnn_general.py" />
         <option value="$PROJECT_DIR$/core/rnn/deeplearning_lstm.py" />
         <option value="$PROJECT_DIR$/core/rnn/deeplearning_imdb.py" />
-        <option value="$PROJECT_DIR$/core/rnn/common.py" />
         <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_lstm.py" />
+        <option value="$PROJECT_DIR$/core/rnn/common.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_general.py" />
         <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       </list>
     </option>
@@ -772,12 +773,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00004" summary="get experiments working again, and wrote some code to bring in the stanford pipeline and decorated unigrams">
-      <created>1440811340820</created>
-      <option name="number" value="00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1440811340820</updated>
-    </task>
     <task id="LOCAL-00005" summary="get experiments working again, and wrote some code to bring in the stanford pipeline and decorated unigrams">
       <created>1440811364199</created>
       <option name="number" value="00005" />
@@ -1066,7 +1061,13 @@
       <option name="project" value="LOCAL" />
       <updated>1442262594000</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="added seperate range of learning rates for LSTM">
+      <created>1442262735174</created>
+      <option name="number" value="00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1442262735174</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1111,7 +1112,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="finessed some details" />
     <MESSAGE value="reset to test parameters" />
     <MESSAGE value="got classifier chains working!" />
     <MESSAGE value="added ensembles of RNNs and of classifier chains" />
@@ -1136,7 +1136,8 @@
     <MESSAGE value="added early quit for no gains" />
     <MESSAGE value="changed some defaults for a test" />
     <MESSAGE value="added some code to mask the input for minibatches" />
-    <option name="LAST_COMMIT_MESSAGE" value="added some code to mask the input for minibatches" />
+    <MESSAGE value="added seperate range of learning rates for LSTM" />
+    <option name="LAST_COMMIT_MESSAGE" value="added seperate range of learning rates for LSTM" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1563,12 +1564,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_multitask.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.1111112">
-          <caret line="383" column="29" selection-start-line="383" selection-start-column="29" selection-end-line="383" selection-end-column="29" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="459" column="26" selection-start-line="459" selection-start-column="26" selection-end-line="459" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/deeplearning_imdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7356948">
+          <caret line="46" column="0" selection-start-line="41" selection-start-column="4" selection-end-line="46" selection-end-column="0" />
           <folding>
-            <element signature="e#66#101#0" expanded="true" />
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1583,14 +1592,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_multitask.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="459" column="26" selection-start-line="459" selection-start-column="26" selection-end-line="459" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/deeplearning_lstm.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1601,36 +1602,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/deeplearning_imdb.py">
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="46" column="0" selection-start-line="41" selection-start-column="4" selection-end-line="46" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
+          <caret line="362" column="0" selection-start-line="362" selection-start-column="0" selection-end-line="362" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/common.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="81" column="25" selection-start-line="81" selection-start-column="25" selection-end-line="81" selection-end-column="25" />
+          <caret line="68" column="38" selection-start-line="68" selection-start-column="38" selection-end-line="68" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_general.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="385" column="16" selection-start-line="385" selection-start-column="13" selection-end-line="385" selection-end-column="16" />
-          <folding />
+          <caret line="383" column="29" selection-start-line="383" selection-start-column="29" selection-end-line="383" selection-end-column="29" />
+          <folding>
+            <element signature="e#66#101#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6948229">
-          <caret line="169" column="71" selection-start-line="169" selection-start-column="71" selection-end-line="169" selection-end-column="71" />
+        <state vertical-scroll-proportion="0.71389645">
+          <caret line="90" column="55" selection-start-line="90" selection-start-column="55" selection-end-line="90" selection-end-column="55" />
           <folding />
         </state>
       </provider>

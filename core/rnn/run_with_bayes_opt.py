@@ -86,7 +86,7 @@ def call_experiment(args):
     else:
         params['bidirectional'] = False
         params['bi_combine'] = None
-    params['lr'] = args['training']['learning_rate']
+    params['lr'] = args['training']['learning_rate'][0]
     params['lr_emb_fac'] = args['training']['lr_emb_fac']
     params['decay_delay'] = args['training']['decay_delay']
     params['decay_factor'] = args['training']['decay_factor']

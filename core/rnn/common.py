@@ -64,14 +64,23 @@ def load_data(datasets, test_fold, dev_subfold, min_doc_thresh):
     return data, words2idx, items, all_labels
 
 # this creates masks such that all input sequences are the same length
-def prepare_data(all_x):
+def prepare_data(train_x, valid_x, test_x):
+
+    all_x = train_x + valid_x + test_x
     lengths = [len(x) for x in all_x]
     max_len = np.max(lengths)
 
+    train_x, train_mask = prepare_part_of_data(train_x, max_len)
+    valid_x, valid_mask = prepare_part_of_data(valid_x, max_len)
+    test_x, test_mask = prepare_part_of_data(test_x, max_len)
+
+    return (train_x, valid_x, test_x), (train_mask, valid_mask, test_mask)
+
+def prepare_part_of_data(group_x, max_len):
     long_xs = []
     masks = []
 
-    for i, x in enumerate(all_x):
+    for i, x in enumerate(group_x):
         long_x = np.zeros(max_len).astype('int32')
         mask = np.zeros(max_len).astype('int32')
         long_x[:len(x)] = x

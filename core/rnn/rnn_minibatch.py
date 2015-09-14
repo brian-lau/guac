@@ -204,10 +204,11 @@ class RNN(object):
 
         # create a vector for y
         y = T.ivector('y')
+        mask = T.imatrix('mask')
 
-        def recurrence_basic(x_t, h_tm1):
+        def recurrence_basic(mask_t, x_t, h_tm1):
             h_t = T.nnet.sigmoid(T.dot(x_t, self.W_xh) + T.dot(h_tm1, self.W_hh) + self.b_h)
-            return h_t
+            return mask_t * h_t + (1 - mask_t) * h_tm1
 
         def recurrence_basic_reverse(x_t, h_tp1):
             h_t = T.nnet.sigmoid(T.dot(x_t, self.W_xh) + T.dot(h_tp1, self.W_hh) + self.b_h)
@@ -259,7 +260,7 @@ class RNN(object):
                 [h_r, c_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=x,
                                             outputs_info=[self.h_i_r, self.c_i_r], go_backwards=True)
         else:
-            h_f, _ = theano.scan(fn=recurrence_basic, sequences=x, outputs_info=[self.h_i_f], n_steps=x.shape[0])
+            h_f, _ = theano.scan(fn=recurrence_basic, sequences=[mask, x], outputs_info=[self.h_i_f], n_steps=x.shape[0])
             if bidirectional:
                 h_r, _ = theano.scan(fn=recurrence_basic_reverse, sequences=x, outputs_info=[self.h_i_r],
                                      go_backwards=True)
@@ -323,18 +324,21 @@ class RNN(object):
             if pooling_method == 'attention1' or pooling_method == 'attention2':
                 self.a_sum_check = theano.function(inputs=[idxs, extra], outputs=a_sum)
         else:
-            self.sentence_classify = theano.function(inputs=[idxs], outputs=y_pred)
-            self.sentence_train = theano.function(inputs=[idxs, y, lr, lr_emb_fac],
+            self.sentence_classify = theano.function(inputs=[idxs, mask], outputs=y_pred)
+            self.sentence_train = theano.function(inputs=[idxs, mask, y, lr, lr_emb_fac],
                                                   outputs=sentence_nll,
                                                   updates=sentence_updates)
             if pooling_method == 'attention1' or pooling_method == 'attention2':
-                self.a_sum_check = theano.function(inputs=[idxs], outputs=a_sum)
+                self.a_sum_check = theano.function(inputs=[idxs, mask], outputs=a_sum)
 
         self.normalize = theano.function(inputs=[],
                                          updates={self.emb: self.emb / T.sqrt((self.emb**2).sum(axis=1))
                                          .dimshuffle(0, 'x')})
 
-    def classify(self, x, window_size, extra_input_dims=0, extra=None):
+    def classify(self, x, mask, window_size, extra_input_dims=0, extra=None):
+
+        assert window_size == 1
+        assert extra_input_dims == 0
 
         cwords = contextwin(x, window_size)
         # make an array of these windows
@@ -344,20 +348,24 @@ class RNN(object):
             extra = np.array(extra).astype('int32').reshape((1, extra_input_dims))
             return self.sentence_classify(words, extra)
         else:
-            return self.sentence_classify(words)
+            return self.sentence_classify(words, mask)
 
-    def train(self, x, y, window_size, learning_rate, emb_lr_factor, extra_input_dims=0, extra=None):
+    def train(self, x, mask, y, window_size, learning_rate, emb_lr_factor, extra_input_dims=0, extra=None):
+        assert window_size == 1
+        assert extra_input_dims == 0
         # concatenate words in a window
         cwords = contextwin(x, window_size)
         # make an array of these windows
         words = map(lambda x: np.asarray(x).astype('int32'), cwords)
+
+        mask = np.reshape(mask, [1, len(mask)])
 
         # train on these sentences and normalize
         if extra_input_dims > 0:
             extra = np.array(extra).astype('int32').reshape((1, extra_input_dims))
             self.sentence_train(words, extra, y, learning_rate, emb_lr_factor)
         else:
-            self.sentence_train(words, y, learning_rate, emb_lr_factor)
+            self.sentence_train(words, mask, y, learning_rate, emb_lr_factor)
         self.normalize()
 
     def save(self, output_dir):
@@ -380,7 +388,7 @@ def main(params=None):
 
     if params is None:
         params = {
-            'exp_name': 'ensemble_test',
+            'exp_name': 'minibatch_test',
             'test_fold': 0,
             'n_dev_folds': 1,
             'min_doc_thresh': 1,
@@ -392,7 +400,7 @@ def main(params=None):
             'win': 1,                   # size of context window
             'add_DRLD': False,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
-            'n_hidden': 50,             # size of hidden units
+            'n_hidden': 100,             # size of hidden units
             'pooling_method': 'max',    # max, mean, or attention1/2
             'bidirectional': False,
             'bi_combine': 'mean',        # concat, max, or mean
@@ -404,6 +412,7 @@ def main(params=None):
             'n_epochs': 3,
             'add_OOV_noise': False,
             'OOV_noise_prob': 0.01,
+            'minibatch_size': 1,
             'ensemble': False,
             'save_model': True,
             'seed': 42,
@@ -452,6 +461,17 @@ def main(params=None):
         train_lex, train_y = train_xy
         valid_lex, valid_y = valid_xy
         test_lex, test_y = test_xy
+
+        if params['minibatch_size'] > 1:
+            print "padding input with zeros"
+            all_data, all_masks = common.prepare_data(train_lex, valid_lex, test_lex)
+            train_lex, valid_lex, test_lex = all_data
+            train_masks, valid_masks, test_masks = all_masks
+        else:
+            train_masks = [np.ones(len(x)).astype('int32') for x in train_lex]
+            valid_masks = [np.ones(len(x)).astype('int32') for x in valid_lex]
+            test_masks = [np.ones(len(x)).astype('int32') for x in test_lex]
+
         train_items, dev_items, test_items = items
         vocsize = len(words2idx.keys())
         idx2words = dict((k, v) for v, k in words2idx.iteritems())
@@ -510,11 +530,10 @@ def main(params=None):
         params['clr'] = params['lr']
         for e in xrange(params['n_epochs']):
             # shuffle
-            shuffle([train_lex, train_y, train_extra], params['seed'])   # shuffle the input data
+            shuffle([train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
             params['ce'] = e                # store the current epoch
             tic = timeit.default_timer()
 
-            #for i, (x, y) in enumerate(zip(train_lex, train_y)):
             for i, orig_x in enumerate(train_lex):
                 n_words = len(orig_x)
                 if params['add_OOV_noise']:
@@ -524,8 +543,9 @@ def main(params=None):
                     x = orig_x
                 y = train_y[i]
                 extra = train_extra[i]
+                mask = train_masks[i]
 
-                rnn.train(x, y, params['win'], params['clr'], params['lr_emb_fac'],
+                rnn.train(x, mask, y, params['win'], params['clr'], params['lr_emb_fac'],
                           extra_input_dims, extra)
                 print '[learning] epoch %i >> %2.2f%%' % (
                     e, (i + 1) * 100. / float(n_sentences)),
@@ -536,7 +556,7 @@ def main(params=None):
             print ""
 
             #print rnn.classify((np.asarray(contextwin(train_lex[0], params['win'])).astype('int32')), train_likes[0], params['win'])
-            print rnn.classify(train_lex[0], params['win'], extra_input_dims, train_extra[0])
+            print rnn.classify(train_lex[0], train_masks[0], params['win'], extra_input_dims, train_extra[0])
             #print rnn.get_element_weights(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
             if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
                 if extra_input_dims == 0:
@@ -556,11 +576,11 @@ def main(params=None):
             #predictions_test = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in test_lex]
             #predictions_valid = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in valid_lex]
 
-            predictions_train = [rnn.classify(x, params['win'],
+            predictions_train = [rnn.classify(x, train_masks[i], params['win'],
                                               extra_input_dims, train_extra[i]) for i, x in enumerate(train_lex)]
-            predictions_test = [rnn.classify(x, params['win'],
+            predictions_test = [rnn.classify(x, valid_masks[i], params['win'],
                                              extra_input_dims, test_extra[i]) for i, x in enumerate(test_lex)]
-            predictions_valid = [rnn.classify(x, params['win'],
+            predictions_valid = [rnn.classify(x, test_masks[i], params['win'],
                                               extra_input_dims, dev_extra[i]) for i, x in enumerate(valid_lex)]
 
             train_f1 = common.calc_mean_f1(predictions_train, train_y)
@@ -622,6 +642,7 @@ def main(params=None):
 
         test_prediction_arrays.append(np.array(best_test_predictions, dtype=int))
 
+    params['ensemble'] = False
     if params['ensemble']:
         test_predictions_stack = np.dstack(test_prediction_arrays)
         final_predictions = stats.mode(test_predictions_stack, axis=2)[0][:, :, 0]
