@@ -386,33 +386,40 @@ def main(params=None):
             'n_dev_folds': 1,
             'min_doc_thresh': 2,
             'initialize_word_vectors': True,
-            'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
+            'vectors': 'default_word2vec',  # default_word2vec, anes_word2vec ...
             'word2vec_dim': 300,
-            'init_scale': 0.156613479115,
+            'init_scale': 0.1,
             'add_OOV': True,
             'win': 1,                   # size of context window
             'add_DRLD': True,
-            'rnn_type': 'basic',        # basic, GRU, or LSTM
-            'n_hidden': 100.0,             # size of hidden units
-            'pooling_method': 'attention2',    # max, mean, or attention1/2
-            'bidirectional': False,
-            'bi_combine': None,        # concat, max, or mean
+            'rnn_type': 'LSTM',        # basic, GRU, or LSTM
+            'n_hidden': 50,             # size of hidden units
+            'pooling_method': 'max',    # max, mean, or attention1/2
+            'bidirectional': True,
+            'bi_combine': 'concat',        # concat, max, or mean
             'train_embeddings': True,
-            'lr': 0.119838887743,                  # learning rate
-            'lr_emb_fac': 0.105267329539,            # factor to modify learning rate for embeddings
+            'lr': 0.01,                  # learning rate
+            'lr_emb_fac': 0.5,            # factor to modify learning rate for embeddings
             'decay_delay': 8,           # number of epochs with no improvement before decreasing learning rate
-            'decay_factor': 0.354472346367,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 3,
+            'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
+            'n_epochs': 60,
             'add_OOV_noise': True,
-            'OOV_noise_prob': 0.00603875828056,
+            'OOV_noise_prob': 0.005,
             'ensemble': False,
-            'save_model': False,
-            'seed': 3736828149,
+            'save_model': True,
+            'seed': 42,
             'verbose': 1,
             'reuse': False,
             'orig_T': 0.04,
             'tau': 0.01
         }
+
+    # load params from a previous experiment
+    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/params.json')
+    #params['exp_name'] += '_ensemble_reuse_test'
+    #params['orig_T'] = 0.02
+    #params['tau'] = 0.005
+
 
     reuser = None
     if params['reuse']:
