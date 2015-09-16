@@ -113,7 +113,7 @@ class RNN(object):
         self.b_s = theano.shared(name='b_s', value=np.zeros(nc, dtype=theano.config.floatX))
 
         # temporary parameters
-        self.h_i_f = theano.shared(name='h_i_f', value=np.zeros(nh, dtype=theano.config.floatX))
+        self.h_i_f = theano.shared(name='h_i_f', value=np.zeros((2, nh), dtype=theano.config.floatX))
 
         if bidirectional:
             self.h_i_r = theano.shared(name='h_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
@@ -174,8 +174,8 @@ class RNN(object):
                 self.c_i_r = theano.shared(name='c_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
 
         self.params = [self.W_xh, self.W_hh, self.b_h,
-                       self.W_s, self.b_s,
-                       self.h_i_f]
+                       self.W_s, self.b_s]
+        #self.params += [self.h_i_f]
         if train_embeddings:
             self.params += [self.emb]
         if pooling_method == 'attention':
@@ -200,15 +200,26 @@ class RNN(object):
             x = T.concatenate([self.emb[idxs].reshape((idxs.shape[0], de*cs)),
                                T.repeat(extra, idxs.shape[0], axis=0)], axis=1)
         else:
-            x = self.emb[idxs].reshape((idxs.shape[0], de*cs))
+            x = T.printing.Print('x')(self.emb[idxs].reshape((idxs.shape[1], idxs.shape[0], de*cs)))
+            x = T.printing.Print('x')(self.emb[idxs]
+            #x = (1-printing)*self.emb[idxs].reshape((idxs.shape[1], idxs.shape[0], de*cs))
 
         # create a vector for y
-        y = T.ivector('y')
+        y = T.imatrix('y')
         mask = T.imatrix('mask')
+        #mask = T.printing.Print('mask')(T.imatrix('mask'))
+        #mask = mask.reshape((mask.shape[0], mask.shape[1]))
+        #mask = T.printing.Print('mask')(mask.reshape((idxs.shape[1], idxs.shape[0], 1)))
+        minibatch_size = T.iscalar()
 
-        def recurrence_basic(mask_t, x_t, h_tm1):
+
+        def recurrence_basic(x_t, mask_t, h_tm1):
+            #h_t = theano.printing.Print('h_t')(T.nnet.sigmoid(T.dot(x_t, self.W_xh) + T.dot(h_tm1, self.W_hh) + self.b_h))
             h_t = T.nnet.sigmoid(T.dot(x_t, self.W_xh) + T.dot(h_tm1, self.W_hh) + self.b_h)
+            #temp = T.printing.Print('mask_t')(mask_t.shape)
+            #return temp[0] * mask_t[0] * h_t + (1 - mask_t[0]) * h_tm1
             return mask_t * h_t + (1 - mask_t) * h_tm1
+            #return h_t
 
         def recurrence_basic_reverse(x_t, h_tp1):
             h_t = T.nnet.sigmoid(T.dot(x_t, self.W_xh) + T.dot(h_tp1, self.W_hh) + self.b_h)
@@ -260,7 +271,10 @@ class RNN(object):
                 [h_r, c_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=x,
                                             outputs_info=[self.h_i_r, self.c_i_r], go_backwards=True)
         else:
-            h_f, _ = theano.scan(fn=recurrence_basic, sequences=[mask, x], outputs_info=[self.h_i_f], n_steps=x.shape[0])
+            #h_f, _ = theano.scan(fn=recurrence_basic, sequences=x, outputs_info=[self.h_i_f], n_steps=x.shape[0])
+            h_f, _ = theano.scan(fn=recurrence_basic, sequences=[x, mask],
+                                 outputs_info=[T.alloc(np.array(0.), minibatch_size, nh)],
+                                 n_steps=x.shape[0])
             if bidirectional:
                 h_r, _ = theano.scan(fn=recurrence_basic_reverse, sequences=x, outputs_info=[self.h_i_r],
                                      go_backwards=True)
@@ -299,10 +313,14 @@ class RNN(object):
             y_pred = p_y_given_x_sentence > 0.5
             element_weights = s
         else:  # pooling_method == 'max'
-            s = T.nnet.sigmoid((T.dot(h, self.W_s) + self.b_s))  # [n_elements, nc] in R(0,1)
+            s = T.nnet.sigmoid((T.dot(h, self.W_s) + self.b_s))  # [n_elements, minibatch_size, nc] in R(0,1)
+            #s_shape = T.printing.Print('s_shape')(s.shape)
+            #p_y_given_x_sentence = T.max(s_shape[0] * s, axis=0)
             p_y_given_x_sentence = T.max(s, axis=0)
+            #p_y_given_x_sentence = T.printing.Print('p_y')(T.max(s, axis=0))
             y_pred = p_y_given_x_sentence > 0.5
-            element_weights = s
+            #y_pred = T.printing.Print('y_pred')(p_y_given_x_sentence > 0.5)
+            #element_weights = s
 
 
         # cost and gradients and learning rate
@@ -310,6 +328,9 @@ class RNN(object):
         lr_emb_fac = T.scalar('lr_emb')
 
         sentence_nll = T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)))
+        #sentence_nlls = T.printing.Print('nlls')(T.sum(-T.log(y*p_y_given_x_sentence
+        #                                                    + (1-y)*(1-p_y_given_x_sentence)), axis=1))
+        #sentence_nll = T.sum(sentence_nlls)
         sentence_gradients = T.grad(sentence_nll, self.params)
         sentence_updates = OrderedDict((p, p - lr * g) for p, g in zip(self.params, [lr_emb_fac *
                                                                             sentence_gradients[0]]
@@ -324,8 +345,8 @@ class RNN(object):
             if pooling_method == 'attention1' or pooling_method == 'attention2':
                 self.a_sum_check = theano.function(inputs=[idxs, extra], outputs=a_sum)
         else:
-            self.sentence_classify = theano.function(inputs=[idxs, mask], outputs=y_pred)
-            self.sentence_train = theano.function(inputs=[idxs, mask, y, lr, lr_emb_fac],
+            self.sentence_classify = theano.function(inputs=[idxs, mask, minibatch_size], outputs=y_pred)
+            self.sentence_train = theano.function(inputs=[idxs, mask, y, lr, lr_emb_fac, minibatch_size],
                                                   outputs=sentence_nll,
                                                   updates=sentence_updates)
             if pooling_method == 'attention1' or pooling_method == 'attention2':
@@ -340,32 +361,57 @@ class RNN(object):
         assert window_size == 1
         assert extra_input_dims == 0
 
-        cwords = contextwin(x, window_size)
-        # make an array of these windows
-        words = map(lambda x: np.asarray(x).astype('int32'), cwords)
+        #cwords = contextwin(x, window_size)
+        ## make an array of these windows
+        #words = map(lambda x: np.asarray(x).astype('int32'), cwords)
+
+        if len(x.shape) == 2:
+            minibatch_size, seq_len = x.shape
+            words = np.array(x).astype('int32').reshape(x.shape)
+            mask = np.array(mask).astype('int32').reshape(seq_len, minibatch_size)
+        else:
+            minibatch_size = 1
+            seq_len = x.shape[0]
+            words = np.array(x).astype('int32').reshape(minibatch_size, seq_len)
+            mask = np.array(mask).astype('int32').reshape((seq_len, minibatch_size))
+
 
         if extra_input_dims > 0:
             extra = np.array(extra).astype('int32').reshape((1, extra_input_dims))
             return self.sentence_classify(words, extra)
         else:
-            return self.sentence_classify(words, mask)
+            return self.sentence_classify(words, mask, minibatch_size)
 
     def train(self, x, mask, y, window_size, learning_rate, emb_lr_factor, extra_input_dims=0, extra=None):
         assert window_size == 1
         assert extra_input_dims == 0
         # concatenate words in a window
-        cwords = contextwin(x, window_size)
+        #cwords = contextwin(x, window_size)
         # make an array of these windows
-        words = map(lambda x: np.asarray(x).astype('int32'), cwords)
+        #words = map(lambda x: np.asarray(x).astype('int32'), cwords)
 
-        mask = np.reshape(mask, [1, len(mask)])
+        # if minibatch_size is 1, X = 1D list of indices, i.e. X.shape[0] = seq_len
+        # if minibatch_size > 0, X = np.array([minibatch_size, seq_len])
+
+        if len(x.shape) == 2:
+            minibatch_size, seq_len = x.shape
+            words = np.array(x).astype('int32').reshape(x.shape)
+            mask = np.array(mask).astype('int32').reshape(seq_len, minibatch_size)
+            print words
+            y = np.array(y).astype('int32').reshape(y.shape)
+        else:
+            minibatch_size = 1
+            seq_len = x.shape[0]
+            words = np.array(x).astype('int32').reshape(minibatch_size, seq_len)
+            mask = np.array(mask).astype('int32').reshape((seq_len, minibatch_size))
+            y = np.array(y).astype('int32').reshape(minibatch_size, y.shape[0])
 
         # train on these sentences and normalize
         if extra_input_dims > 0:
             extra = np.array(extra).astype('int32').reshape((1, extra_input_dims))
             self.sentence_train(words, extra, y, learning_rate, emb_lr_factor)
         else:
-            self.sentence_train(words, mask, y, learning_rate, emb_lr_factor)
+            self.sentence_train(words, mask, y, learning_rate, emb_lr_factor, minibatch_size)
         self.normalize()
 
     def save(self, output_dir):
@@ -400,7 +446,7 @@ def main(params=None):
             'win': 1,                   # size of context window
             'add_DRLD': False,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
-            'n_hidden': 100,             # size of hidden units
+            'n_hidden': 50,             # size of hidden units
             'pooling_method': 'max',    # max, mean, or attention1/2
             'bidirectional': False,
             'bi_combine': 'mean',        # concat, max, or mean
@@ -409,10 +455,10 @@ def main(params=None):
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 3,
+            'n_epochs': 40,
             'add_OOV_noise': False,
             'OOV_noise_prob': 0.01,
-            'minibatch_size': 1,
+            'minibatch_size': 2,
             'ensemble': False,
             'save_model': True,
             'seed': 42,
@@ -488,10 +534,14 @@ def main(params=None):
         groundtruth_test = test_y[:]
         words_test = [map(lambda x: idx2words[x], w) for w in test_lex]
 
-        initial_embeddings = common.load_embeddings(params, words2idx)
-        OOV_index = words2idx['__OOV__']
-        emb_dim = initial_embeddings.shape[1]
-        print 'emb_dim =', emb_dim
+        if params['initialize_word_vectors']:
+            initial_embeddings = common.load_embeddings(params, words2idx)
+            OOV_index = words2idx['__OOV__']
+            emb_dim = initial_embeddings.shape[1]
+            print 'emb_dim =', emb_dim
+        else:
+            initial_embeddings = None
+            emb_dim = params['word2vec_dim']
 
         extra_input_dims = 0
         if params['add_DRLD']:
@@ -534,34 +584,53 @@ def main(params=None):
             params['ce'] = e                # store the current epoch
             tic = timeit.default_timer()
 
-            for i, orig_x in enumerate(train_lex):
-                n_words = len(orig_x)
-                if params['add_OOV_noise']:
-                    draws = np.random.rand(n_words)
-                    x = [OOV_index if draws[i] < params['OOV_noise_prob'] else orig_x[i] for i in range(n_words)]
-                else:
-                    x = orig_x
-                y = train_y[i]
+            ms = params['minibatch_size']
+            #for i, orig_x in enumerate(train_lex):
+            for i in range(0, len(train_lex)//ms*ms, ms):
+                #orig_x = train_lex[i]
+                #n_words = len(orig_x)
+                #if params['add_OOV_noise']:
+                #    draws = np.random.rand(n_words)
+                #    x = [OOV_index if draws[i] < params['OOV_noise_prob'] else orig_x[i] for i in range(n_words)]
+                #else:
+                #    x = orig_x
+                #y = train_y[i]
                 extra = train_extra[i]
-                mask = train_masks[i]
+                #mask = train_masks[i]
 
-                rnn.train(x, mask, y, params['win'], params['clr'], params['lr_emb_fac'],
+                if ms > 1:
+                    minibatch_x = np.vstack([train_lex[j] for j in range(i, i+ms)])
+                    minibatch_y = np.vstack([train_y[j] for j in range(i, i+ms)])
+                    minibatch_mask = np.vstack([train_masks[j] for j in range(i, i+ms)])
+                else:
+                    minibatch_x = train_lex[i]
+                    minibatch_y = train_y[i]
+                    minibatch_mask = train_masks[i]
+
+                if i == 0:
+                    printing = 1
+                else:
+                    printing = 0
+                rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'], params['clr'], params['lr_emb_fac'],
                           extra_input_dims, extra)
+                #rnn.train(x, mask, y, params['win'], params['clr'], params['lr_emb_fac'],
+                #          extra_input_dims, extra)
                 print '[learning] epoch %i >> %2.2f%%' % (
                     e, (i + 1) * 100. / float(n_sentences)),
                 print 'completed in %.2f (sec) <<\r' % (timeit.default_timer() - tic),
                 sys.stdout.flush()
+                sys.exit()
 
             # evaluation // back into the real world : idx -> words
             print ""
 
             #print rnn.classify((np.asarray(contextwin(train_lex[0], params['win'])).astype('int32')), train_likes[0], params['win'])
-            print rnn.classify(train_lex[0], train_masks[0], params['win'], extra_input_dims, train_extra[0])
+            #print rnn.classify(train_lex[0], train_masks[0], params['win'], extra_input_dims, train_extra[0])
             #print rnn.get_element_weights(np.asarray(contextwin(train_lex[0], params['win'])).astype('int32'))
-            if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
-                if extra_input_dims == 0:
-                    r = np.random.randint(0, len(train_lex))
-                    print r, rnn.a_sum_check(np.asarray(contextwin(train_lex[r], params['win'])).astype('int32'))
+            #if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
+            #    if extra_input_dims == 0:
+            #        r = np.random.randint(0, len(train_lex))
+            #        print r, rnn.a_sum_check(np.asarray(contextwin(train_lex[r], params['win'])).astype('int32'))
 
             """
             predictions_train = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
@@ -578,10 +647,10 @@ def main(params=None):
 
             predictions_train = [rnn.classify(x, train_masks[i], params['win'],
                                               extra_input_dims, train_extra[i]) for i, x in enumerate(train_lex)]
-            predictions_test = [rnn.classify(x, valid_masks[i], params['win'],
-                                             extra_input_dims, test_extra[i]) for i, x in enumerate(test_lex)]
-            predictions_valid = [rnn.classify(x, test_masks[i], params['win'],
+            predictions_valid = [rnn.classify(x, valid_masks[i], params['win'],
                                               extra_input_dims, dev_extra[i]) for i, x in enumerate(valid_lex)]
+            predictions_test = [rnn.classify(x, test_masks[i], params['win'],
+                                             extra_input_dims, test_extra[i]) for i, x in enumerate(test_lex)]
 
             train_f1 = common.calc_mean_f1(predictions_train, train_y)
             test_f1 = common.calc_mean_f1(predictions_test, test_y)
@@ -613,6 +682,7 @@ def main(params=None):
             # learning rate decay if no improvement in a given number of epochs
             if abs(params['be']-params['ce']) >= params['decay_delay']:
                 params['clr'] *= params['decay_factor']
+                params['be'] = params['ce']
                 print "Reverting to current best; new learning rate = ", params['clr']
                 # also reset to the previous best
                 rnn = best_rnn
@@ -621,6 +691,9 @@ def main(params=None):
                 break
 
             if best_f1 == 1.0:
+                break
+
+            if best_f1 == 0 and e > 10:
                 break
 
         if params['save_model']:

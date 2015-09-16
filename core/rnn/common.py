@@ -178,6 +178,8 @@ def calc_mean_f1(predictions, true):
     mean_f1 = 0.0
     for i in range(len(predictions)):
         pred_item = predictions[i]
+        if len(pred_item.shape) == 2:
+            pred_item = pred_item[0, :]
         y_item = true[i]
         #print pred_item.shape
         #print y_item.shape

@@ -175,8 +175,8 @@ class RNN(object):
                 self.c_i_r = theano.shared(name='c_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
 
         self.params = [self.W_xh, self.W_hh, self.b_h,
-                       self.W_s, self.b_s,
-                       self.h_i_f]
+                       self.W_s, self.b_s]
+        #self.params += [self.h_i_f]
         if train_embeddings:
             self.params += [self.emb]
         if pooling_method == 'attention':
@@ -260,7 +260,14 @@ class RNN(object):
                 [h_r, c_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=x,
                                             outputs_info=[self.h_i_r, self.c_i_r], go_backwards=True)
         else:
-            h_f, _ = theano.scan(fn=recurrence_basic, sequences=x, outputs_info=[self.h_i_f], n_steps=x.shape[0])
+            h_f, _ = theano.scan(fn=recurrence_basic, sequences=x,
+                                 outputs_info=[T.alloc(np.array(0.), nh)],
+                                 n_steps=x.shape[0])
+
+            #h_f, _ = theano.scan(fn=recurrence_basic, sequences=x,
+            #                     outputs_info=[self.h_i_f],
+            #                     n_steps=x.shape[0])
+
             if bidirectional:
                 h_r, _ = theano.scan(fn=recurrence_basic_reverse, sequences=x, outputs_info=[self.h_i_r],
                                      go_backwards=True)
@@ -381,30 +388,31 @@ def main(params=None):
 
     if params is None:
         params = {
-            'exp_name': 'lstm_test',
+            'exp_name': 'minibatch_test',
             'test_fold': 0,
             'n_dev_folds': 1,
-            'min_doc_thresh': 2,
+            'min_doc_thresh': 1,
             'initialize_word_vectors': True,
-            'vectors': 'default_word2vec',  # default_word2vec, anes_word2vec ...
+            'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
             'word2vec_dim': 300,
-            'init_scale': 0.1,
+            'init_scale': 0.2,
             'add_OOV': True,
             'win': 1,                   # size of context window
-            'add_DRLD': True,
-            'rnn_type': 'LSTM',        # basic, GRU, or LSTM
-            'n_hidden': 50,             # size of hidden units
+            'add_DRLD': False,
+            'rnn_type': 'basic',        # basic, GRU, or LSTM
+            'n_hidden': 3,             # size of hidden units
             'pooling_method': 'max',    # max, mean, or attention1/2
-            'bidirectional': True,
-            'bi_combine': 'concat',        # concat, max, or mean
+            'bidirectional': False,
+            'bi_combine': 'mean',        # concat, max, or mean
             'train_embeddings': True,
-            'lr': 0.01,                  # learning rate
-            'lr_emb_fac': 0.5,            # factor to modify learning rate for embeddings
-            'decay_delay': 8,           # number of epochs with no improvement before decreasing learning rate
+            'lr': 0.1,                  # learning rate
+            'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
+            'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 60,
-            'add_OOV_noise': True,
-            'OOV_noise_prob': 0.005,
+            'n_epochs': 10,
+            'add_OOV_noise': False,
+            'OOV_noise_prob': 0.01,
+            'minibatch_size': 1,
             'ensemble': False,
             'save_model': True,
             'seed': 42,
@@ -419,7 +427,6 @@ def main(params=None):
     #params['exp_name'] += '_ensemble_reuse_test'
     #params['orig_T'] = 0.02
     #params['tau'] = 0.005
-
 
     reuser = None
     if params['reuse']:

@@ -3,6 +3,7 @@ from core.experiment import experiment_conformal
 from core.experiment import experiment_multilabel_test
 from core.rnn import run_with_bayes_opt
 from core.rnn import rnn_general
+from core.rnn import rnn_minibatch
 
 
 """
@@ -12,7 +13,7 @@ experiment_conformal.run_group_experiment('test',
                      model_type='LR', verbose=1)
 """
 
-rnn_general.main()
+rnn_minibatch.main()
 
 #from core.rnn import rnn_general
 
