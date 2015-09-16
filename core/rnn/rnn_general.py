@@ -423,9 +423,9 @@ def main(params=None):
         }
 
     # load params from a previous experiment
-    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_params.json')
-    params['exp_name'] += '_no_h_i_f'
-    params['n_hidden'] = int(params['n_hidden'])
+    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_params.json')
+    #params['exp_name'] += '_no_h_i_f'
+    #params['n_hidden'] = int(params['n_hidden'])
     #params['exp_name'] += '_ensemble_reuse_test'
     #params['orig_T'] = 0.02
     #params['tau'] = 0.005

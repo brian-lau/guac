@@ -42,6 +42,7 @@ data_normalized_text_file = os.path.join(data_processed_text_dir, 'normalized.js
 
 resources_group_dir = os.path.join(resources_dir, 'groups')
 resources_clusters_dir = os.path.join(resources_dir, 'clusters')
+resources_gensim_dir = os.path.join(resources_dir, 'gensim')
 
 vectors_dir = os.path.join(resources_dir, 'vectors')
 non_distributional_vectors_dir = os.path.join(vectors_dir, 'non-distributional')
