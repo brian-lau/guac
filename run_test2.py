@@ -13,7 +13,11 @@ experiment_conformal.run_group_experiment('test',
                      model_type='LR', verbose=1)
 """
 
-rnn_minibatch.main()
+result = rnn_minibatch.main()
+
+print('name' + '\t' + str(-result['loss']) +
+      '\t' + str(result['final_test_f1']) + '\nvalid_f1s:' + '\t' + str(result['valid_f1s']) + '\n')
+print('test_f1s:' + '\t' + str(result['test_f1s']) + '\n')
 
 #from core.rnn import rnn_general
 
