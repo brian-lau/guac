@@ -363,10 +363,11 @@ class RNN(object):
         # train on these sentences and normalize
         if extra_input_dims > 0:
             extra = np.array(extra).astype('int32').reshape((1, extra_input_dims))
-            self.sentence_train(words, extra, y, learning_rate, emb_lr_factor)
+            nll = self.sentence_train(words, extra, y, learning_rate, emb_lr_factor)
         else:
-            self.sentence_train(words, y, learning_rate, emb_lr_factor)
+            nll = self.sentence_train(words, y, learning_rate, emb_lr_factor)
         self.normalize()
+        return nll
 
     def save(self, output_dir):
         for param in self.params:
@@ -544,7 +545,7 @@ def main(params=None):
                 y = train_y[i]
                 extra = train_extra[i]
 
-                rnn.train(x, y, params['win'], params['clr'], params['lr_emb_fac'],
+                nll = rnn.train(x, y, params['win'], params['clr'], params['lr_emb_fac'],
                           extra_input_dims, extra)
                 print '[learning] epoch %i >> %2.2f%%' % (
                     e, (i + 1) * 100. / float(n_sentences)),
@@ -553,6 +554,14 @@ def main(params=None):
                 #if i == 0:
                 #    print ' '.join([idx2words[idx] for idx in orig_x])
                 #    print rnn.classify(orig_x, params['win'], extra_input_dims, extra)
+
+                if np.isnan(nll) or np.isinf(nll):
+                    return {'loss': nll,
+                            'final_test_f1': 0,
+                            'valid_f1s': [0],
+                            'test_f1s': [0],
+                            'status': STATUS_OK
+                            }
 
             # evaluation // back into the real world : idx -> words
             print ""
