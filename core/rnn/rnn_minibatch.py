@@ -463,7 +463,8 @@ def main(params=None):
             'n_epochs': 40,
             'add_OOV_noise': False,
             'OOV_noise_prob': 0.01,
-            'minibatch_size': 2,
+            'minibatch_size': 16,
+            'pred_minibatch_size': 64,
             'ensemble': False,
             'save_model': True,
             'seed': 42,
@@ -595,8 +596,9 @@ def main(params=None):
             tic = timeit.default_timer()
 
             ms = params['minibatch_size']
+            n_train = len(train_lex)
             #for i, orig_x in enumerate(train_lex):
-            for i in range(0, len(train_lex)//ms*ms, ms):
+            for i in range(0, n_train, ms):
                 #orig_x = train_lex[i]
                 #n_words = len(orig_x)
                 #if params['add_OOV_noise']:
@@ -609,19 +611,20 @@ def main(params=None):
                 #mask = train_masks[i]
 
                 if ms > 1:
-                    minibatch_x = np.vstack([train_lex[j] for j in range(i, i+ms)])
-                    minibatch_y = np.vstack([train_y[j] for j in range(i, i+ms)])
-                    minibatch_mask = np.vstack([train_masks[j] for j in range(i, i+ms)])
+                    minibatch_x = np.vstack([train_lex[j] for j in range(i, min(i+ms, n_train))])
+                    minibatch_y = np.vstack([train_y[j] for j in range(i, min(i+ms, n_train))])
+                    minibatch_mask = np.vstack([train_masks[j] for j in range(i, min(i+ms, n_train))])
                 else:
-                    minibatch_x = train_lex[i]
-                    minibatch_y = train_y[i]
-                    minibatch_mask = train_masks[i]
+                    minibatch_x = np.array(train_lex[i])
+                    minibatch_y = np.array(train_y[i])
+                    minibatch_mask = np.array(train_masks[i])
 
                 #for mb in range(ms):
                     #words = [idx2words[x] for x in minibatch_x[mb, :]]
                     #print ' '.join(words)
 
-                nll = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'], params['clr'],
+                nll = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'],
+                                params['clr']/float(params['minibatch_size']),
                                 params['lr_emb_fac'], extra_input_dims, extra)
                 #rnn.train(x, mask, y, params['win'], params['clr'], params['lr_emb_fac'],
                 #          extra_input_dims, extra)
@@ -644,26 +647,15 @@ def main(params=None):
             print "true y", train_y[-1]
             y_pred = rnn.classify(train_lex[-1], train_masks[-1], params['win'], extra_input_dims, train_extra[-1])[0]
             print "pred y", y_pred
-            print common.calc_mean_f1(y_pred, train_y[-1])
 
             #if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
             #    if extra_input_dims == 0:
             #        r = np.random.randint(0, len(train_lex))
             #        print r, rnn.a_sum_check(np.asarray(contextwin(train_lex[r], params['win'])).astype('int32'))
 
-
-            """
-            predictions_train = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
-                                 for x in train_lex]
-            predictions_test = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
-                                for x in test_lex]
-            predictions_valid = [np.max(rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')), axis=0)
-                                 for x in valid_lex]
-            """
-
-            #predictions_train = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in train_lex]
-            #predictions_test = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in test_lex]
-            #predictions_valid = [rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32'), likes) for x in valid_lex]
+            predictions_train = predict(n_train, params['pred_minibatch_size'], train_lex, train_masks,
+                                         params['win'], extra_input_dims, train_extra, rnn)
+            ### REPEAT HERE...
 
             predictions_train = [rnn.classify(x, train_masks[i], params['win'],
                                               extra_input_dims, train_extra[i])[0] for i, x in enumerate(train_lex)]
@@ -758,6 +750,24 @@ def main(params=None):
             'status': STATUS_OK
             }
 
+
+
+def predict(n, ms, x, masks, window_size, extra_input_dims, extra, rnn):
+    predictions = []
+    for i in range(0, n, ms):
+        if ms > 1:
+            minibatch_x = np.vstack([x[j] for j in range(i, min(i+ms, n))])
+            minibatch_mask = np.vstack([masks[j] for j in range(i, min(i+ms, n))])
+            minibatch_extra = np.vstack([extra[j] for j in range(i, min(i+ms, n))])
+        else:
+            minibatch_x = np.array(x[i])
+            minibatch_mask = np.array(masks[i])
+            minibatch_mask = np.array(extra[i])
+
+        prediction = rnn.classify(minibatch_x, minibatch_mask, window_size, extra_input_dims, minibatch_extra)
+        predictions.train(prediction)
+
+    return predictions
 
 if __name__ == '__main__':
     report = main()
