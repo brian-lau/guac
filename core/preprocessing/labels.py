@@ -1,6 +1,7 @@
 import os
 import json
 import codecs
+from optparse import OptionParser
 
 import pandas as pd
 
@@ -39,3 +40,68 @@ def get_labels(datasets):
         all_labels.append(labels)
 
     return pd.concat(all_labels, axis=0)
+
+
+def get_powerset_labels(datasets):
+
+    powerset_df = pd.DataFrame(columns=['powerset_index'])
+
+    all_labels = get_labels(datasets)
+    powerset_index = []
+
+    for i in all_labels.index:
+        key = str(list(all_labels.loc[i, :]))
+        if key not in powerset_index:
+            powerset_index.append(key)
+        index = powerset_index.index(key)
+        powerset_df.loc[i] = index
+
+    return powerset_df, powerset_index
+
+
+def output_label_counts(datasets):
+    label_dict = {}
+    all_labels = get_labels(datasets)
+    n, p = all_labels.shape
+    for i in all_labels.index:
+        key = str(list(all_labels.loc[i, :]))
+        label_dict[key] = label_dict.get(key, 0) + 1
+
+    gt1 = 0
+    gt2 = 0
+    for k in label_dict:
+        if label_dict[k] > 1:
+            gt1 += 1
+        if label_dict[k] > 2:
+            gt2 += 1
+
+    print "total keys = ", len(label_dict.keys())
+    print "greater than 1 =", gt1
+    print "greater than 2 =", gt2
+
+
+
+def get_groups(group_file):
+    groups = []
+    lines = fh.read_text(group_file)
+    for line in lines:
+        if len(line) > 0:
+            groups.append(line.split())
+    return groups
+
+
+def main():
+    parser = OptionParser()
+    (options, args) = parser.parse_args()
+
+    group_file = args[0]
+    groups = get_groups(group_file)
+
+    for group in groups:
+        print group
+        output_label_counts(group)
+
+
+if __name__ == '__main__':
+    main()
+

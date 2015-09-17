@@ -21,13 +21,14 @@ class MultilabelModel():
             self.models[code] = model
 
     # X = sparse matrix
-    # all_y = DataFrame of labels
+    # all_y = DataFrame(?)
     def fit(self, X, all_y):
         codes = all_y.columns
         for code in codes:
             y = all_y[code].as_matrix()
             model = self.models[code]
             model.fit(X, y)
+
 
     def tune_by_cv(self, X, all_y, alpha_values, td_splits, n_dev_folds, reuser=None, verbose=1):
         codes = all_y.columns

@@ -6,18 +6,15 @@ from core.rnn import rnn_general
 from core.rnn import rnn_minibatch
 
 
-"""
-experiment_conformal.run_group_experiment('test',
+
+experiment_multilabel_test.run_group_experiment('powerset_test',
                      ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes'],
                      test_fold=0, feature_list=['ngrams'],
                      model_type='LR', verbose=1)
-"""
 
-result = rnn_minibatch.main()
 
-print('name' + '\t' + str(-result['loss']) +
-      '\t' + str(result['final_test_f1']) + '\nvalid_f1s:' + '\t' + str(result['valid_f1s']) + '\n')
-print('test_f1s:' + '\t' + str(result['test_f1s']) + '\n')
+#result = rnn_minibatch.main()
+
 
 #from core.rnn import rnn_general
 
