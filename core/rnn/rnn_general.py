@@ -398,7 +398,7 @@ def main(params=None):
             'word2vec_dim': 300,
             'init_scale': 0.2,
             'add_OOV': True,
-            'win': 1,                   # size of context window
+            'win': 3,                   # size of context window
             'add_DRLD': False,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
             'n_hidden': 3,             # size of hidden units
