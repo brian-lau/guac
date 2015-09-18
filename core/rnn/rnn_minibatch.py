@@ -113,10 +113,10 @@ class RNN(object):
         self.b_s = theano.shared(name='b_s', value=np.zeros(nc, dtype=theano.config.floatX))
 
         # temporary parameters
-        self.h_i_f = theano.shared(name='h_i_f', value=np.zeros((2, nh), dtype=theano.config.floatX))
+        #self.h_i_f = theano.shared(name='h_i_f', value=np.zeros((2, nh), dtype=theano.config.floatX))
 
-        if bidirectional:
-            self.h_i_r = theano.shared(name='h_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
+        #if bidirectional:
+        #    self.h_i_r = theano.shared(name='h_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
 
         # Attention parameters
         if pooling_method == 'attention1' or pooling_method == 'attention2':
@@ -169,9 +169,9 @@ class RNN(object):
             # use normal ->hidden weights for memory cell
 
             # temp
-            self.c_i_f = theano.shared(name='c_i_f', value=np.zeros(nh, dtype=theano.config.floatX))
-            if bidirectional:
-                self.c_i_r = theano.shared(name='c_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
+            #self.c_i_f = theano.shared(name='c_i_f', value=np.zeros(nh, dtype=theano.config.floatX))
+            #if bidirectional:
+            #    self.c_i_r = theano.shared(name='c_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
 
         self.params = [self.W_xh, self.W_hh, self.b_h,
                        self.W_s, self.b_s]
@@ -186,12 +186,12 @@ class RNN(object):
         if rnn_type == 'LSTM':
             self.params += [self.W_xf, self.W_hf, self.W_cf, self.b_f,
                             self.W_xi, self.W_hi, self.W_ci, self.b_i,
-                            self.W_xo, self.W_ho, self.W_co, self.b_o,
-                            self.c_i_f]
-            if bidirectional:
-                self.params += [self.c_i_r]
-        if bidirectional:
-            self.params += [self.h_i_r]
+                            self.W_xo, self.W_ho, self.W_co, self.b_o]
+                            #self.c_i_f]
+            #if bidirectional:
+            #    self.params += [self.c_i_r]
+        #if bidirectional:
+        #    self.params += [self.h_i_r]
 
         # create an X object based on the size of the object at the index [elements, emb_dim * window]
         idxs = T.imatrix()
@@ -221,55 +221,64 @@ class RNN(object):
             # apply the mask to propogate the last (unmaksed) element in sequence to the end
             return mask_t * h_t + (1 - mask_t) * h_tm1
 
-        def recurrence_basic_reverse(x_t, h_tp1):
+        def recurrence_basic_reverse(x_t, mask_t, h_tp1):
             h_t = T.nnet.sigmoid(T.dot(x_t, self.W_xh) + T.dot(h_tp1, self.W_hh) + self.b_h)
-            return h_t
+            return mask_t * h_t + (1 - mask_t) * h_tp1
 
-        def recurrence_gru(x_t, h_tm1):
+        def recurrence_gru(x_t, mask_t, h_tm1):
             r_t = T.nnet.sigmoid(T.dot(x_t, self.W_xr) + T.dot(h_tm1, self.W_hr) + self.b_r)
             z_t = T.nnet.sigmoid(T.dot(x_t, self.W_xz) + T.dot(h_tm1, self.W_hz) + self.b_z)
             g_t = T.tanh(T.dot(x_t, self.W_xh) + r_t * T.dot(h_tm1, self.W_hh) + self.b_h)
             h_t = (1 - z_t) * h_tm1 + z_t * g_t
-            return h_t
+            return mask_t * h_t + (1 - mask_t) * h_tm1
 
-        def recurrence_gru_reverse(x_t, h_tp1):
+        def recurrence_gru_reverse(x_t, mask_t, h_tp1):
             r_t = T.nnet.sigmoid(T.dot(x_t, self.W_xr) + T.dot(h_tp1, self.W_hr) + self.b_r)
             z_t = T.nnet.sigmoid(T.dot(x_t, self.W_xz) + T.dot(h_tp1, self.W_hz) + self.b_z)
             g_t = T.tanh(T.dot(x_t, self.W_xh) + r_t * T.dot(h_tp1, self.W_hh) + self.b_h)
             h_t = (1 - z_t) * h_tp1 + z_t * g_t
-            return h_t
+            return mask_t * h_t + (1 - mask_t) * h_tp1
 
-        def recurrence_lstm(x_t, h_tm1, c_tm1):
+        def recurrence_lstm(x_t, mask_t, h_tm1, c_tm1):
             i_t = T.nnet.sigmoid(T.dot(x_t, self.W_xi) + T.dot(h_tm1, self.W_hi) + T.dot(c_tm1, self.W_ci) + self.b_i)
             f_t = T.nnet.sigmoid(T.dot(x_t, self.W_xf) + T.dot(h_tm1, self.W_hf) + T.dot(c_tm1, self.W_cf) + self.b_f)
             d_t = T.tanh(T.dot(x_t, self.W_xh) + T.dot(h_tm1, self.W_hh) + self.b_h)
             c_t = f_t * c_tm1 + i_t * d_t
             o_t = T.nnet.sigmoid(T.dot(x_t, self.W_xo) + T.dot(h_tm1, self.W_ho) + T.dot(c_t, self.W_co) + self.b_o)
             h_t = o_t * c_t
-            return [h_t, c_t]
+            return [mask_t * h_t + (1 - mask_t) * h_tm1, mask_t * c_t + (1 - mask_t) * c_tm1]
 
-        def recurrence_lstm_reverse(x_t, h_tp1, c_tp1):
+        def recurrence_lstm_reverse(x_t, mask_t, h_tp1, c_tp1):
             i_t = T.nnet.sigmoid(T.dot(x_t, self.W_xi) + T.dot(h_tp1, self.W_hi) + T.dot(c_tp1, self.W_ci) + self.b_i)
             f_t = T.nnet.sigmoid(T.dot(x_t, self.W_xf) + T.dot(h_tp1, self.W_hf) + T.dot(c_tp1, self.W_cf) + self.b_f)
             d_t = T.tanh(T.dot(x_t, self.W_xh) + T.dot(h_tp1, self.W_hh) + self.b_h)
             c_t = f_t * c_tp1 + i_t * d_t
             o_t = T.nnet.sigmoid(T.dot(x_t, self.W_xo) + T.dot(h_tp1, self.W_ho) + T.dot(c_t, self.W_co) + self.b_o)
             h_t = o_t * c_t
-            return [h_t, c_t]
+            return [mask_t * h_t + (1 - mask_t) * h_tp1, mask_t * c_t + (1 - mask_t) * c_tp1]
 
         h_r = None
 
         if rnn_type == 'GRU':
-            h_f, _ = theano.scan(fn=recurrence_gru, sequences=x, outputs_info=[self.h_i_f], n_steps=x.shape[0])
+            h_f, _ = theano.scan(fn=recurrence_gru, sequences=[x, mask_3d],
+                                 outputs_info=[T.alloc(np.array(0.), minibatch_size, nh)],
+                                 n_steps=x.shape[0])
             if bidirectional:
-                h_r, _ = theano.scan(fn=recurrence_gru_reverse, sequences=x, outputs_info=[self.h_i_r],
+                h_r, _ = theano.scan(fn=recurrence_gru_reverse, sequences=[x, mask_3d],
+                                     outputs_info=[T.alloc(np.array(0.), minibatch_size, nh)],
                                      go_backwards=True)
         elif rnn_type == 'LSTM':
-            [h_f, c_f], _ = theano.scan(fn=recurrence_lstm, sequences=x,
-                                        outputs_info=[self.h_i_f, self.c_i_f], n_steps=x.shape[0])
+            [h_f, c_f], _ = theano.scan(fn=recurrence_lstm, sequences=[x, mask_3d],
+                                        outputs_info=[T.alloc(np.array(0.), minibatch_size, nh),
+                                                      T.alloc(np.array(0.), minibatch_size, nh)],
+                                        n_steps=x.shape[0])
             if bidirectional:
-                [h_r, c_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=x,
-                                            outputs_info=[self.h_i_r, self.c_i_r], go_backwards=True)
+                [h_f, c_f], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=[x, mask_3d],
+                                            outputs_info=[T.alloc(np.array(0.), minibatch_size, nh),
+                                                          T.alloc(np.array(0.), minibatch_size, nh)],
+                                            go_backwards=True)
+                #[h_r, c_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=x,
+                #                            outputs_info=[self.h_i_r, self.c_i_r], go_backwards=True)
         else:
             #h_f, _ = theano.scan(fn=recurrence_basic, sequences=x, outputs_info=[self.h_i_f], n_steps=x.shape[0])
             temp, _ = theano.scan(fn=recurrence_basic, sequences=[x, mask_3d],
@@ -278,19 +287,20 @@ class RNN(object):
             #h_f = theano.printing.Print('h_f')(temp)
             h_f = temp
             if bidirectional:
-                h_r, _ = theano.scan(fn=recurrence_basic_reverse, sequences=x, outputs_info=[self.h_i_r],
+                h_r, _ = theano.scan(fn=recurrence_basic_reverse, sequences=[x, mask_3d],
+                                     outputs_info=[T.alloc(np.array(0.), minibatch_size, nh)],
                                      go_backwards=True)
 
         if bidirectional:
             # reverse the second hidden layer so it lines up with the first
-            h_r = h_r[::-1, :]
+            h_r = h_r[::-1, :, :]
             if bi_combine == 'max':
                 h = T.maximum(h_f, h_r)
             elif bi_combine == 'mean':
                 h = (h_f + h_r) / 2.0
             else:  # concatenate
                 #h = theano.printing.Print('h:')(T.concatenate([h_fp, h_rp], axis=1))
-                h = T.concatenate([h_f, h_r], axis=1)
+                h = T.concatenate([h_f, h_r], axis=2)
         else:
             #temp = T.printing.Print('isnan')(T.max(T.isnan(h_f)))
             #h = h_f * (1-temp)
@@ -300,7 +310,7 @@ class RNN(object):
         if pooling_method == 'attention1':  # combine hidden nodes, then transform and sigmoid
             # SOFTMAX normalizes across the row (axis=1)
             a = T.nnet.softmax((T.dot(h, self.W_a) + self.b_a).T)  # [1, n_elements]: normalized vector
-            a_sum = T.sum(a)    # to check a is normalized
+            a_sum = T.sum(a, )    # to check a is normalized
             p_y_given_x_sentence = T.nnet.sigmoid(T.dot(T.dot(a, h), self.W_s) + self.b_s)  # [1, nc] in R(0,1)
             y_pred = T.max(p_y_given_x_sentence, axis=0) > 0.5  # note, max is just to coerce into proper shape
             element_weights = T.outer(a, p_y_given_x_sentence)  # [ne, nc]
@@ -316,7 +326,7 @@ class RNN(object):
             p_y_given_x_sentence = T.mean(s, axis=0)
             y_pred = p_y_given_x_sentence > 0.5
             element_weights = s
-        else:  # pooling_method == 'max'
+        elif pooling_method == 'max':
             s = T.nnet.sigmoid((T.dot(h, self.W_s) + self.b_s))  # [n_elements, minibatch_size, nc] in R(0,1)
             #s_shape = T.printing.Print('s_shape')(s.shape)
             #p_y_given_x_sentence = T.max(s_shape[0] * s, axis=0)
@@ -325,6 +335,14 @@ class RNN(object):
             #temp = T.printing.Print('p_y')(p_y_given_x_sentence)
             #y_pred = T.printing.Print('y_pred')(p_y_given_x_sentence > 0.5)
             y_pred = p_y_given_x_sentence > 0.5
+            element_weights = s
+        elif pooling_method == 'last':
+            s = T.nnet.sigmoid((T.dot(h, self.W_s) + self.b_s))  # [n_elements, minibatch_size, nc] in R(0,1)
+            p_y_given_x_sentence = s[-1, :, :]
+            y_pred = p_y_given_x_sentence > 0.5
+            element_weights = s
+        else:
+            sys.exit("Pooling method not recognized")
 
 
 
@@ -332,7 +350,7 @@ class RNN(object):
         lr = T.scalar('lr_main')
         lr_emb_fac = T.scalar('lr_emb')
 
-        sentence_nll = T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)))
+        sentence_nll = T.mean(T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)), axis=1))
         #sentence_nlls = T.printing.Print('nlls')(T.sum(-T.log(y*p_y_given_x_sentence
         #                                                    + (1-y)*(1-p_y_given_x_sentence)), axis=1))
         #sentence_nll = T.sum(sentence_nlls)
@@ -345,8 +363,8 @@ class RNN(object):
         if extra_input_dims > 0:
             self.sentence_classify = theano.function(inputs=[idxs, extra], outputs=y_pred)
             self.sentence_train = theano.function(inputs=[idxs, extra, y, lr, lr_emb_fac],
-                                                       outputs=sentence_nll,
-                                                       updates=sentence_updates)
+                                                  outputs=sentence_nll,
+                                                  updates=sentence_updates)
             if pooling_method == 'attention1' or pooling_method == 'attention2':
                 self.a_sum_check = theano.function(inputs=[idxs, extra], outputs=a_sum)
         else:
@@ -450,11 +468,11 @@ def main(params=None):
             'add_OOV': True,
             'win': 1,                   # size of context window
             'add_DRLD': False,
-            'rnn_type': 'basic',        # basic, GRU, or LSTM
+            'rnn_type': 'LSTM',        # basic, GRU, or LSTM
             'n_hidden': 10,             # size of hidden units
             'pooling_method': 'max',    # max, mean, or attention1/2
             'bidirectional': False,
-            'bi_combine': 'mean',        # concat, max, or mean
+            'bi_combine': 'concat',        # concat, max, or mean
             'train_embeddings': True,
             'lr': 0.05,                  # learning rate
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
@@ -464,7 +482,7 @@ def main(params=None):
             'add_OOV_noise': False,
             'OOV_noise_prob': 0.01,
             'minibatch_size': 16,
-            'pred_minibatch_size': 64,
+            'classify_minibatch_size': 1,
             'ensemble': False,
             'save_model': True,
             'seed': 42,
@@ -473,6 +491,14 @@ def main(params=None):
             'orig_T': 0.04,
             'tau': 0.01
         }
+
+    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_params.json')
+    #params['exp_name'] += '_minibatch_16'
+    #params['n_hidden'] = int(params['n_hidden'])
+    #params['minibatch_size'] = 16
+    #params['classify_minibatch_size'] = 64
+    #params['orig_T'] = 0.02
+    #params['tau'] = 0.005
 
     reuser = None
     if params['reuse']:
@@ -514,7 +540,7 @@ def main(params=None):
         valid_lex, valid_y = valid_xy
         test_lex, test_y = test_xy
 
-        if params['minibatch_size'] > 1:
+        if params['minibatch_size'] > 1 or params['classify_minibatch_size'] > 1:
             print "padding input with zeros"
             all_data, all_masks = common.prepare_data(train_lex, valid_lex, test_lex)
             train_lex, valid_lex, test_lex = all_data
@@ -597,6 +623,7 @@ def main(params=None):
 
             ms = params['minibatch_size']
             n_train = len(train_lex)
+
             #for i, orig_x in enumerate(train_lex):
             for i in range(0, n_train, ms):
                 #orig_x = train_lex[i]
@@ -624,7 +651,7 @@ def main(params=None):
                     #print ' '.join(words)
 
                 nll = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'],
-                                params['clr']/float(params['minibatch_size']),
+                                params['clr'],
                                 params['lr_emb_fac'], extra_input_dims, extra)
                 #rnn.train(x, mask, y, params['win'], params['clr'], params['lr_emb_fac'],
                 #          extra_input_dims, extra)
@@ -653,16 +680,23 @@ def main(params=None):
             #        r = np.random.randint(0, len(train_lex))
             #        print r, rnn.a_sum_check(np.asarray(contextwin(train_lex[r], params['win'])).astype('int32'))
 
-            predictions_train = predict(n_train, params['pred_minibatch_size'], train_lex, train_masks,
+            predictions_train = predict(n_train, params['classify_minibatch_size'], train_lex, train_masks,
                                          params['win'], extra_input_dims, train_extra, rnn)
-            ### REPEAT HERE...
+            n_valid = len(valid_lex)
+            n_test = len(test_lex)
+            predictions_valid = predict(n_valid, params['classify_minibatch_size'], valid_lex, valid_masks,
+                                        params['win'], extra_input_dims, dev_extra, rnn)
+            predictions_test = predict(n_test, params['classify_minibatch_size'], test_lex, test_masks,
+                                        params['win'], extra_input_dims, test_extra, rnn)
 
+            """
             predictions_train = [rnn.classify(x, train_masks[i], params['win'],
                                               extra_input_dims, train_extra[i])[0] for i, x in enumerate(train_lex)]
             predictions_valid = [rnn.classify(x, valid_masks[i], params['win'],
                                               extra_input_dims, dev_extra[i])[0] for i, x in enumerate(valid_lex)]
             predictions_test = [rnn.classify(x, test_masks[i], params['win'],
                                              extra_input_dims, test_extra[i])[0] for i, x in enumerate(test_lex)]
+            """
 
             train_f1 = common.calc_mean_f1(predictions_train, train_y)
             test_f1 = common.calc_mean_f1(predictions_test, test_y)
@@ -708,14 +742,9 @@ def main(params=None):
             if best_f1 == 0 and e > 10:
                 break
 
-
-            #****#
-            sys.exit()
-
-
         if params['save_model']:
-            predictions_valid = [rnn.classify(x, params['win'],
-                                              extra_input_dims, dev_extra[i]) for i, x in enumerate(valid_lex)]
+            predictions_valid = predict(n_valid, params['classify_minibatch_size'], valid_lex, valid_masks,
+                                        params['win'], extra_input_dims, dev_extra, rnn)
 
             #predictions_valid = [best_rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
             best_rnn.save(output_dir)
@@ -759,13 +788,15 @@ def predict(n, ms, x, masks, window_size, extra_input_dims, extra, rnn):
             minibatch_x = np.vstack([x[j] for j in range(i, min(i+ms, n))])
             minibatch_mask = np.vstack([masks[j] for j in range(i, min(i+ms, n))])
             minibatch_extra = np.vstack([extra[j] for j in range(i, min(i+ms, n))])
+            prediction = rnn.classify(minibatch_x, minibatch_mask, window_size, extra_input_dims, minibatch_extra)
+            for p in prediction:
+                predictions.append(p)
         else:
             minibatch_x = np.array(x[i])
             minibatch_mask = np.array(masks[i])
-            minibatch_mask = np.array(extra[i])
-
-        prediction = rnn.classify(minibatch_x, minibatch_mask, window_size, extra_input_dims, minibatch_extra)
-        predictions.train(prediction)
+            minibatch_extra = np.array(extra[i])
+            prediction = rnn.classify(minibatch_x, minibatch_mask, window_size, extra_input_dims, minibatch_extra)
+            predictions.append(prediction)
 
     return predictions
 

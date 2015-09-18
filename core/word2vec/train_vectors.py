@@ -33,7 +33,7 @@ class MySentences(object):
 input_dir = os.path.join(defines.resources_clusters_dir, 'input')
 input_filename = fh.make_filename(input_dir, 'anes_plus_reddit', 'txt')
 sentences = MySentences(input_filename) # a memory-friendly iterator
-model = gensim.models.Word2Vec(sentences, min_count=1, size=300, hs=0, negative=10)
+model = gensim.models.Word2Vec(sentences, min_count=1, size=100, hs=0, negative=10)
 
-output = os.path.join(defines.vectors_dir, 'anes_plus_reddit_word2vec_300.bin')
+output = os.path.join(defines.vectors_dir, 'anes_plus_reddit_word2vec_100.bin')
 model.save(output)
