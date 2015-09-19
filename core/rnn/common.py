@@ -97,17 +97,16 @@ def load_embeddings(params, words2idx):
     initial_embeddings = None
     vocsize = len(words2idx.keys())
     if params['initialize_word_vectors']:
-        if params['vectors'] == 'anes_word2vec':
-            # my word2vec vectors
-
-            print "Loading custom word2vec vectors"
-            vector_file = defines.my_word2vec_filename
-            vectors = gensim.models.Word2Vec.load(vector_file)
-        elif params['vectors'] == 'default_word2vec':
+        if params['vectors'] == 'default_word2vec':
             # standard word2vec
             print "Loading standard word2vec vectors"
             vector_file = defines.word2vec_vectors_filename
             vectors = gensim.models.Word2Vec.load_word2vec_format(vector_file, binary=True)
+        else:
+            # my word2vec vectors
+            print "Loading custom word2vec vectors"
+            vector_file = fh.make_filename(defines.vectors_dir, params['vectors'], 'bin')
+            vectors = gensim.models.Word2Vec.load(vector_file)
 
         print "Setting up initial embeddings"
 

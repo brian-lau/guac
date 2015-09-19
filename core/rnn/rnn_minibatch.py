@@ -543,7 +543,7 @@ def main(params=None):
             'n_dev_folds': 1,
             'min_doc_thresh': 1,
             'initialize_word_vectors': True,
-            'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec ...
+            'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec_300 ...
             'word2vec_dim': 300,
             'init_scale': 0.2,
             'add_OOV': True,

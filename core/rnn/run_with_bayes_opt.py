@@ -24,8 +24,10 @@ space = {
     'init': {
         'vectors': hp.choice('vectors', [
             {'vectors': 'word2vec'},
-            #{'vectors': 'anes', 'size': hp.choice('size', [100, 200, 300])}
-            {'vectors': 'anes'}
+            {'vectors': 'anes', 'size': hp.choice('size', [100, 300])},
+            {'vectors': 'anes_plus_reddit', 'size': hp.choice('size', [100, 300])},
+            {'vectors': 'reddit', 'size': hp.choice('size', [100, 300])}
+
         ]
         ),
         'add_OOV': hp.choice('add_OOV', [True, False]),
@@ -36,7 +38,7 @@ space = {
         'window': hp.choice('window', [1, 3]),
         'add_DRLD': hp.choice('add_DRLD', [True, False]),
         'train_embeddings': hp.choice('train_embeddings', [True, False]),
-        'pooling_method': hp.choice('pooling_method', ['max', 'mean', 'attention1', 'attention2', 'last']),
+        'pooling_method': hp.choice('pooling_method', ['max', 'attention1', 'attention2', 'last']),
         'bidirectional': hp.choice('bidirectional', [
             {'bidirectional': False},
             {'bidirectional': True, 'combine': hp.choice('combine', ['concat', 'max', 'mean'])}
@@ -51,6 +53,8 @@ space = {
             {'OOV_noise': True, 'noise_prob': hp.loguniform('noise_prob', -6, -3)}
         ]
         ),
+        'minibatch_size': hp.choice('minibatch_size', [1, 4, 16]),
+        'classify_minibatch_size': hp.choice('classify_minibatch_size', [1, 64])
     }
     # 'regularization': {'dropout'... 'add_noise'..., 'corruption'...}
 }
@@ -66,12 +70,16 @@ def call_experiment(args):
     params['test_fold'] = 0
     params['min_doc_thresh'] = args['input']['min_doc_thresh']
     params['initialize_word_vectors'] = True
+    params['word2vec_dim'] = int(args['init']['vectors']['size'])
     if args['init']['vectors']['vectors'] == 'word2vec':
         params['vectors'] = 'default_word2vec'
-        params['word2vec_dim'] = 300
-    else:
-        params['vectors'] = 'anes_word2vec'
-        params['word2vec_dim'] = 300
+    elif args['init']['vectors']['vectors'] == 'anes':
+        params['vectors'] = 'anes_word2vec_' + str(args['init']['vectors']['size'])
+    elif args['init']['vectors']['vectors'] == 'reddit':
+        params['vectors'] = 'reddit_word2vec_' + str(args['init']['vectors']['size'])
+    elif args['init']['vectors']['vectors'] == 'anes_plus_reddit':
+        params['vectors'] = 'anes_plus_reddit_word2vec_' + str(args['init']['vectors']['size'])
+
     params['add_OOV'] = args['init']['add_OOV']
     params['init_scale'] = args['init']['init_scale']
     params['win'] = args['arch']['window']
@@ -95,10 +103,12 @@ def call_experiment(args):
         params['OOV_noise_prob'] = args['training']['OOV_noise']['noise_prob']
     else:
         params['add_OOV_noise'] = False
+    params['minibatch_size'] = int(args['training']['minibatch_size'])
+    params['classify_minibatch_size'] = int(args['training']['classify_minibatch_size'])
 
     params['ensemble'] = False
     params['n_dev_folds'] = 1
-    params['n_epochs'] = 40
+    params['n_epochs'] = 50
 
     if reuse:
         params['reuse'] = True
@@ -162,7 +172,7 @@ def main():
     elif model == 'GRU':
         space['arch']['unit'] = 'GRU'
         space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 200, 5)
-        space['training']['learning_rate'] = hp.loguniform('learning_rate', -4, -1),
+        space['training']['learning_rate'] = hp.loguniform('learning_rate', -5, -1.5),
     elif model == 'LSTM':
         space['arch']['unit'] = 'LSTM'
         space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 100, 5)
