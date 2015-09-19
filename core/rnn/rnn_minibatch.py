@@ -202,7 +202,6 @@ class RNN(object):
             h_t = T.nnet.sigmoid(T.dot(x_t, self.W_xh) + T.dot(h_tm1, self.W_hh) + self.b_h)
             #masked_h_t = T.printing.Print('masked_h_t')(mask_t * h_t + (1 - mask_t) * h_tm1)
             # apply the mask to propogate the last (unmaksed) element in sequence to the end
-
             return mask_t * h_t + (1 - mask_t) * h_tm1
             #return h_t
 
@@ -298,29 +297,34 @@ class RNN(object):
             # SOFTMAX normalizes across the row (axis=1)
             #a = T.nnet.softmax((T.dot(h, self.W_a) + self.b_a).T)
 
-            temp = (T.dot(h, self.W_a) + self.b_a)
+            temp = T.dot(h, self.W_a) + self.b_a
             # softmax?
-            a = T.sum(T.exp(temp)/T.exp(temp).sum(axis=0, keepdims=True), axis=2).T # [minibatch_size?, n_elements]: normalized vector
-
-            sh1 = T.printing.Print('a')(a.shape)
+            a = T.exp(temp)/T.exp(temp).sum(axis=0, keepdims=True)
 
             a_sum = T.sum(a, )    # to check a is normalized
+            a_rep = T.repeat(a, nh, axis=2)
+            weighted_sum = T.sum(h * a_rep, axis=0)
 
-            s = T.nnet.sigmoid((T.dot(h, self.W_s) + self.b_s))  # [n_elements, minibatch_size, nc] in R(0,1)
-            p_y_given_x_sentence = s[-1, :, :] * sh1[0]
-            y_pred = p_y_given_x_sentence > 0.5
+            p_y_given_x_sentence = T.nnet.sigmoid(T.dot(weighted_sum, self.W_s) + self.b_s)  # [1, nc] in R(0,1)
+            y_pred = p_y_given_x_sentence  > 0.5  # note, max is just to coerce into proper shape
+            #element_weights = T.outer(a, p_y_given_x_sentence)  # [ne, nc]
 
             #p_y_given_x_sentence = T.nnet.sigmoid(T.dot(T.dot(a, h), self.W_s) + self.b_s)  # [1, nc] in R(0,1)
             #y_pred = T.max(p_y_given_x_sentence, axis=0) > 0.5  # note, max is just to coerce into proper shape
             #element_weights = T.outer(a, p_y_given_x_sentence)  # [ne, nc]
 
         elif pooling_method == 'attention2': # transform hidden nodes, sigmoid, then combine
-            a = T.nnet.softmax((T.dot(h, self.W_a) + self.b_a).T)  # [1, n_elements]: normalized vector
-            a_sum = T.sum(a)
-            temp = T.nnet.sigmoid(T.dot(h, self.W_s) + self.b_s)  # [ne x nc]
-            p_y_given_x_sentence = T.dot(a, temp)  # [1, nc] in R(0,1)
-            y_pred = T.max(p_y_given_x_sentence, axis=0) > 0.5  # note, max is just to coerce into proper shape
-            element_weights = T.repeat(a.T, nc, axis=1) * temp   # [ne, nc]
+            temp = T.dot(h, self.W_a) + self.b_a
+            # softmax?
+            a = T.exp(temp)/T.exp(temp).sum(axis=0, keepdims=True)  # [ne, minibatch_size, 1]: normalized over ne
+
+            #a = T.nnet.softmax((T.dot(h, self.W_a) + self.b_a))
+            a_sum = T.sum(a, axis=0)
+
+            temp = T.nnet.sigmoid(T.dot(h, self.W_s) + self.b_s)  # [ne, minibatch_size, nc]
+            p_y_given_x_sentence = T.sum(temp * T.repeat(a, nc, axis=2), axis=0)  # [minibatch_size, nc] in R(0,1)
+            y_pred = p_y_given_x_sentence > 0.5
+            #element_weights = T.repeat(a.T, nc, axis=1) * temp   # [ne, nc]
         elif pooling_method == 'mean':
             s = T.nnet.sigmoid((T.dot(h, self.W_s) + self.b_s))  # [n_elements, nc] in R(0,1)
             p_y_given_x_sentence = T.mean(s, axis=0)
@@ -363,14 +367,14 @@ class RNN(object):
         if extra_input_dims > 0:
             self.sentence_classify = theano.function(inputs=[idxs, mask, extra, minibatch_size], outputs=y_pred)
             self.sentence_train = theano.function(inputs=[idxs, mask, extra, y, lr, lr_emb_fac, minibatch_size],
-                                                  outputs=sentence_nll,
+                                                  outputs=[sentence_nll, a_sum],
                                                   updates=sentence_updates)
             #if pooling_method == 'attention1' or pooling_method == 'attention2':
             #    self.a_sum_check = theano.function(inputs=[idxs, extra], outputs=a_sum)
         else:
             self.sentence_classify = theano.function(inputs=[idxs, mask, minibatch_size], outputs=y_pred)
             self.sentence_train = theano.function(inputs=[idxs, mask, y, lr, lr_emb_fac, minibatch_size],
-                                                  outputs=sentence_nll,
+                                                  outputs=[sentence_nll, a_sum],
                                                   updates=sentence_updates)
             #if pooling_method == 'attention1' or pooling_method == 'attention2':
             #    self.a_sum_check = theano.function(inputs=[idxs, mask, minibatch_size], outputs=a_sum)
@@ -712,7 +716,7 @@ def main(params=None):
             n_train = len(train_lex)
 
             #for i, orig_x in enumerate(train_lex):
-            for i in range(0, n_train, ms):
+            for iteration, i in enumerate(range(0, n_train, ms)):
                 #orig_x = train_lex[i]
                 #n_words = len(orig_x)
                 #if params['add_OOV_noise']:
@@ -729,21 +733,19 @@ def main(params=None):
                                                                params['win'], i, ms, order,
                                                                params['add_OOV_noise'], params['OOV_noise_prob'])
 
-                if i == 0:
-                    print '\n'.join([' '.join([idx2words[idx] for idx in minibatch_x[:, k, 0].tolist()]) for
-                           k in range(ms)])
+                #if i == 0:
+                #    print '\n'.join([' '.join([idx2words[idx] for idx in minibatch_x[:, k, 0].tolist()]) for
+                #           k in range(ms)])
 
-                nll = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'],
+                nll, a_sum = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'],
                                 params['clr'],
                                 params['lr_emb_fac'], extra_input_dims, minibatch_extra)
-                if i < 20 or float(i/500.0) == float(i//500):
-                    print nll
-
                 #rnn.train(x, mask, y, params['win'], params['clr'], params['lr_emb_fac'],
                 #          extra_input_dims, extra)
                 print '[learning] epoch %i >> %2.2f%%' % (
                     e, (i + 1) * 100. / float(n_sentences)),
-                print 'completed in %.2f (sec) <<\r' % (timeit.default_timer() - tic),
+                print 'completed in %.2f (sec), nll = %.2f, a_sum = %.1f <<\r' % (timeit.default_timer() - tic,
+                                                                                  nll, np.max(a_sum)),
                 sys.stdout.flush()
 
                 if np.isnan(nll) or np.isinf(nll):
@@ -768,7 +770,7 @@ def main(params=None):
             #        print r, rnn.a_sum_check(np.asarray(contextwin(train_lex[r], params['win'])).astype('int32'))
 
             predictions_train = predict(n_train, params['classify_minibatch_size'], train_x_win, train_masks,
-                                         train_y, params['win'], extra_input_dims, train_extra, rnn)
+                                         train_y, params['win'], extra_input_dims, train_extra, rnn, order)
             n_valid = len(valid_lex)
             n_test = len(test_lex)
             predictions_valid = predict(n_valid, params['classify_minibatch_size'], valid_x_win, valid_masks,
@@ -826,7 +828,7 @@ def main(params=None):
             if best_f1 == 1.0:
                 break
 
-            if best_f1 == 0 and e > 10:
+            if best_f1 == 0 and e > 6:
                 break
 
         if params['save_model']:
@@ -873,7 +875,7 @@ def expand_x_with_context_win(lex, window_size):
 
     if window_size > 1:
         for i in range(n_items):
-            x_win[:, i, :] = np.array(contextwin(list(x[i, :]), window_size), type='int32')
+            x_win[:, i, :] = np.array(contextwin(list(x[i, :]), window_size), dtype='int32')
             #x_i =
         #x_win = [[np.array(w).astype('int32') for w in contextwin(list(x), window_size)] for x in lex]
     else:
@@ -920,11 +922,11 @@ def select_minibatch(x_win, masks, extra, y, window_size, i, minibatch_size, ord
 
     return minibatch_x, minibatch_mask, minibatch_extra, minibatch_y
 
-def predict(n, ms, x_win, masks, y, window_size, extra_input_dims, extra, rnn):
+def predict(n, ms, x_win, masks, y, window_size, extra_input_dims, extra, rnn, order=None):
     predictions = []
     for i in range(0, n, ms):
 
-        mb_x, mb_masks, mb_extra, mb_y = select_minibatch(x_win, masks, extra, y, window_size, i, ms, order=None)
+        mb_x, mb_masks, mb_extra, mb_y = select_minibatch(x_win, masks, extra, y, window_size, i, ms, order=order)
 
         if ms > 1:
 
