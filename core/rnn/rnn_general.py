@@ -114,7 +114,7 @@ class RNN(object):
         self.b_s = theano.shared(name='b_s', value=np.zeros(nc, dtype=theano.config.floatX))
 
         # temporary parameters
-        self.h_i_f = theano.shared(name='h_i_f', value=np.zeros(nh, dtype=theano.config.floatX))
+        #self.h_i_f = theano.shared(name='h_i_f', value=np.zeros(nh, dtype=theano.config.floatX))
 
         if bidirectional:
             self.h_i_r = theano.shared(name='h_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
@@ -263,10 +263,6 @@ class RNN(object):
             h_f, _ = theano.scan(fn=recurrence_basic, sequences=x,
                                  outputs_info=[T.alloc(np.array(0.), nh)],
                                  n_steps=x.shape[0])
-
-            #h_f, _ = theano.scan(fn=recurrence_basic, sequences=x,
-            #                     outputs_info=[self.h_i_f],
-            #                     n_steps=x.shape[0])
 
             if bidirectional:
                 h_r, _ = theano.scan(fn=recurrence_basic_reverse, sequences=x, outputs_info=[self.h_i_r],
@@ -424,12 +420,12 @@ def main(params=None):
         }
 
     # load params from a previous experiment
-    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_params.json')
-    #params['exp_name'] += '_no_h_i_f'
-    #params['n_hidden'] = int(params['n_hidden'])
-    #params['exp_name'] += '_ensemble_reuse_test'
-    #params['orig_T'] = 0.02
-    #params['tau'] = 0.005
+    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_mod.json')
+    params['exp_name'] += '_minibatch_16'
+    params['n_hidden'] = int(params['n_hidden'])
+    params['orig_T'] = 0.02
+    params['tau'] = 0.005
+
 
     reuser = None
     if params['reuse']:
@@ -545,8 +541,17 @@ def main(params=None):
                 y = train_y[i]
                 extra = train_extra[i]
 
+                if i == 0:
+                    print ' '.join([idx2words[w] for w in train_lex[i]])
+
+                if i == 0:
+                    print x
+                    print y
+
                 nll = rnn.train(x, y, params['win'], params['clr'], params['lr_emb_fac'],
                           extra_input_dims, extra)
+                if float(i/100.0) == float(i//100):
+                    print nll
                 print '[learning] epoch %i >> %2.2f%%' % (
                     e, (i + 1) * 100. / float(n_sentences)),
                 print 'completed in %.2f (sec) <<\r' % (timeit.default_timer() - tic),
