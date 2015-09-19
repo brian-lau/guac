@@ -174,16 +174,19 @@ class RNN(object):
         #    self.params += [self.h_i_r]
 
         # create an X object based on the size of the object at the index [elements, emb_dim * window]
-        idxs = T.imatrix()
+        idxs = T.tensor3('idxs', dtype='int32')
         if extra_input_dims:
             extra = T.tensor3('extra')
             extra_3d = extra.repeat(idxs.shape[0], axis=0)
             #x = T.concatenate([self.emb[idxs].reshape((idxs.shape[0], de*cs)),
             #                   T.repeat(extra, idxs.shape[0], axis=0)], axis=1)
-            x = T.concatenate([self.emb[idxs], extra_3d], axis=2)
+            #temp = T.printing.Print('temp')(self.emb[idxs].reshape((idxs.shape[0], idxs.shape[1], de*cs)))
+            temp = self.emb[idxs].reshape((idxs.shape[0], idxs.shape[1], de*cs))
+            x = T.concatenate([temp, extra_3d], axis=2)
         else:
             #x = T.printing.Print('x')(self.emb[idxs])
-            x = self.emb[idxs]  #[n_elements, minibatch_size, emb_dim] (?)
+            x = self.emb[idxs].reshape((idxs.shape[0], idxs.shape[1], de*cs))  # [n_elements, minibatch_size, emb_dim]
+            #x = self.emb[idxs]
 
 
         y = T.imatrix('y')
@@ -383,11 +386,11 @@ class RNN(object):
         ## make an array of these windows
         #words = map(lambda x: np.asarray(x).astype('int32'), cwords)
 
+        """
         for i in range(x.shape[0]):
             cwords = contextwin(list(x[i, :]), window_size)
             words = map(lambda q: np.asarray(q).astype('int32'), cwords)
             x[i, :] = words
-
 
         if len(x.shape) == 2:
             minibatch_size, seq_len = x.shape
@@ -398,6 +401,30 @@ class RNN(object):
             seq_len = x.shape[0]
             words = np.array(x).astype('int32').reshape((seq_len, minibatch_size))
             mask = np.array(mask).astype('int32').reshape((seq_len, minibatch_size, 1))
+
+        """
+
+        if len(x.shape) == 2:
+            minibatch_size, seq_len = x.shape
+            words = np.zeros([seq_len, minibatch_size, window_size], dtype='int32')
+            if window_size > 1:
+                for i in range(minibatch_size):
+                    cwords = contextwin(list(x[i, :]), window_size)
+                    words_i = np.array(cwords, dtype='int32')
+                    #[words_i.extend(j) for j in cwords]
+                    words[:, i, :] = words_i
+                x = words.T
+
+            words = np.array(x.T).astype('int32').reshape((seq_len, minibatch_size, window_size))
+            mask = np.array(mask.T).astype('int32').reshape((seq_len, minibatch_size, 1))
+        else:
+            minibatch_size = 1
+            seq_len = x.shape[0]
+            words = np.zeros([seq_len, minibatch_size, window_size], dtype='int32')
+            cwords = contextwin(x, window_size)
+            words[:, 0, :] = np.array(cwords, dtype='int32')
+            #words = np.array(words).astype('int32').reshape((seq_len, minibatch_size, window_size))
+            mask = np.array(mask).astype('int32').reshape((seq_len, 1, 1))
 
         if extra_input_dims > 0:
             extra = np.array(extra).astype('int32').reshape((1, minibatch_size, extra_input_dims))
@@ -416,28 +443,29 @@ class RNN(object):
         # if minibatch_size is 1, X = 1D list of indices, i.e. X.shape[0] = seq_len
         # if minibatch_size > 0, X = np.array([minibatch_size, seq_len])
 
-        if window_size > 1:
-            words = []
-            for i in range(x.shape[0]):
-                cwords = contextwin(list(x[i, :]), window_size)
-                print cwords
-                words += []
-                ## GAH!
-                words = map(lambda q: np.asarray(q).astype('int32'), cwords)
-                print words
-                x[i, :] = words
-
         if len(x.shape) == 2:
             minibatch_size, seq_len = x.shape
-            words = np.array(x.T).astype('int32')
+            words = np.zeros([seq_len, minibatch_size, window_size], dtype='int32')
+            if window_size > 1:
+                for i in range(minibatch_size):
+                    cwords = contextwin(list(x[i, :]), window_size)
+                    words_i = np.array(cwords, dtype='int32')
+                    #[words_i.extend(j) for j in cwords]
+                    words[:, i, :] = words_i
+                x = words.T
+
+            words = np.array(x.T).astype('int32').reshape((seq_len, minibatch_size, window_size))
             mask = np.array(mask.T).astype('int32').reshape((seq_len, minibatch_size, 1))
             y = np.array(y).astype('int32')
         else:
             minibatch_size = 1
             seq_len = x.shape[0]
-            words = np.array(x).astype('int32').reshape((seq_len, minibatch_size))
-            mask = np.array(mask).astype('int32').reshape((seq_len, minibatch_size, 1))
-            y = np.array(y).astype('int32').reshape((minibatch_size, len(y)))
+            words = np.zeros([seq_len, minibatch_size, window_size], dtype='int32')
+            cwords = contextwin(x, window_size)
+            words[:, 0, :] = np.array(cwords, dtype='int32')
+            #words = np.array(words).astype('int32').reshape((seq_len, minibatch_size, window_size))
+            mask = np.array(mask).astype('int32').reshape((seq_len, 1, 1))
+            y = np.array(y).astype('int32').reshape((1, len(y)))
 
         # train on these sentences and normalize
         if extra_input_dims > 0:
@@ -524,11 +552,9 @@ def main(params=None):
             'tau': 0.01
         }
 
-    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_params.json')
+    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_mod.json')
     params['exp_name'] += '_minibatch_16'
     params['n_hidden'] = int(params['n_hidden'])
-    params['minibatch_size'] = 4
-    params['classify_minibatch_size'] = 64
     params['orig_T'] = 0.02
     params['tau'] = 0.005
 
@@ -640,6 +666,8 @@ def main(params=None):
         dev_extra = [[dev_likes[i], dev_dem[i]] for i, t in enumerate(dev_items)]
         test_extra = [[test_likes[i], test_dem[i]] for i, t in enumerate(test_items)]
 
+        # Rejigger to convert x to contex win in advance
+        train_x_win = np.array(train_lex, dtype='int32')
 
         ### LOAD
         #rnn.load(output_dir)
@@ -813,6 +841,29 @@ def main(params=None):
             'status': STATUS_OK
             }
 
+
+def expand_x_with_context_win(x, minibatch_size, window_size):
+    if len(x.shape) == 2:
+        minibatch_size, seq_len = x.shape
+        words = np.zeros([seq_len, minibatch_size, window_size], dtype='int32')
+        if window_size > 1:
+            for i in range(minibatch_size):
+                cwords = contextwin(list(x[i, :]), window_size)
+                words_i = np.array(cwords, dtype='int32')
+                #[words_i.extend(j) for j in cwords]
+                words[:, i, :] = words_i
+            x = words.T
+        words = np.array(x.T).astype('int32').reshape((seq_len, minibatch_size, window_size))
+
+    else:
+        minibatch_size = 1
+        seq_len = x.shape[0]
+        words = np.zeros([seq_len, minibatch_size, window_size], dtype='int32')
+        cwords = contextwin(x, window_size)
+        words[:, 0, :] = np.array(cwords, dtype='int32')  # .reshape((seq_len, minibatch_size, window_size))
+        #words = np.array(words).astype('int32')
+
+    return words
 
 
 def predict(n, ms, x, masks, window_size, extra_input_dims, extra, rnn):
