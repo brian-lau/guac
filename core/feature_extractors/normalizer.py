@@ -1,9 +1,10 @@
 import re
 
-def fix_basic_punctuation(text, remove_angle_brackets=True, remove_double_quotes=True,
+def fix_basic_punctuation(text, lower=True, remove_angle_brackets=True, remove_double_quotes=True,
                           remove_backticks=True, split_on_dashes=True, replace_underscores=True,
                           sentence_split_on_slashes=True):
-    text = text.lower()
+    if lower:
+        text = text.lower()
     text = text.lstrip()
     text = text.rstrip()
     if remove_angle_brackets:
