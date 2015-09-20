@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -25,10 +25,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="rnn_minibatch.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rnn_minibatch.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.93119264">
+            <state vertical-scroll-proportion="0.0">
               <caret line="259" column="25" selection-start-line="259" selection-start-column="25" selection-end-line="259" selection-end-column="25" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
@@ -49,11 +49,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="13.851851">
-              <caret line="120" column="9" selection-start-line="120" selection-start-column="9" selection-end-line="120" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.5232274">
+              <caret line="114" column="27" selection-start-line="114" selection-start-column="27" selection-end-line="114" selection-end-column="27" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -146,10 +146,10 @@
         <option value="$PROJECT_DIR$/core/rnn/rnn_general.py" />
         <option value="$PROJECT_DIR$/core/experiment/reusable_holdout.py" />
         <option value="$PROJECT_DIR$/core/word2vec/train_vectors.py" />
-        <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
         <option value="$PROJECT_DIR$/core/word2vec/extract_relevant_vectors.py" />
         <option value="$PROJECT_DIR$/core/rnn/common.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
+        <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       </list>
     </option>
   </component>
@@ -736,12 +736,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00021" summary="got dis/like and dem/rep added to rnn general">
-      <created>1441246525604</created>
-      <option name="number" value="00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1441246525605</updated>
-    </task>
     <task id="LOCAL-00022" summary="got bayes opt working for RNNs">
       <created>1441334153027</created>
       <option name="number" value="00022" />
@@ -1030,7 +1024,13 @@
       <option name="project" value="LOCAL" />
       <updated>1442710473385</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="fixed a typo for bidirectional LSTM">
+      <created>1442711472518</created>
+      <option name="number" value="00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1442711472518</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1100,7 +1100,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="another day, another test" />
     <MESSAGE value="seem to have got the discrepancy resolved; added some additional output" />
     <MESSAGE value="fixed small input problem" />
     <MESSAGE value="found a bug in decrementing learning rate" />
@@ -1125,7 +1124,8 @@
     <MESSAGE value="updated bayes opt params" />
     <MESSAGE value="started to add a script to save a subset of the default word2vec vectors, but I'm not sure of the best way to do it..." />
     <MESSAGE value="reverted back to standard word2vec vectors" />
-    <option name="LAST_COMMIT_MESSAGE" value="reverted back to standard word2vec vectors" />
+    <MESSAGE value="fixed a typo for bidirectional LSTM" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed a typo for bidirectional LSTM" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1613,16 +1613,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="13.851851">
-          <caret line="120" column="9" selection-start-line="120" selection-start-column="9" selection-end-line="120" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/word2vec/extract_relevant_vectors.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1645,10 +1635,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.93119264">
+        <state vertical-scroll-proportion="0.0">
           <caret line="259" column="25" selection-start-line="259" selection-start-column="25" selection-end-line="259" selection-end-column="25" />
           <folding>
             <element signature="e#66#101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5232274">
+          <caret line="114" column="27" selection-start-line="114" selection-start-column="27" selection-end-line="114" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
