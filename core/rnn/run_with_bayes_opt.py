@@ -11,6 +11,7 @@ import numpy as np
 from hyperopt import fmin, tpe, hp, Trials, space_eval
 
 import rnn_general
+import rnn_minibatch
 from ..util import defines
 from ..util import file_handling as fh
 
@@ -24,10 +25,9 @@ space = {
     'init': {
         'vectors': hp.choice('vectors', [
             {'vectors': 'word2vec'},
-            {'vectors': 'anes', 'size': hp.choice('size', [100, 300])},
-            {'vectors': 'anes_plus_reddit', 'size': hp.choice('size', [100, 300])},
-            {'vectors': 'reddit', 'size': hp.choice('size', [100, 300])}
-
+            {'vectors': 'anes', 'a_size': hp.choice('a_size', [300])},
+            {'vectors': 'reddit', 'r_size': hp.choice('r_size', [300])},
+            {'vectors': 'anes_plus_reddit', 'apr_size': hp.choice('apr_size', [300])}
         ]
         ),
         'add_OOV': hp.choice('add_OOV', [True, False]),
@@ -70,15 +70,18 @@ def call_experiment(args):
     params['test_fold'] = 0
     params['min_doc_thresh'] = args['input']['min_doc_thresh']
     params['initialize_word_vectors'] = True
-    params['word2vec_dim'] = int(args['init']['vectors']['size'])
     if args['init']['vectors']['vectors'] == 'word2vec':
         params['vectors'] = 'default_word2vec'
+        params['word2vec_dim'] = 300
     elif args['init']['vectors']['vectors'] == 'anes':
-        params['vectors'] = 'anes_word2vec_' + str(args['init']['vectors']['size'])
+        params['vectors'] = 'anes_word2vec_' + str(args['init']['vectors']['a_size'])
+        params['word2vec_dim'] = int(args['init']['vectors']['a_size'])
     elif args['init']['vectors']['vectors'] == 'reddit':
-        params['vectors'] = 'reddit_word2vec_' + str(args['init']['vectors']['size'])
+        params['vectors'] = 'reddit_word2vec_' + str(args['init']['vectors']['r_size'])
+        params['word2vec_dim'] = int(args['init']['vectors']['r_size'])
     elif args['init']['vectors']['vectors'] == 'anes_plus_reddit':
-        params['vectors'] = 'anes_plus_reddit_word2vec_' + str(args['init']['vectors']['size'])
+        params['vectors'] = 'anes_plus_reddit_word2vec_' + str(args['init']['vectors']['apr_size'])
+        params['word2vec_dim'] = int(args['init']['vectors']['apr_size'])
 
     params['add_OOV'] = args['init']['add_OOV']
     params['init_scale'] = args['init']['init_scale']
@@ -86,7 +89,7 @@ def call_experiment(args):
     params['train_embeddings'] = args['arch']['train_embeddings']
     params['add_DRLD'] = args['arch']['add_DRLD']
     params['rnn_type'] = args['arch']['unit']
-    params['n_hidden'] = args['arch']['n_hidden']
+    params['n_hidden'] = int(args['arch']['n_hidden'])
     params['pooling_method'] = args['arch']['pooling_method']
     if args['arch']['bidirectional']['bidirectional']:
         params['bidirectional'] = True
@@ -100,15 +103,16 @@ def call_experiment(args):
     params['decay_factor'] = args['training']['decay_factor']
     if args['training']['OOV_noise']['OOV_noise']:
         params['add_OOV_noise'] = True
-        params['OOV_noise_prob'] = args['training']['OOV_noise']['noise_prob']
+        params['OOV_noise_prob'] = float(args['training']['OOV_noise']['noise_prob'])
     else:
         params['add_OOV_noise'] = False
+        params['OOV_noise_prob'] = 0.0
     params['minibatch_size'] = int(args['training']['minibatch_size'])
     params['classify_minibatch_size'] = int(args['training']['classify_minibatch_size'])
 
     params['ensemble'] = False
     params['n_dev_folds'] = 1
-    params['n_epochs'] = 50
+    params['n_epochs'] = 2
 
     if reuse:
         params['reuse'] = True
@@ -136,11 +140,12 @@ def call_experiment(args):
 
     params['exp_name'] = name
 
-    result = rnn_general.main(params)
+    result = rnn_minibatch.main(params)
 
     with codecs.open(output_filename, 'a') as output_file:
         output_file.write(str(datetime.datetime.now()) + '\t' + name + '\t' +
-                          str(-result['loss']) + '\t' + str(result['final_test_f1']) + '\t' + params['lr'] + '\n')
+                          str(-result['loss']) + '\t' + str(result['final_test_f1']) + '\t' +
+                          str(result['true_valid_f1s']) + '\t' + str(params['lr']) + '\n')
 
     print result
     return result

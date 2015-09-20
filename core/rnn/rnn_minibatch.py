@@ -543,7 +543,7 @@ def main(params=None):
             'n_dev_folds': 1,
             'min_doc_thresh': 1,
             'initialize_word_vectors': True,
-            'vectors': 'anes_word2vec',  # default_word2vec, anes_word2vec_300 ...
+            'vectors': 'default_word2vec',  # default_word2vec, anes_word2vec_300 ...
             'word2vec_dim': 300,
             'init_scale': 0.2,
             'add_OOV': True,
@@ -573,15 +573,11 @@ def main(params=None):
             'tau': 0.01
         }
 
-    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_mod.json')
-    params['exp_name'] += '_minibatch_16'
-    params['n_hidden'] = int(params['n_hidden'])
-    params['orig_T'] = 0.02
-    params['tau'] = 0.005
-
-    reuser = None
-    if params['reuse']:
-        reuser = reusable_holdout.ReuseableHoldout(T=params['orig_T'], tau=params['tau'])
+    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_mod.json')
+    #params['exp_name'] += '_minibatch_16'
+    #params['n_hidden'] = int(params['n_hidden'])
+    #params['orig_T'] = 0.02
+    #params['tau'] = 0.005
 
 
     keys = params.keys()
@@ -593,12 +589,17 @@ def main(params=None):
     np.random.seed(params['seed'])
     random.seed(params['seed'])
 
+    reuser = None
+    if params['reuse']:
+        reuser = reusable_holdout.ReuseableHoldout(T=params['orig_T'], tau=params['tau'])
+
     datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
 
     np.random.seed(params['seed'])
     random.seed(params['seed'])
 
     best_valid_f1s = []
+    best_true_valid_f1s = []
     best_test_f1s = []
 
     test_prediction_arrays = []
@@ -751,8 +752,9 @@ def main(params=None):
                 if np.isnan(nll) or np.isinf(nll):
                     return {'loss': nll,
                             'final_test_f1': 0,
-                            'valid_f1s': [0],
-                            'test_f1s': [0],
+                            'valid_f1s': 0,
+                            'true_valid_f1s': 0,
+                            'test_f1s': 0,
                             'status': STATUS_OK
                             }
 
@@ -790,9 +792,6 @@ def main(params=None):
             train_f1 = common.calc_mean_f1(predictions_train, train_y)
             test_f1 = common.calc_mean_f1(predictions_test, test_y)
             valid_f1 = common.calc_mean_f1(predictions_valid, valid_y)
-
-            if reuser is not None:
-                valid_f1 = reuser.mask_value(valid_f1, train_f1)
 
             question_f1s = []
             question_pps = []
@@ -845,8 +844,15 @@ def main(params=None):
               'best test F1', params['te_f1'],
               'with the model', output_dir)
 
-        best_valid_f1s.append(params['v_f1'])
+
+        best_true_valid_f1s.append(params['v_f1'])
         best_test_f1s.append(params['te_f1'])
+        if reuser is not None:
+            best_valid_f1 = reuser.mask_value(params['v_f1'], params['tr_f1'])
+        else:
+            best_valid_f1 = params['v_f1']
+        best_valid_f1s.append(best_valid_f1)
+
 
         test_prediction_arrays.append(np.array(best_test_predictions, dtype=int))
 
@@ -863,6 +869,7 @@ def main(params=None):
     return {'loss': -np.median(best_valid_f1s),
             'final_test_f1': final_test_f1,
             'valid_f1s': best_valid_f1s,
+            'true_valid_f1s': best_true_valid_f1s,
             'test_f1s': best_test_f1s,
             'status': STATUS_OK
             }

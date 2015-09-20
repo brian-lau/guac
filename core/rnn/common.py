@@ -100,8 +100,10 @@ def load_embeddings(params, words2idx):
         if params['vectors'] == 'default_word2vec':
             # standard word2vec
             print "Loading standard word2vec vectors"
-            vector_file = defines.word2vec_vectors_filename
-            vectors = gensim.models.Word2Vec.load_word2vec_format(vector_file, binary=True)
+            #vector_file = defines.word2vec_vectors_filename
+            #vectors = gensim.models.Word2Vec.load_word2vec_format(vector_file, binary=True)
+            vector_file = fh.make_filename(defines.vectors_dir, 'default_word2vec_300', 'csv')
+            vectors = fh.read_json(vector_file)
         else:
             # my word2vec vectors
             print "Loading custom word2vec vectors"
@@ -125,7 +127,7 @@ def load_embeddings(params, words2idx):
             elif w == '__OOV__' and params['add_OOV']:
                 initial_embeddings[i, params['word2vec_dim']] = 1
             else:
-                print "no vector for", w
+                #print "no vector for", w
                 missing_count += 1
                 initial_embeddings[i, :params['word2vec_dim']] = 0.05 * \
                     np.random.uniform(-1.0, 1.0, (1, params['word2vec_dim']))
