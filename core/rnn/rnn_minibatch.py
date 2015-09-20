@@ -257,7 +257,7 @@ class RNN(object):
                                                       T.alloc(np.array(0.), minibatch_size, nh)],
                                         n_steps=x.shape[0])
             if bidirectional:
-                [h_f, c_f], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=[x, mask_3d],
+                [h_r, c_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=[x, mask_3d],
                                             outputs_info=[T.alloc(np.array(0.), minibatch_size, nh),
                                                           T.alloc(np.array(0.), minibatch_size, nh)],
                                             go_backwards=True)
