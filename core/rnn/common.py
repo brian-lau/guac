@@ -100,10 +100,10 @@ def load_embeddings(params, words2idx):
         if params['vectors'] == 'default_word2vec':
             # standard word2vec
             print "Loading standard word2vec vectors"
-            #vector_file = defines.word2vec_vectors_filename
-            #vectors = gensim.models.Word2Vec.load_word2vec_format(vector_file, binary=True)
-            vector_file = fh.make_filename(defines.vectors_dir, 'default_word2vec_300', 'csv')
-            vectors = fh.read_json(vector_file)
+            vector_file = defines.word2vec_vectors_filename
+            vectors = gensim.models.Word2Vec.load_word2vec_format(vector_file, binary=True)
+            #vector_file = fh.make_filename(defines.vectors_dir, 'default_word2vec_300', 'csv')
+            #vectors = fh.read_json(vector_file)
         else:
             # my word2vec vectors
             print "Loading custom word2vec vectors"
