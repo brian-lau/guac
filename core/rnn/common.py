@@ -63,6 +63,57 @@ def load_data(datasets, test_fold, dev_subfold, min_doc_thresh):
 
     return data, words2idx, items, all_labels
 
+
+def load_char_data(datasets, test_fold, dev_subfold):
+    train_items = []
+    dev_items = []
+    test_items = []
+    label_list = []
+
+    # load labels and train/test/split
+    for d in datasets:
+        train_items.extend(ds.get_train_documents(d, test_fold, dev_subfold))
+        dev_items.extend(ds.get_dev_documents(d, test_fold, dev_subfold))
+        test_items.extend(ds.get_test_documents(d, test_fold))
+        label_list.append(labels.get_dataset_labels(d))
+
+    items = (train_items, dev_items, test_items)
+
+    all_labels = pd.concat(label_list, axis=0)
+
+    basename = 'chars_rnn'
+    all_lex_filename = fh.make_filename(defines.data_rnn_dir, basename, 'json')
+
+    # load word indices for all sentences
+    all_lex = fh.read_json(fh.make_filename(defines.data_rnn_dir, basename + '_indices', 'json'))
+    # load a vocabulary index
+    words2idx = fh.read_json(fh.make_filename(defines.data_rnn_dir, basename + '_vocab', 'json'))
+
+    # build a train/test/validation set from the sentences
+    train_lex = []
+    train_y = []
+    for item in train_items:
+        train_lex.append(np.array(all_lex[item]).astype('int32'))
+        train_y.append(np.array(all_labels.loc[item]).astype('int32'))
+    valid_lex = []
+    valid_y = []
+    for item in dev_items:
+        valid_lex.append(np.array(all_lex[item]).astype('int32'))
+        valid_y.append(np.array(all_labels.loc[item]).astype('int32'))
+    test_lex = []
+    test_y = []
+    for item in test_items:
+        test_lex.append(np.array(all_lex[item]).astype('int32'))
+        test_y.append(np.array(all_labels.loc[item]).astype('int32'))
+
+    # invert the vocabulary index
+
+    data = ((train_lex, train_y), (valid_lex, valid_y), (test_lex, test_y))
+
+    return data, words2idx, items, all_labels
+
+
+
 # this creates masks such that all input sequences are the same length
 def prepare_data(train_x, valid_x, test_x):
 

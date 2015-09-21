@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/word_vectors/make_char_vectors.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/rnn/rnn_char.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/core/rnn/bidirectional_rnn.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/core/rnn/rnn_gru_multitask.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/core/rnn/rnn_lstm_multitask.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/core/rnn/rnn_multitask_attention.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/word2vec/__init__.py" afterPath="$PROJECT_DIR$/core/word_vectors/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/word2vec/extract_relevant_vectors.py" afterPath="$PROJECT_DIR$/core/word_vectors/extract_relevant_vectors.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/word2vec/train_vectors.py" afterPath="$PROJECT_DIR$/core/word_vectors/train_vectors.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/word2vec/word2vec.iml" afterPath="$PROJECT_DIR$/core/word_vectors/word2vec.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/feature_extractors/normalizer.py" afterPath="$PROJECT_DIR$/core/feature_extractors/normalizer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/common.py" afterPath="$PROJECT_DIR$/core/rnn/common.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_char.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_char.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -39,7 +30,7 @@
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="259" column="25" selection-start-line="259" selection-start-column="25" selection-end-line="259" selection-end-column="25" />
+              <caret line="504" column="12" selection-start-line="504" selection-start-column="8" selection-end-line="504" selection-end-column="12" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
               </folding>
@@ -50,8 +41,8 @@
       <file leaf-file-name="rnn_char.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_char.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-15.416667">
-              <caret line="47" column="18" selection-start-line="47" selection-start-column="18" selection-end-line="47" selection-end-column="18" />
+            <state vertical-scroll-proportion="0.59615386">
+              <caret line="552" column="27" selection-start-line="552" selection-start-column="27" selection-end-line="552" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -65,38 +56,6 @@
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="make_char_vectors.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/word_vectors/make_char_vectors.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="normalize_text.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/preprocessing/normalize_text.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="normalizer.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/feature_extractors/normalizer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="8" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -117,7 +76,7 @@
         <entry file="file://$PROJECT_DIR$/core/rnn/common.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="37" column="34" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
+              <caret line="66" column="18" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="18" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -151,7 +110,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/core/experiment/evaluation.py" />
         <option value="$PROJECT_DIR$/core/stanford/preprocess.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_anugrams.py" />
@@ -195,13 +153,14 @@
         <option value="$PROJECT_DIR$/core/experiment/reusable_holdout.py" />
         <option value="$PROJECT_DIR$/core/word2vec/train_vectors.py" />
         <option value="$PROJECT_DIR$/core/word2vec/extract_relevant_vectors.py" />
-        <option value="$PROJECT_DIR$/core/rnn/common.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
         <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
         <option value="$PROJECT_DIR$/core/word2vec/make_char_vectors.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/normalizer.py" />
         <option value="$PROJECT_DIR$/core/preprocessing/normalize_text.py" />
         <option value="$PROJECT_DIR$/core/word_vectors/make_char_vectors.py" />
+        <option value="$PROJECT_DIR$/core/rnn/common.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_char.py" />
       </list>
     </option>
   </component>
@@ -806,12 +765,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00023" summary="reset some testing params to normal values">
-      <created>1441337111724</created>
-      <option name="number" value="00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1441337111724</updated>
-    </task>
     <task id="LOCAL-00024" summary="fixed type">
       <created>1441338253842</created>
       <option name="number" value="00024" />
@@ -1100,12 +1053,18 @@
       <option name="project" value="LOCAL" />
       <updated>1442711540524</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="added a way to extract character indices; deleted some old rnns that have now been generalized">
+      <created>1442782089720</created>
+      <option name="number" value="00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1442782089720</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="1455" y="114" width="1246" height="861" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1123,7 +1082,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35500652" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35500652" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1170,7 +1129,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="fixed small input problem" />
     <MESSAGE value="found a bug in decrementing learning rate" />
     <MESSAGE value="removed debugging line" />
     <MESSAGE value="added early quit for no gains" />
@@ -1195,7 +1153,8 @@
     <MESSAGE value="reverted back to standard word2vec vectors" />
     <MESSAGE value="fixed a typo for bidirectional LSTM" />
     <MESSAGE value="reset a couple of settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="reset a couple of settings" />
+    <MESSAGE value="added a way to extract character indices; deleted some old rnns that have now been generalized" />
+    <option name="LAST_COMMIT_MESSAGE" value="added a way to extract character indices; deleted some old rnns that have now been generalized" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1252,7 +1211,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/core/rnn/common.py</url>
-          <line>179</line>
+          <line>230</line>
           <option name="timeStamp" value="65" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
@@ -1529,6 +1488,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1650,16 +1610,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.814815">
-          <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/feature_extractors/tokenizer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
@@ -1676,16 +1626,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/common.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="37" column="34" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/preprocessing/normalize_text.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1694,19 +1634,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
+    <entry file="file://$PROJECT_DIR$/core/rnn/common.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="259" column="25" selection-start-line="259" selection-start-column="25" selection-end-line="259" selection-end-column="25" />
+          <caret line="66" column="18" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="18" />
           <folding>
-            <element signature="e#66#101#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/word_vectors/make_char_vectors.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="0.22435898">
           <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
@@ -1714,10 +1654,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.814815">
+          <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="504" column="12" selection-start-line="504" selection-start-column="8" selection-end-line="504" selection-end-column="12" />
+          <folding>
+            <element signature="e#66#101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_char.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.416667">
-          <caret line="47" column="18" selection-start-line="47" selection-start-column="18" selection-end-line="47" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.59615386">
+          <caret line="552" column="27" selection-start-line="552" selection-start-column="27" selection-end-line="552" selection-end-column="27" />
           <folding />
         </state>
       </provider>

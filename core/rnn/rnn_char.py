@@ -538,31 +538,31 @@ def main(params=None):
 
     if params is None:
         params = {
-            'exp_name': 'minibatch_test',
+            'exp_name': 'car_test',
             'test_fold': 0,
             'n_dev_folds': 1,
             'min_doc_thresh': 1,
             'initialize_word_vectors': True,
-            'vectors': 'default_word2vec',  # default_word2vec, anes_word2vec_300 ...
-            'word2vec_dim': 300,
+            'vectors': 'char',  # default_word2vec, anes_word2vec_300 ...
+            'word2vec_dim': 93,
             'init_scale': 0.2,
-            'add_OOV': True,
+            'add_OOV': False,
             'win': 1,                   # size of context window
             'add_DRLD': False,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
-            'n_hidden': 10,             # size of hidden units
-            'pooling_method': 'attention1',    # max, mean, or attention1/2
-            'bidirectional': False,
+            'n_hidden': 93,             # size of hidden units
+            'pooling_method': 'max',    # max, mean, or attention1/2
+            'bidirectional': True,
             'bi_combine': 'concat',        # concat, max, or mean
             'train_embeddings': True,
-            'lr': 0.02,                  # learning rate
+            'lr': 0.1,                  # learning rate
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 40,
+            'n_epochs': 100,
             'add_OOV_noise': False,
-            'OOV_noise_prob': 0.01,
-            'minibatch_size': 4,
+            'OOV_noise_prob': 0.00,
+            'minibatch_size': 1,
             'classify_minibatch_size': 1,
             'ensemble': False,
             'save_model': True,
@@ -613,8 +613,7 @@ def main(params=None):
 
         output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
 
-        all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], dev_fold,
-                                                                  params['min_doc_thresh'])
+        all_data, words2idx, items, all_labels = common.load_char_data(datasets, params['test_fold'], dev_fold)
         train_xy, valid_xy, test_xy = all_data
         train_lex, train_y = train_xy
         valid_lex, valid_y = valid_xy
@@ -657,8 +656,7 @@ def main(params=None):
         words_test = [map(lambda x: idx2words[x], w) for w in test_lex]
 
         if params['initialize_word_vectors']:
-            initial_embeddings = common.load_embeddings(params, words2idx)
-            OOV_index = words2idx['__OOV__']
+            initial_embeddings = np.eye(vocsize)
             emb_dim = initial_embeddings.shape[1]
             print 'emb_dim =', emb_dim
         else:
