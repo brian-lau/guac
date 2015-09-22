@@ -154,7 +154,7 @@ def call_experiment(args):
         ner = 'ngrams,source=NER'
         feature_list.append(ner)
     if args['features']['brown_vectors']['use']:
-        brown = 'brown,clusters=d,binarize=' + args['features']['brown_vectors']['bc_binarize']
+        brown = 'brown,clusters=anes,binarize=' + args['features']['brown_vectors']['bc_binarize']
         feature_list.append(brown)
 
     datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
@@ -222,7 +222,8 @@ def main():
     if model == 'LR':
         space['model'] = {
             'model': 'LR',
-            'regularization': hp.choice('regularization', ['l1', 'l2'])
+            #'regularization': hp.choice('regularization', ['l1', 'l2'])
+            'regularization': 'l1'
         }
     elif model == 'SVM':
         space['model'] = {
