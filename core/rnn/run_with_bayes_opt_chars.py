@@ -71,7 +71,7 @@ def call_experiment(args):
     if params['initialize_word_vectors']:
         params['vectors'] = 'chars_word2vec_25'
     else:
-        params['vectors'] = 'chars_word2vec' + str(args['init']['initialize_vectors']['size'])
+        params['vectors'] = 'chars_word2vec_' + str(int(args['init']['initialize_vectors']['size']))
     params['add_OOV_dim'] = False
     params['init_scale'] = args['init']['init_scale']
     params['win'] = args['arch']['window']
