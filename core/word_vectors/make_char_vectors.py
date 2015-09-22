@@ -5,11 +5,18 @@ from ..util import file_handling as fh
 input_filename = defines.data_raw_text_file
 data = fh.read_json(input_filename)
 
+output_dir = fh.makedirs(defines.resources_clusters_dir, 'input')
+output_filename = fh.make_filename(output_dir, 'chars', 'txt')
+
 char_lists = {}
 for key, line in data.items():
     #line = normalizer.fix_basic_punctuation(line)
     chars = list(line)
     char_lists[key] = chars
+
+with open(output_filename, 'w') as output_file:
+    for key, chars in char_lists.items():
+        output_file.write(' '.join(chars) + '\n')
 
 char_set = set()
 for key, response in char_lists.items():

@@ -30,7 +30,7 @@ space = {
             {'vectors': 'anes_plus_reddit', 'apr_size': hp.choice('apr_size', [300])}
         ]
         ),
-        'add_OOV': hp.choice('add_OOV', [True, False]),
+        'add_OOV_dim': hp.choice('add_OOV_dim', [True, False]),
         'init_scale': hp.uniform('init_scale', 0, 1)
 
         },
@@ -71,19 +71,15 @@ def call_experiment(args):
     params['min_doc_thresh'] = args['input']['min_doc_thresh']
     params['initialize_word_vectors'] = True
     if args['init']['vectors']['vectors'] == 'word2vec':
-        params['vectors'] = 'default_word2vec'
-        params['word2vec_dim'] = 300
+        params['vectors'] = 'default_word2vec_300'
     elif args['init']['vectors']['vectors'] == 'anes':
         params['vectors'] = 'anes_word2vec_' + str(args['init']['vectors']['a_size'])
-        params['word2vec_dim'] = int(args['init']['vectors']['a_size'])
     elif args['init']['vectors']['vectors'] == 'reddit':
         params['vectors'] = 'reddit_word2vec_' + str(args['init']['vectors']['r_size'])
-        params['word2vec_dim'] = int(args['init']['vectors']['r_size'])
     elif args['init']['vectors']['vectors'] == 'anes_plus_reddit':
         params['vectors'] = 'anes_plus_reddit_word2vec_' + str(args['init']['vectors']['apr_size'])
-        params['word2vec_dim'] = int(args['init']['vectors']['apr_size'])
 
-    params['add_OOV'] = args['init']['add_OOV']
+    params['add_OOV_dim'] = args['init']['add_OOV_dim']
     params['init_scale'] = args['init']['init_scale']
     params['win'] = args['arch']['window']
     params['train_embeddings'] = args['arch']['train_embeddings']

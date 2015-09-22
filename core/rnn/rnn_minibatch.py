@@ -538,32 +538,31 @@ def main(params=None):
 
     if params is None:
         params = {
-            'exp_name': 'minibatch_test',
+            'exp_name': 'char_test',
             'test_fold': 0,
             'n_dev_folds': 1,
             'min_doc_thresh': 1,
             'initialize_word_vectors': True,
-            'vectors': 'default_word2vec',  # default_word2vec, anes_word2vec_300 ...
-            'word2vec_dim': 300,
+            'vectors': 'chars_word2vec_25',  # default_word2vec_300, anes_word2vec_300, chars_word2vec_25, eye_1 ...
             'init_scale': 0.2,
-            'add_OOV': True,
+            'add_OOV_dim': True,
             'win': 1,                   # size of context window
             'add_DRLD': False,
             'rnn_type': 'basic',        # basic, GRU, or LSTM
-            'n_hidden': 10,             # size of hidden units
+            'n_hidden': 50,             # size of hidden units
             'pooling_method': 'attention1',    # max, mean, or attention1/2
             'bidirectional': False,
             'bi_combine': 'concat',        # concat, max, or mean
             'train_embeddings': True,
-            'lr': 0.02,                  # learning rate
+            'lr': 0.1,                  # learning rate
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 40,
+            'n_epochs': 100,
             'add_OOV_noise': False,
             'OOV_noise_prob': 0.01,
-            'minibatch_size': 4,
-            'classify_minibatch_size': 1,
+            'minibatch_size': 16,
+            'classify_minibatch_size': 64,
             'ensemble': False,
             'save_model': True,
             'seed': 42,
@@ -579,7 +578,6 @@ def main(params=None):
     #params['orig_T'] = 0.02
     #params['tau'] = 0.005
 
-
     keys = params.keys()
     keys.sort()
     for key in keys:
@@ -588,6 +586,10 @@ def main(params=None):
     # seed the random number generators
     np.random.seed(params['seed'])
     random.seed(params['seed'])
+
+    vector_type = params['vectors'].split('_')[0]
+    params['word2vec_dim'] = int(params['vectors'].split('_')[-1])
+
 
     reuser = None
     if params['reuse']:
@@ -614,8 +616,11 @@ def main(params=None):
 
         output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
 
-        all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], dev_fold,
-                                                                  params['min_doc_thresh'])
+        if vector_type == 'chars':
+            all_data, words2idx, items, all_labels = common.load_char_data(datasets, params['test_fold'], dev_fold)
+        else:
+            all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], dev_fold,
+                                                                      params['min_doc_thresh'])
         train_xy, valid_xy, test_xy = all_data
         train_lex, train_y = train_xy
         valid_lex, valid_y = valid_xy
@@ -650,18 +655,17 @@ def main(params=None):
         codes = all_labels.columns
         n_items, n_codes = all_labels.shape
 
-
-
         # get the words in the sentences for the test and validation sets
         words_valid = [map(lambda x: idx2words[x], w) for w in valid_lex]
         groundtruth_test = test_y[:]
         words_test = [map(lambda x: idx2words[x], w) for w in test_lex]
 
-        if params['initialize_word_vectors']:
-            initial_embeddings = common.load_embeddings(params, words2idx)
-            OOV_index = words2idx['__OOV__']
+        if vector_type == 'eye':
+            initial_embeddings = np.eye(vocsize)
             emb_dim = initial_embeddings.shape[1]
-            print 'emb_dim =', emb_dim
+        elif params['initialize_word_vectors']:
+            initial_embeddings = common.load_embeddings(params, words2idx)
+            emb_dim = initial_embeddings.shape[1]
         else:
             initial_embeddings = None
             emb_dim = params['word2vec_dim']
@@ -829,7 +833,7 @@ def main(params=None):
             if best_f1 == 1.0:
                 break
 
-            if best_f1 == 0 and e > 6:
+            if best_f1 == 0 and e > 7:
                 break
 
         if params['save_model']:

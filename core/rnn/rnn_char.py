@@ -648,8 +648,6 @@ def main(params=None):
         codes = all_labels.columns
         n_items, n_codes = all_labels.shape
 
-
-
         # get the words in the sentences for the test and validation sets
         words_valid = [map(lambda x: idx2words[x], w) for w in valid_lex]
         groundtruth_test = test_y[:]
@@ -753,6 +751,7 @@ def main(params=None):
                             'valid_f1s': 0,
                             'true_valid_f1s': 0,
                             'test_f1s': 0,
+                            'train_f1s': 0,
                             'status': STATUS_OK
                             }
 

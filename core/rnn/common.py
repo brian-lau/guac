@@ -148,7 +148,7 @@ def load_embeddings(params, words2idx):
     initial_embeddings = None
     vocsize = len(words2idx.keys())
     if params['initialize_word_vectors']:
-        if params['vectors'] == 'default_word2vec':
+        if params['vectors'] == 'default_word2vec_300':
             # standard word2vec
             print "Loading standard word2vec vectors"
             vector_file = defines.word2vec_vectors_filename
@@ -166,7 +166,7 @@ def load_embeddings(params, words2idx):
         missing_count = 0
         total_count = 0
         total_emb_dims = params['word2vec_dim']
-        if params['add_OOV']:
+        if params['add_OOV_dim']:
             total_emb_dims += 1
         initial_embeddings = np.zeros([vocsize, total_emb_dims], dtype=float)
         for w in words2idx.keys():
@@ -175,7 +175,7 @@ def load_embeddings(params, words2idx):
             if w in vectors:
                 initial_embeddings[i, :params['word2vec_dim']] = vectors[w]
             # create a separate orthogonal dimension for OOV
-            elif w == '__OOV__' and params['add_OOV']:
+            elif w == '__OOV__' and params['add_OOV_dim']:
                 initial_embeddings[i, params['word2vec_dim']] = 1
             else:
                 #print "no vector for", w
