@@ -157,7 +157,8 @@ def call_experiment(args):
         brown = 'brown,clusters=anes,binarize=' + args['features']['brown_vectors']['bc_binarize']
         feature_list.append(brown)
 
-    datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
+    #datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
+    datasets = ['MIP-Personal-1', 'MIP-Personal-2', 'MIP-Political-1', 'MIP-Political-2']
 
     if reuse:
         kwargs['reuse'] = True
