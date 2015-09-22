@@ -759,7 +759,7 @@ def main(params=None):
                     if best_f1 > 0:
                         break
                     else:
-                        return {'loss': -1.0,
+                        return {'loss': 1.0,
                                 'final_test_f1': 0,
                                 'valid_f1s': 0,
                                 'true_valid_f1s': 0,
