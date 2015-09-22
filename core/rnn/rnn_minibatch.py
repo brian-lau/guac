@@ -601,6 +601,7 @@ def main(params=None):
     best_valid_f1s = []
     best_true_valid_f1s = []
     best_test_f1s = []
+    best_train_f1s = []
 
     test_prediction_arrays = []
 
@@ -754,6 +755,7 @@ def main(params=None):
                             'final_test_f1': 0,
                             'valid_f1s': 0,
                             'true_valid_f1s': 0,
+                            'train_f1s': 0,
                             'test_f1s': 0,
                             'status': STATUS_OK
                             }
@@ -847,6 +849,7 @@ def main(params=None):
 
         best_true_valid_f1s.append(params['v_f1'])
         best_test_f1s.append(params['te_f1'])
+        best_train_f1s.append(params['tr_f1'])
         if reuser is not None:
             best_valid_f1 = reuser.mask_value(params['v_f1'], params['tr_f1'])
         else:
@@ -869,6 +872,7 @@ def main(params=None):
     return {'loss': -np.median(best_valid_f1s),
             'final_test_f1': final_test_f1,
             'valid_f1s': best_valid_f1s,
+            'train_f1s': best_train_f1s,
             'true_valid_f1s': best_true_valid_f1s,
             'test_f1s': best_test_f1s,
             'status': STATUS_OK

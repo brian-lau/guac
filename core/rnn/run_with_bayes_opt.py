@@ -145,7 +145,8 @@ def call_experiment(args):
     with codecs.open(output_filename, 'a') as output_file:
         output_file.write(str(datetime.datetime.now()) + '\t' + name + '\t' +
                           str(-result['loss']) + '\t' + str(result['final_test_f1']) + '\t' +
-                          str(result['true_valid_f1s']) + '\t' + str(params['lr']) + '\n')
+                          str(result['true_valid_f1s']) + '\t' + str(result['train_f1s']) +
+                          '\t' + str(params['lr']) + '\n')
 
     print result
     return result
@@ -176,7 +177,7 @@ def main():
         space['training']['learning_rate'] = hp.loguniform('learning_rate', -4, -1),
     elif model == 'GRU':
         space['arch']['unit'] = 'GRU'
-        space['arch']['n_hidden'] = hp.quniform('n_hidden', 5, 200, 5)
+        space['arch']['n_hidden'] = hp.quniform('n_hidden', 5, 150, 5)
         space['training']['learning_rate'] = hp.loguniform('learning_rate', -5, -1.5),
     elif model == 'LSTM':
         space['arch']['unit'] = 'LSTM'
