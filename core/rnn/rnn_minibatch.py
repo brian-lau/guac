@@ -542,27 +542,27 @@ def main(params=None):
             'test_fold': 0,
             'n_dev_folds': 1,
             'min_doc_thresh': 1,
-            'initialize_word_vectors': True,
-            'vectors': 'chars_word2vec_25',  # default_word2vec_300, anes_word2vec_300, chars_word2vec_25, eye_1 ...
+            'initialize_word_vectors': False,
+            'vectors': 'chars_word2vec_40',  # default_word2vec_300, anes_word2vec_300, chars_word2vec_25, eye_1 ...
             'init_scale': 0.2,
             'add_OOV_dim': True,
             'win': 1,                   # size of context window
             'add_DRLD': False,
-            'rnn_type': 'basic',        # basic, GRU, or LSTM
-            'n_hidden': 50,             # size of hidden units
-            'pooling_method': 'attention1',    # max, mean, or attention1/2
+            'rnn_type': 'LSTM',        # basic, GRU, or LSTM
+            'n_hidden': 20,             # size of hidden units
+            'pooling_method': 'max',    # max, mean, or attention1/2
             'bidirectional': False,
             'bi_combine': 'concat',        # concat, max, or mean
             'train_embeddings': True,
-            'lr': 0.1,                  # learning rate
+            'lr': 0.005,                  # learning rate
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
             'n_epochs': 100,
             'add_OOV_noise': False,
             'OOV_noise_prob': 0.01,
-            'minibatch_size': 16,
-            'classify_minibatch_size': 64,
+            'minibatch_size': 1,
+            'classify_minibatch_size': 1,
             'ensemble': False,
             'save_model': True,
             'seed': 42,
@@ -660,15 +660,16 @@ def main(params=None):
         groundtruth_test = test_y[:]
         words_test = [map(lambda x: idx2words[x], w) for w in test_lex]
 
-        if vector_type == 'eye':
-            initial_embeddings = np.eye(vocsize)
-            emb_dim = initial_embeddings.shape[1]
-        elif params['initialize_word_vectors']:
+        #if vector_type == 'eye':
+        #    initial_embeddings = np.eye(vocsize)
+        #    emb_dim = initial_embeddings.shape[1]
+        if params['initialize_word_vectors']:
             initial_embeddings = common.load_embeddings(params, words2idx)
             emb_dim = initial_embeddings.shape[1]
         else:
             initial_embeddings = None
             emb_dim = params['word2vec_dim']
+        print "embedding dim =", emb_dim
 
         extra_input_dims = 0
         if params['add_DRLD']:
