@@ -47,6 +47,7 @@ space = {
                     'use': True,
                 }
             ] ),
+        """
         'like-dislike':
             hp.choice('like-dislike', [
                 {
@@ -69,6 +70,7 @@ space = {
                     'dr_min_doc_threshold': hp.choice('dr_min_doc_threshold', [1,2,3,4,5])
                 }
             ] ),
+        """
         'POS_tags':
             hp.choice('POS_tags', [
                 {
@@ -129,6 +131,7 @@ def call_experiment(args):
     if args['features']['dataset']['use']:
         dataset = 'dataset'
         feature_list.append(dataset)
+    """
     if args['features']['like-dislike']['use']:
         base = 'ngrams' + \
                ',binarize=' + args['features']['like-dislike']['ld_binarize'] + \
@@ -145,6 +148,7 @@ def call_experiment(args):
         rep = base + ',source=decorated_rep'
         feature_list.append(dem)
         feature_list.append(rep)
+    """
     if args['features']['POS_tags']['use']:
         pos_tags = 'ngrams' + \
                    ',binarize=' + args['features']['POS_tags']['pos_binarize'] + \

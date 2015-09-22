@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/gather_results.py" afterPath="$PROJECT_DIR$/core/experiment/gather_results.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -41,8 +40,8 @@
       <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.24082568">
-              <caret line="160" column="4" selection-start-line="160" selection-start-column="4" selection-end-line="160" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.86009175">
+              <caret line="150" column="7" selection-start-line="150" selection-start-column="7" selection-end-line="150" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -821,12 +820,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00034" summary="fixed typo in RNN bayes opt">
-      <created>1441681996132</created>
-      <option name="number" value="00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1441681996132</updated>
-    </task>
     <task id="LOCAL-00035" summary="fixed LSTM">
       <created>1441747170764</created>
       <option name="number" value="00035" />
@@ -1115,7 +1108,13 @@
       <option name="project" value="LOCAL" />
       <updated>1442961582847</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="changed a dataset">
+      <created>1442963630731</created>
+      <option name="number" value="00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1442963630731</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1185,7 +1184,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="finally have minibatches more or less working I think" />
     <MESSAGE value="added nll checking for rnn_general" />
     <MESSAGE value="working towards batch prediction" />
     <MESSAGE value="added a powerset approach, though it's a bit hacky right now, and not currently beating other things on DRLD" />
@@ -1210,7 +1208,8 @@
     <MESSAGE value="fixed a wrong sign" />
     <MESSAGE value="correction to basic experiment bayesopt" />
     <MESSAGE value="found a small bug with one of the attention mechanisms" />
-    <option name="LAST_COMMIT_MESSAGE" value="found a small bug with one of the attention mechanisms" />
+    <MESSAGE value="changed a dataset" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed a dataset" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1746,8 +1745,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.24082568">
-          <caret line="160" column="4" selection-start-line="160" selection-start-column="4" selection-end-line="160" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.86009175">
+          <caret line="150" column="7" selection-start-line="150" selection-start-column="7" selection-end-line="150" selection-end-column="7" />
           <folding />
         </state>
       </provider>
