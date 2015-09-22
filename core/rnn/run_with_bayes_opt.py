@@ -116,8 +116,8 @@ def call_experiment(args):
 
     if reuse:
         params['reuse'] = True
-        params['orig_T'] = 0.04
-        params['tau'] = 0.01
+        params['orig_T'] = 0.02
+        params['tau'] = 0.005
     else:
         params['reuse'] = False
 
@@ -172,16 +172,16 @@ def main():
 
     if model == 'basic':
         space['arch']['unit'] = 'basic'
-        space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 300, 5)
+        space['arch']['n_hidden'] = hp.quniform('n_hidden', 5, 200, 5)
         space['training']['learning_rate'] = hp.loguniform('learning_rate', -4, -1),
     elif model == 'GRU':
         space['arch']['unit'] = 'GRU'
-        space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 200, 5)
+        space['arch']['n_hidden'] = hp.quniform('n_hidden', 5, 200, 5)
         space['training']['learning_rate'] = hp.loguniform('learning_rate', -5, -1.5),
     elif model == 'LSTM':
         space['arch']['unit'] = 'LSTM'
-        space['arch']['n_hidden'] = hp.quniform('n_hidden', 30, 100, 5)
-        space['training']['learning_rate'] = hp.loguniform('learning_rate', -6, -2),
+        space['arch']['n_hidden'] = hp.quniform('n_hidden', 5, 100, 5)
+        space['training']['learning_rate'] = hp.loguniform('learning_rate', -6, -2.5),
     else:
         sys.exit('Model not supported!')
 
