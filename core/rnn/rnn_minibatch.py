@@ -302,7 +302,7 @@ class RNN(object):
             a = T.exp(temp)/T.exp(temp).sum(axis=0, keepdims=True)
 
             a_sum = T.sum(a, )    # to check a is normalized
-            a_rep = T.repeat(a, nh, axis=2)
+            a_rep = T.repeat(a, nh*bi, axis=2)
             weighted_sum = T.sum(h * a_rep, axis=0)
 
             p_y_given_x_sentence = T.nnet.sigmoid(T.dot(weighted_sum, self.W_s) + self.b_s)  # [1, nc] in R(0,1)

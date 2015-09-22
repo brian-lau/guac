@@ -78,10 +78,7 @@ def main():
     for group in groups:
         print group
         result = run_group_experiment(name, group, test_fold, feature_list, model_type,
-                             reuse=reuse_holdout, orig_T=reuseable_T, tau=reuseable_tau, verbose=1,
-                                      min_alpha_exp=0, max_alpha_exp=0)
-
-
+                             reuse=reuse_holdout, orig_T=reuseable_T, tau=reuseable_tau, verbose=1)
 
 
 
