@@ -756,14 +756,17 @@ def main(params=None):
                 sys.stdout.flush()
 
                 if np.isnan(nll) or np.isinf(nll):
-                    return {'loss': nll,
-                            'final_test_f1': 0,
-                            'valid_f1s': 0,
-                            'true_valid_f1s': 0,
-                            'train_f1s': 0,
-                            'test_f1s': 0,
-                            'status': STATUS_OK
-                            }
+                    if best_f1 > 0:
+                        break
+                    else:
+                        return {'loss': -1.0,
+                                'final_test_f1': 0,
+                                'valid_f1s': 0,
+                                'true_valid_f1s': 0,
+                                'train_f1s': 0,
+                                'test_f1s': 0,
+                                'status': STATUS_OK
+                                }
 
             # evaluation // back into the real world : idx -> words
             print ""
