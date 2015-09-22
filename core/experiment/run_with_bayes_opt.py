@@ -19,6 +19,8 @@ output_dirname = None
 output_filename = None
 reuse = None
 search_alpha = None
+run = None
+group = None
 
 space = {
     'features': {
@@ -47,30 +49,6 @@ space = {
                     'use': True,
                 }
             ] ),
-        """
-        'like-dislike':
-            hp.choice('like-dislike', [
-                {
-                    'use': False
-                },
-                {
-                    'use': True,
-                    'ld_binarize': hp.choice('ld_binarize', ['True', 'False']),
-                    'ld_min_doc_threshold': hp.choice('ld_min_doc_threshold', [1,2,3,4,5])
-                }
-            ] ),
-        'dem-rep':
-            hp.choice('dem-rep', [
-                {
-                    'use': False
-                },
-                {
-                    'use': True,
-                    'dr_binarize': hp.choice('dr_binarize', ['True', 'False']),
-                    'dr_min_doc_threshold': hp.choice('dr_min_doc_threshold', [1,2,3,4,5])
-                }
-            ] ),
-        """
         'POS_tags':
             hp.choice('POS_tags', [
                 {
@@ -103,9 +81,47 @@ space = {
     }
 }
 
+def add_DRLD():
+    space['features']['like-dislike'] = hp.choice('like-dislike', [
+            {
+                'use': False
+            },
+            {
+                'use': True,
+                'ld_binarize': hp.choice('ld_binarize', ['True', 'False']),
+                'ld_min_doc_threshold': hp.choice('ld_min_doc_threshold', [1,2,3,4,5])
+            }
+        ] )
+    space['features']['dem-rep'] = hp.choice('dem-rep', [
+            {
+                'use': False
+            },
+            {
+                'use': True,
+                'dr_binarize': hp.choice('dr_binarize', ['True', 'False']),
+                'dr_min_doc_threshold': hp.choice('dr_min_doc_threshold', [1,2,3,4,5])
+            }
+        ] )
+
+
+def add_MIP():
+    space['features']['personal'] = hp.choice('personal', [
+        {
+            'use': False
+        },
+        {
+            'use': True,
+            'per_binarize': hp.choice('per_binarize', ['True', 'False']),
+            'per_min_doc_threshold': hp.choice('per_min_doc_threshold', [1,2,3,4,5])
+        }
+    ] )
+
 
 def call_experiment(args):
     kwargs = {}
+
+
+
 
     model = args['model']['model']
 
@@ -149,6 +165,15 @@ def call_experiment(args):
         feature_list.append(dem)
         feature_list.append(rep)
     """
+    if args['features']['personal']['use']:
+        base = 'ngrams' + \
+               ',binarize=' + args['features']['personal']['per_binarize'] + \
+               ',min_doc_threshold=' + str(args['features']['personal']['per_min_doc_threshold'])
+        personal = base + ',source=decorated_personal'
+        political = base + ',source=decorated_political'
+        feature_list.append(personal)
+        feature_list.append(political)
+
     if args['features']['POS_tags']['use']:
         pos_tags = 'ngrams' + \
                    ',binarize=' + args['features']['POS_tags']['pos_binarize'] + \
@@ -161,8 +186,6 @@ def call_experiment(args):
         brown = 'brown,clusters=anes,binarize=' + args['features']['brown_vectors']['bc_binarize']
         feature_list.append(brown)
 
-    #datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
-    datasets = ['MIP-Personal-1', 'MIP-Personal-2', 'MIP-Political-1', 'MIP-Political-2']
 
     if reuse:
         kwargs['reuse'] = True
@@ -174,7 +197,7 @@ def call_experiment(args):
             alphas.append(float(alpha))
         kwargs['best_alphas'] = alphas
 
-    base_dir = fh.makedirs(defines.exp_dir, '_'.join(datasets), "test_fold_0")
+    base_dir = fh.makedirs(defines.exp_dir, '_'.join(group), "test_fold_0")
     basename = fh.get_basename(output_dirname)
     existing_dirs = glob.glob(os.path.join(base_dir, basename + '*'))
     max_num = 0
@@ -188,7 +211,7 @@ def call_experiment(args):
     name = fh.get_basename(output_filename) + '_' + str(max_num + 1)
 
     print feature_list
-    result = experiment.run_group_experiment(name, datasets, 0, feature_list, model_type=model, **kwargs)
+    result = experiment.run_group_experiment(name, group, 0, feature_list, model_type=model, **kwargs)
     print result
 
     with codecs.open(output_filename, 'a') as output_file:
@@ -216,7 +239,7 @@ def main():
 
     (options, args) = parser.parse_args()
 
-    global output_dirname, output_filename, reuse, search_alpha, space
+    global output_dirname, output_filename, reuse, search_alpha, space, run, group
     reuse = options.reuse
     search_alpha = options.alpha
     n_codes = int(options.n_codes)
@@ -251,6 +274,16 @@ def main():
         }
     else:
         sys.exit('Choice of model not supported!')
+
+
+    run = 'MIP'
+    if run == 'DRLD':
+        add_DRLD()
+        group = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
+
+    elif run == 'MIP':
+        add_MIP()
+        group = ['MIP-Personal-1', 'MIP-Personal-2', 'MIP-Political-1', 'MIP-Political-2']
 
     output_dirname += '_' + model
 

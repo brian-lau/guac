@@ -31,6 +31,10 @@ def main():
     decorate_words(output_filename, 'Likes')
     output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_dislikes', 'json')
     decorate_words(output_filename, 'Dislikes')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_personal', 'json')
+    decorate_words(output_filename, 'Personal')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_political', 'json')
+    decorate_words(output_filename, 'Political')
 
 
 if __name__ == '__main__':
