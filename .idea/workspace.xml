@@ -38,11 +38,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="289" column="34" selection-start-line="289" selection-start-column="34" selection-end-line="289" selection-end-column="34" />
+            <state vertical-scroll-proportion="11.077982">
+              <caret line="322" column="0" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -82,11 +82,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="decorate_words.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="decorate_words.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/preprocessing/decorate_words.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.86238533">
-              <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -191,8 +191,8 @@
         <option value="$PROJECT_DIR$/core/experiment/experiment.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
         <option value="$PROJECT_DIR$/core/experiment/gather_results.py" />
-        <option value="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" />
         <option value="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
+        <option value="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" />
       </list>
     </option>
   </component>
@@ -815,12 +815,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00037" summary="set up for some tests on 20 newsgroups">
-      <created>1441758385027</created>
-      <option name="number" value="00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1441758385027</updated>
-    </task>
     <task id="LOCAL-00038" summary="added calibration split to data_splitting">
       <created>1441811576486</created>
       <option name="number" value="00038" />
@@ -1109,7 +1103,13 @@
       <option name="project" value="LOCAL" />
       <updated>1442964889043</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="added some word decoartors">
+      <created>1443030702256</created>
+      <option name="number" value="00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1443030702256</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1179,7 +1179,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="added a powerset approach, though it's a bit hacky right now, and not currently beating other things on DRLD" />
     <MESSAGE value="multilabel working in basic settings; currently expanding to all" />
     <MESSAGE value="having some trouble dealing with the context window..." />
     <MESSAGE value="got minibatches working for context win, but introduced a bit of slowdown..." />
@@ -1204,7 +1203,8 @@
     <MESSAGE value="changed a dataset" />
     <MESSAGE value="removed some features temporarily" />
     <MESSAGE value="fiddling with bayes opt for linear" />
-    <option name="LAST_COMMIT_MESSAGE" value="fiddling with bayes opt for linear" />
+    <MESSAGE value="added some word decoartors" />
+    <option name="LAST_COMMIT_MESSAGE" value="added some word decoartors" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1728,20 +1728,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
+    <entry file="file://$PROJECT_DIR$/core/preprocessing/decorate_words.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="289" column="34" selection-start-line="289" selection-start-column="34" selection-end-line="289" selection-end-column="34" />
+          <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/preprocessing/decorate_words.py">
+    <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.86238533">
-          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+        <state vertical-scroll-proportion="11.077982">
+          <caret line="322" column="0" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

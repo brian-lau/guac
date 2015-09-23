@@ -117,6 +117,42 @@ def add_MIP():
     ] )
 
 
+def add_MOLD():
+    space['features']['like-dislike'] = hp.choice('like-dislike', [
+        {
+            'use': False
+        },
+        {
+            'use': True,
+            'ld_binarize': hp.choice('ld_binarize', ['True', 'False']),
+            'ld_min_doc_threshold': hp.choice('ld_min_doc_threshold', [1,2,3,4,5])
+        }
+    ] )
+    space['features']['obama'] = hp.choice('obama', [
+        {
+            'use': False
+        },
+        {
+            'use': True,
+            'om_binarize': hp.choice('om_binarize', ['True', 'False']),
+            'om_min_doc_threshold': hp.choice('om_min_doc_threshold', [1,2,3,4,5])
+        }
+    ] )
+
+
+def add_obama():
+    space['features']['obama'] = hp.choice('obama', [
+        {
+            'use': False
+        },
+        {
+            'use': True,
+            'om_binarize': hp.choice('om_binarize', ['True', 'False']),
+            'om_min_doc_threshold': hp.choice('om_min_doc_threshold', [1,2,3,4,5])
+        }
+    ] )
+
+
 def call_experiment(args):
     kwargs = {}
 
@@ -147,32 +183,40 @@ def call_experiment(args):
     if args['features']['dataset']['use']:
         dataset = 'dataset'
         feature_list.append(dataset)
-    """
-    if args['features']['like-dislike']['use']:
-        base = 'ngrams' + \
-               ',binarize=' + args['features']['like-dislike']['ld_binarize'] + \
-               ',min_doc_threshold=' + str(args['features']['like-dislike']['ld_min_doc_threshold'])
-        likes = base + ',source=decorated_likes'
-        dislikes = base + ',source=decorated_dislikes'
-        feature_list.append(likes)
-        feature_list.append(dislikes)
-    if args['features']['dem-rep']['use']:
-        base = 'ngrams' + \
-               ',binarize=' + args['features']['dem-rep']['dr_binarize'] + \
-               ',min_doc_threshold=' + str(args['features']['dem-rep']['dr_min_doc_threshold'])
-        dem = base + ',source=decorated_dem'
-        rep = base + ',source=decorated_rep'
-        feature_list.append(dem)
-        feature_list.append(rep)
-    """
-    if args['features']['personal']['use']:
-        base = 'ngrams' + \
-               ',binarize=' + args['features']['personal']['per_binarize'] + \
-               ',min_doc_threshold=' + str(args['features']['personal']['per_min_doc_threshold'])
-        personal = base + ',source=decorated_personal'
-        political = base + ',source=decorated_political'
-        feature_list.append(personal)
-        feature_list.append(political)
+    if 'like-dislike' in args['features']:
+        if args['features']['like-dislike']['use']:
+            base = 'ngrams' + \
+                   ',binarize=' + args['features']['like-dislike']['ld_binarize'] + \
+                   ',min_doc_threshold=' + str(args['features']['like-dislike']['ld_min_doc_threshold'])
+            likes = base + ',source=decorated_likes'
+            dislikes = base + ',source=decorated_dislikes'
+            feature_list.append(likes)
+            #feature_list.append(dislikes)
+    if 'dem-rep' in args['features']:
+        if args['features']['dem-rep']['use']:
+            base = 'ngrams' + \
+                   ',binarize=' + args['features']['dem-rep']['dr_binarize'] + \
+                   ',min_doc_threshold=' + str(args['features']['dem-rep']['dr_min_doc_threshold'])
+            dem = base + ',source=decorated_dem'
+            rep = base + ',source=decorated_rep'
+            feature_list.append(dem)
+            #feature_list.append(rep)
+    if 'personal' in args['features']:
+        if args['features']['personal']['use']:
+            base = 'ngrams' + \
+                   ',binarize=' + args['features']['personal']['per_binarize'] + \
+                   ',min_doc_threshold=' + str(args['features']['personal']['per_min_doc_threshold'])
+            personal = base + ',source=decorated_personal'
+            political = base + ',source=decorated_political'
+            feature_list.append(personal)
+            #feature_list.append(political)
+    if 'obama' in args['features']:
+        if args['features']['obama']['use']:
+            base = 'ngrams' + \
+                   ',binarize=' + args['features']['obama']['om_binarize'] + \
+                   ',min_doc_threshold=' + str(args['features']['obama']['om_min_doc_threshold'])
+            obama = base + ',source=decorated_obama'
+            feature_list.append(obama)
 
     if args['features']['POS_tags']['use']:
         pos_tags = 'ngrams' + \
@@ -224,7 +268,7 @@ def call_experiment(args):
 
 def main():
 
-    usage = "%prog <DRLD|MIP|MOLD>"
+    usage = "%prog <DRLD|MIP|MOLD|Primary|General|Terrorist|PK-Brown|PK-Roberts|PK-Pelosi|PK-Cheney>"
     parser = OptionParser(usage=usage)
     parser.add_option('-m', dest='model', default='LR',
                       help='Model: (LR|SVM|MNB|SVMNB); default=%default')
@@ -277,7 +321,6 @@ def main():
     else:
         sys.exit('Choice of model not supported!')
 
-
     run = 'MIP'
     if run == 'DRLD':
         add_DRLD()
@@ -288,8 +331,14 @@ def main():
     elif run == 'MOLD':
         add_MOLD()
         group = ['McCain-Likes', 'McCain-Dislikes', 'Obama-Likes', 'Obama-Dislikes']
+    elif run == 'Primary':
+        add_obama()
+        group = ['Obama-Primary', 'Clinton-Primary']
+    elif run == 'General':
+        add_obama()
+        group = ['Obama-General', 'McCain-General']
     else:
-        sys.exit('dataset not recognized')
+        group = [run]
 
     output_dirname += '_' + model
 
