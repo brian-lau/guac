@@ -126,8 +126,12 @@ class RNN(object):
         # LSTM paramters
         if rnn_type == 'LSTM':
             # forget gate (needs special initialization)
+            if xavier_init:
+                init_scale = np.sqrt(6/float(dx+nh))
             self.W_xf = theano.shared(name='W_xf', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
                                       .astype(theano.config.floatX))
+            if xavier_init:
+                init_scale = np.sqrt(6/float(nh+nh))
             self.W_hf = theano.shared(name='W_hf', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                       .astype(theano.config.floatX))
             self.W_cf = theano.shared(name='W_cf', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
@@ -135,8 +139,12 @@ class RNN(object):
             self.b_f = theano.shared(name='b_f', value=np.array(np.random.uniform(0.8, 1.0, nh),
                                                                 dtype=theano.config.floatX))
             # input gate
+            if xavier_init:
+                init_scale = np.sqrt(6/float(dx+nh))
             self.W_xi = theano.shared(name='W_xi', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
                                       .astype(theano.config.floatX))
+            if xavier_init:
+                init_scale = np.sqrt(6/float(nh+nh))
             self.W_hi = theano.shared(name='W_hi', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                       .astype(theano.config.floatX))
             self.W_ci = theano.shared(name='W_ci', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
@@ -144,8 +152,12 @@ class RNN(object):
             self.b_i = theano.shared(name='b_i', value=np.zeros(nh, dtype=theano.config.floatX))
 
             # output gate
+            if xavier_init:
+                init_scale = np.sqrt(6/float(dx+nh))
             self.W_xo = theano.shared(name='W_xo', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
                                       .astype(theano.config.floatX))
+            if xavier_init:
+                init_scale = np.sqrt(6/float(nh+nh))
             self.W_ho = theano.shared(name='W_ho', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                       .astype(theano.config.floatX))
             self.W_co = theano.shared(name='W_co', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
@@ -545,7 +557,7 @@ def main(params=None):
 
     if params is None:
         params = {
-            'exp_name': 'char_test',
+            'exp_name': 'best_minibatch_mod',
             'test_fold': 0,
             'n_dev_folds': 1,
             'min_doc_thresh': 1,
@@ -576,12 +588,13 @@ def main(params=None):
             'verbose': 1,
             'reuse': False,
             'orig_T': 0.04,
-            'tau': 0.01
+            'tau': 0.01,
+            'xavier_init': True
         }
 
-    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_params.json')
-    params['exp_name'] += '_best'
-    params['n_hidden'] = int(params['n_hidden'])
+    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_mod.json')
+    #params['exp_name'] += '_best_minibatch_mod'
+    #params['n_hidden'] = int(params['n_hidden'])
 
     keys = params.keys()
     keys.sort()
@@ -693,7 +706,8 @@ def main(params=None):
                   train_embeddings=params['train_embeddings'],
                   pooling_method=params['pooling_method'],
                   bidirectional=params['bidirectional'],
-                  bi_combine=params['bi_combine']
+                  bi_combine=params['bi_combine'],
+                  xavier_init=params['xavier_init']
                   )
 
 
@@ -726,6 +740,7 @@ def main(params=None):
 
             ms = params['minibatch_size']
             n_train = len(train_lex)
+            nll = 0
 
             #for i, orig_x in enumerate(train_lex):
             for iteration, i in enumerate(range(0, n_train, ms)):
@@ -749,9 +764,10 @@ def main(params=None):
                 #    print '\n'.join([' '.join([idx2words[idx] for idx in minibatch_x[:, k, 0].tolist()]) for
                 #           k in range(ms)])
 
-                nll, a_sum = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'],
+                nll_i, a_sum = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'],
                                 params['clr'],
                                 params['lr_emb_fac'], extra_input_dims, minibatch_extra)
+                nll += nll_i
                 #rnn.train(x, mask, y, params['win'], params['clr'], params['lr_emb_fac'],
                 #          extra_input_dims, extra)
                 print '[learning] epoch %i >> %2.2f%%' % (

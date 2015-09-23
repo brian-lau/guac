@@ -12,6 +12,7 @@ from hyperopt import fmin, tpe, hp, Trials, space_eval
 
 import rnn_general
 import rnn_minibatch
+import rnn_minibatch_mod
 from ..util import defines
 from ..util import file_handling as fh
 
@@ -19,6 +20,7 @@ from ..util import file_handling as fh
 output_dirname = None
 output_filename = None
 reuse = None
+mod = None
 
 space = {
     'input': { 'min_doc_thresh': hp.choice('min_doc_thresh', [1, 2, 3, 4]) },
@@ -136,7 +138,10 @@ def call_experiment(args):
 
     params['exp_name'] = name
 
-    result = rnn_minibatch.main(params)
+    if mod:
+        result = rnn_minibatch_mod.main(params)
+    else:
+        result = rnn_minibatch.main(params)
 
     with codecs.open(output_filename, 'a') as output_file:
         output_file.write(str(datetime.datetime.now()) + '\t' + name + '\t' +
@@ -159,13 +164,17 @@ def main():
                       help='Output directory name')
     parser.add_option('--reuse', dest='reuse', action="store_true", default=False,
                       help='Use reusable holdout; default=%default')
+    parser.add_option('--mod', dest='mod', action="store_true", default=False,
+                      help='Use modifications; default=%default')
+
 
     (options, args) = parser.parse_args()
 
-    global output_dirname, output_filename, reuse, search_alpha, space
+    global output_dirname, output_filename, reuse, search_alpha, space, mod
     reuse = options.reuse
     output_dirname = options.output_dirname
     model = options.model
+    mod = options.mod
 
     if model == 'basic':
         space['arch']['unit'] = 'basic'
