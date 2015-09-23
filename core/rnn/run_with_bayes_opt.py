@@ -111,6 +111,7 @@ def call_experiment(args):
     params['ensemble'] = False
     params['n_dev_folds'] = 1
     params['n_epochs'] = 50
+    params['xavier_init'] = True
 
     if reuse:
         params['reuse'] = True
