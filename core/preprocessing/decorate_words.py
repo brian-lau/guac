@@ -35,6 +35,16 @@ def main():
     decorate_words(output_filename, 'Personal')
     output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_political', 'json')
     decorate_words(output_filename, 'Political')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_obama', 'json')
+    decorate_words(output_filename, 'Obama')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_mccain', 'json')
+    decorate_words(output_filename, 'McCain')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_clinton', 'json')
+    decorate_words(output_filename, 'Clinton')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_general', 'json')
+    decorate_words(output_filename, 'General')
+    output_filename = fh.make_filename(defines.data_processed_text_dir, 'decorated_primary', 'json')
+    decorate_words(output_filename, 'Primary')
 
 
 if __name__ == '__main__':

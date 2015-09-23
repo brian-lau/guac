@@ -224,7 +224,7 @@ def call_experiment(args):
 
 def main():
 
-    usage = "%prog"
+    usage = "%prog <DRLD|MIP|MOLD>"
     parser = OptionParser(usage=usage)
     parser.add_option('-m', dest='model', default='LR',
                       help='Model: (LR|SVM|MNB|SVMNB); default=%default')
@@ -238,6 +238,8 @@ def main():
                       help='Number of codes (only matters with --alpha); default=%default')
 
     (options, args) = parser.parse_args()
+
+    run = args[0]
 
     global output_dirname, output_filename, reuse, search_alpha, space, run, group
     reuse = options.reuse
@@ -280,10 +282,14 @@ def main():
     if run == 'DRLD':
         add_DRLD()
         group = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
-
     elif run == 'MIP':
         add_MIP()
         group = ['MIP-Personal-1', 'MIP-Personal-2', 'MIP-Political-1', 'MIP-Political-2']
+    elif run == 'MOLD':
+        add_MOLD()
+        group = ['McCain-Likes', 'McCain-Dislikes', 'Obama-Likes', 'Obama-Dislikes']
+    else:
+        sys.exit('dataset not recognized')
 
     output_dirname += '_' + model
 
