@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/preprocessing/decorate_words.py" afterPath="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -30,7 +30,7 @@
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="324" column="56" selection-start-line="324" selection-start-column="48" selection-end-line="324" selection-end-column="56" />
+              <caret line="745" column="33" selection-start-line="745" selection-start-column="33" selection-end-line="745" selection-end-column="33" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
               </folding>
@@ -38,14 +38,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rnn_minibatch_mod.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.13761468">
+              <caret line="161" column="28" selection-start-line="161" selection-start-column="28" selection-end-line="161" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="11.077982">
-              <caret line="322" column="0" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0">
+              <caret line="12" column="15" selection-start-line="12" selection-start-column="15" selection-end-line="12" selection-end-column="15" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -142,7 +150,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_brownclusters.py" />
         <option value="$PROJECT_DIR$/core/experiment/run_with_bayes_opt_with_alpha.py" />
         <option value="$PROJECT_DIR$/core/util/file_handling.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/tokenizer.py" />
@@ -189,10 +196,11 @@
         <option value="$PROJECT_DIR$/core/rnn/common.py" />
         <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_chars.py" />
         <option value="$PROJECT_DIR$/core/experiment/experiment.py" />
-        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
         <option value="$PROJECT_DIR$/core/experiment/gather_results.py" />
         <option value="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
         <option value="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
       </list>
     </option>
   </component>
@@ -323,42 +331,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="rnn" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="guac" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="guac" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="preprocessing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="guac" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="guac" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="models" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -815,12 +787,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00038" summary="added calibration split to data_splitting">
-      <created>1441811576486</created>
-      <option name="number" value="00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1441811576486</updated>
-    </task>
     <task id="LOCAL-00039" summary="added calibration split to calls to get split lists">
       <created>1441812116581</created>
       <option name="number" value="00039" />
@@ -1109,7 +1075,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443030702256</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="adjusted use of decorated words, and added all datasets as optiosn for linear bayes opt experiment">
+      <created>1443031528328</created>
+      <option name="number" value="00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1443031528328</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1179,7 +1151,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="multilabel working in basic settings; currently expanding to all" />
     <MESSAGE value="having some trouble dealing with the context window..." />
     <MESSAGE value="got minibatches working for context win, but introduced a bit of slowdown..." />
     <MESSAGE value="refactored to avoid the slow down and fix some problems; attention mechanism still needs fixing" />
@@ -1204,7 +1175,8 @@
     <MESSAGE value="removed some features temporarily" />
     <MESSAGE value="fiddling with bayes opt for linear" />
     <MESSAGE value="added some word decoartors" />
-    <option name="LAST_COMMIT_MESSAGE" value="added some word decoartors" />
+    <MESSAGE value="adjusted use of decorated words, and added all datasets as optiosn for linear bayes opt experiment" />
+    <option name="LAST_COMMIT_MESSAGE" value="adjusted use of decorated words, and added all datasets as optiosn for linear bayes opt experiment" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1321,13 +1293,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/rnn/generate_synthetic_data_for_rnn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Applications/anaconda/lib/python2.7/site-packages/numpy/core/numeric.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="2.2618682">
@@ -1684,16 +1649,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="324" column="56" selection-start-line="324" selection-start-column="48" selection-end-line="324" selection-end-column="56" />
-          <folding>
-            <element signature="e#66#101#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/gather_results.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1740,11 +1695,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="11.077982">
-          <caret line="322" column="0" selection-start-line="322" selection-start-column="0" selection-end-line="322" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="15" selection-start-line="12" selection-start-column="15" selection-end-line="12" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="745" column="33" selection-start-line="745" selection-start-column="33" selection-end-line="745" selection-end-column="33" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#66#101#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.13761468">
+          <caret line="161" column="28" selection-start-line="161" selection-start-column="28" selection-end-line="161" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>

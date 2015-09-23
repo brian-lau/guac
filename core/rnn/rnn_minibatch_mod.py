@@ -84,8 +84,10 @@ class RNN(object):
                                   .astype(theano.config.floatX))
         self.W_hh = theano.shared(name='W_hh', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                   .astype(theano.config.floatX))
-        self.b_h = theano.shared(name='b_h', value=np.array(np.random.uniform(0.0, 1.0, nh),
-                                                            dtype=theano.config.floatX))
+        #self.b_h = theano.shared(name='b_h', value=np.array(np.random.uniform(0.0, 1.0, nh),
+        #                                                    dtype=theano.config.floatX))
+        self.b_h = theano.shared(name='b_h', value=np.zeros(nh, dtype=theano.config.floatX))
+
 
         # output layer parameters
         self.W_s = theano.shared(name='W_s', value=init_scale * np.random.uniform(-1.0, 1.0, (nh * bi, nc))
@@ -126,7 +128,7 @@ class RNN(object):
                                       .astype(theano.config.floatX))
             self.W_cf = theano.shared(name='W_cf', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                       .astype(theano.config.floatX))
-            self.b_f = theano.shared(name='b_f', value=np.array(np.random.uniform(0.0, 1.0, nh),
+            self.b_f = theano.shared(name='b_f', value=np.array(np.random.uniform(0.8, 1.0, nh),
                                                                 dtype=theano.config.floatX))
             # input gate
             self.W_xi = theano.shared(name='W_xi', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
@@ -154,7 +156,8 @@ class RNN(object):
             #    self.c_i_r = theano.shared(name='c_i_r', value=np.zeros(nh, dtype=theano.config.floatX))
 
         self.params = [self.W_xh, self.W_hh, self.b_h,
-                       self.W_s, self.b_s]
+                       self.W_s]
+        self.params += [self.b_s]
         #self.params += [self.h_i_f]
         if train_embeddings:
             self.params += [self.emb]
@@ -719,7 +722,6 @@ def main(params=None):
 
             ms = params['minibatch_size']
             n_train = len(train_lex)
-            nll = 0
 
             #for i, orig_x in enumerate(train_lex):
             for iteration, i in enumerate(range(0, n_train, ms)):
@@ -743,10 +745,9 @@ def main(params=None):
                 #    print '\n'.join([' '.join([idx2words[idx] for idx in minibatch_x[:, k, 0].tolist()]) for
                 #           k in range(ms)])
 
-                nll_i, a_sum = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'],
+                nll, a_sum = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'],
                                 params['clr'],
                                 params['lr_emb_fac'], extra_input_dims, minibatch_extra)
-                nll += nll_i
                 #rnn.train(x, mask, y, params['win'], params['clr'], params['lr_emb_fac'],
                 #          extra_input_dims, extra)
                 print '[learning] epoch %i >> %2.2f%%' % (
