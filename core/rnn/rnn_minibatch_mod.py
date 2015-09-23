@@ -51,7 +51,8 @@ class RNN(object):
                  rnn_type='basic',      # 'basic', 'GRU', or 'LSTM'
                  pooling_method='max',  #'max', 'mean', 'attention1' or 'attention2',
                  extra_input_dims=0, train_embeddings=True,
-                 bidirectional=True, bi_combine='concat'   # 'concat', 'sum', or 'mean'
+                 bidirectional=True, bi_combine='concat',   # 'concat', 'sum', or 'mean'
+                 xavier_init=False
                 ):
         '''
         nh :: dimension of the hidden layer
@@ -76,12 +77,13 @@ class RNN(object):
         else:
             self.emb = theano.shared(name='embeddings', value=initial_embeddings.astype(theano.config.floatX))
 
-        if extra_input_dims > 0:
-            self.W_drld = theano.shared(name='W_drld', value=init_scale * np.random.uniform(-1.0, 1.0, (1, nh))
-                                        .astype(theano.config.floatX))
         # common paramters (feeding into hidden node)
+        if xavier_init:
+            init_scale = np.sqrt(6/float(dx+nh))
         self.W_xh = theano.shared(name='W_xh', value=init_scale * np.random.uniform(-1.0, 1.0, (dx, nh))
                                   .astype(theano.config.floatX))
+        if xavier_init:
+            init_scale = np.sqrt(6/float(nh+nh))
         self.W_hh = theano.shared(name='W_hh', value=init_scale * np.random.uniform(-1.0, 1.0, (nh, nh))
                                   .astype(theano.config.floatX))
         #self.b_h = theano.shared(name='b_h', value=np.array(np.random.uniform(0.0, 1.0, nh),
@@ -90,6 +92,8 @@ class RNN(object):
 
 
         # output layer parameters
+        if xavier_init:
+            init_scale = np.sqrt(6/float(nh*bi+nc))
         self.W_s = theano.shared(name='W_s', value=init_scale * np.random.uniform(-1.0, 1.0, (nh * bi, nc))
                                  .astype(theano.config.floatX))
         self.b_s = theano.shared(name='b_s', value=np.zeros(nc, dtype=theano.config.floatX))
