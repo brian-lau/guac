@@ -275,17 +275,16 @@ def main():
                       help='Model: (LR|SVM|MNB|SVMNB); default=%default')
     parser.add_option('-o', dest='output_dirname', default='bayes_opt',
                       help='Output directory name')
-    parser.add_option('--reuse', dest='reuse', action="store_true", default=True,
+    parser.add_option('--reuse', dest='reuse', action="store_true", default=False,
                       help='Use reusable holdout; default=%default')
-    parser.add_option('--alpha', dest='alpha', action="store_true", default=True,
+    parser.add_option('--alpha', dest='alpha', action="store_true", default=False,
                       help='Include alpha in search space (instead of grid search); default=%default')
     parser.add_option('--codes', dest='n_codes', default=33,
                       help='Number of codes (only matters with --alpha); default=%default')
 
     (options, args) = parser.parse_args()
 
-    #run = args[0]
-    run = 'DRLD'
+    run = args[0]
 
     global output_dirname, output_filename, reuse, search_alpha, space, run, group
     reuse = options.reuse
@@ -323,7 +322,6 @@ def main():
     else:
         sys.exit('Choice of model not supported!')
 
-    run = 'MIP'
     if run == 'DRLD':
         add_DRLD()
         group = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
