@@ -688,7 +688,7 @@ def main(params=None):
                                                                params['win'], i, ms, order,
                                                                params['add_OOV_noise'], params['OOV_noise_prob'])
 
-                #n_elements, _, _ = minibatch_x.shape
+                n_elements, _, _ = minibatch_x.shape
                 #if i > -1:
                 #    print '\n'.join([' '.join([idx2words[idx] for idx in minibatch_x[:, k, 0].tolist()]) for
                 #           k in range(ms)])

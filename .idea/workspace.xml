@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/common.py" afterPath="$PROJECT_DIR$/core/rnn/common.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run_test2.py" afterPath="$PROJECT_DIR$/run_test2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -33,7 +30,7 @@
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="583" column="34" selection-start-line="583" selection-start-column="34" selection-end-line="583" selection-end-column="34" />
+              <caret line="945" column="0" selection-start-line="945" selection-start-column="0" selection-end-line="945" selection-end-column="0" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
               </folding>
@@ -41,24 +38,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rnn_minibatch_mod.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="rnn_minibatch_mod.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="695" column="0" selection-start-line="695" selection-start-column="0" selection-end-line="695" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.46376812">
+              <caret line="691" column="27" selection-start-line="691" selection-start-column="27" selection-end-line="691" selection-end-column="27" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7451456">
-              <caret line="191" column="9" selection-start-line="191" selection-start-column="9" selection-end-line="191" selection-end-column="9" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -89,7 +74,7 @@
         <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="292" column="34" selection-start-line="292" selection-start-column="34" selection-end-line="292" selection-end-column="34" />
+              <caret line="287" column="16" selection-start-line="287" selection-start-column="16" selection-end-line="287" selection-end-column="16" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -101,8 +86,22 @@
         <entry file="file://$PROJECT_DIR$/run_test2.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="54" selection-start-line="2" selection-start-column="54" selection-end-line="2" selection-end-column="54" />
-              <folding />
+              <caret line="3" column="46" selection-start-line="3" selection-start-column="46" selection-end-line="3" selection-end-column="46" />
+              <folding>
+                <element signature="e#0#38#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -110,18 +109,18 @@
       <file leaf-file-name="experiment.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="605" column="0" selection-start-line="605" selection-start-column="0" selection-end-line="607" selection-end-column="0" />
+            <state vertical-scroll-proportion="-4.259259">
+              <caret line="250" column="0" selection-start-line="250" selection-start-column="0" selection-end-line="250" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="defines.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/util/defines.py">
+      <file leaf-file-name="feature_extractor_counts_ngrams.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+              <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -212,10 +211,10 @@
         <option value="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
         <option value="$PROJECT_DIR$/core/rnn/common.py" />
-        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
-        <option value="$PROJECT_DIR$/run_test2.py" />
         <option value="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" />
         <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
+        <option value="$PROJECT_DIR$/run_test2.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
       </list>
     </option>
   </component>
@@ -233,10 +232,10 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="17" />
-    <option name="y" value="49" />
+    <option name="x" value="27" />
+    <option name="y" value="76" />
     <option name="width" value="1246" />
-    <option name="height" value="771" />
+    <option name="height" value="731" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -802,12 +801,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00043" summary="adjusted params for debugging">
-      <created>1441921343612</created>
-      <option name="number" value="00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1441921343612</updated>
-    </task>
     <task id="LOCAL-00044" summary="another test">
       <created>1441932169044</created>
       <option name="number" value="00044" />
@@ -1096,11 +1089,17 @@
       <option name="project" value="LOCAL" />
       <updated>1443037602621</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="added gradient clipping and lr scaling by sequence length to rnn_minibatch_mod">
+      <created>1443113078424</created>
+      <option name="number" value="00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1443113078424</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="17" y="49" width="1246" height="771" extended-state="0" />
+    <frame x="27" y="76" width="1246" height="731" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1119,7 +1118,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35198823" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37402192" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1166,7 +1165,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="updated bayes opt params" />
     <MESSAGE value="started to add a script to save a subset of the default word2vec vectors, but I'm not sure of the best way to do it..." />
     <MESSAGE value="reverted back to standard word2vec vectors" />
     <MESSAGE value="fixed a typo for bidirectional LSTM" />
@@ -1191,7 +1189,8 @@
     <MESSAGE value="updated rnn_minibatch_mod to use xavier init (for basic params)" />
     <MESSAGE value="tried updating bayes opt for mod" />
     <MESSAGE value="forgot xavier init" />
-    <option name="LAST_COMMIT_MESSAGE" value="forgot xavier init" />
+    <MESSAGE value="added gradient clipping and lr scaling by sequence length to rnn_minibatch_mod" />
+    <option name="LAST_COMMIT_MESSAGE" value="added gradient clipping and lr scaling by sequence length to rnn_minibatch_mod" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1215,26 +1214,6 @@
           <url>file://$PROJECT_DIR$/core/experiment/experiment.py</url>
           <line>439</line>
           <option name="timeStamp" value="53" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/core/experiment/experiment.py</url>
-          <line>250</line>
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py</url>
-          <line>63</line>
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py</url>
-          <line>67</line>
-          <option name="timeStamp" value="60" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py</url>
-          <line>74</line>
-          <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/core/rnn/rnn_general.py</url>
@@ -1296,6 +1275,11 @@
           <line>697</line>
           <option name="timeStamp" value="125" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/core/experiment/experiment.py</url>
+          <line>154</line>
+          <option name="timeStamp" value="126" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1304,7 +1288,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="126" />
+      <option name="time" value="128" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1609,14 +1593,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="115" column="39" selection-start-line="115" selection-start-column="39" selection-end-line="115" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/preprocessing/labels.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.6169724">
@@ -1669,46 +1645,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="605" column="0" selection-start-line="605" selection-start-column="0" selection-end-line="607" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/common.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="155" column="19" selection-start-line="155" selection-start-column="18" selection-end-line="155" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run_test2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="54" selection-start-line="2" selection-start-column="54" selection-end-line="2" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="583" column="34" selection-start-line="583" selection-start-column="34" selection-end-line="583" selection-end-column="34" />
-          <folding>
-            <element signature="e#66#101#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="292" column="34" selection-start-line="292" selection-start-column="34" selection-end-line="292" selection-end-column="34" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -1723,21 +1663,67 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
+    <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="695" column="0" selection-start-line="695" selection-start-column="0" selection-end-line="695" selection-end-column="0" />
-          <folding />
+          <caret line="287" column="16" selection-start-line="287" selection-start-column="16" selection-end-line="287" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7451456">
-          <caret line="191" column="9" selection-start-line="191" selection-start-column="9" selection-end-line="191" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="945" column="0" selection-start-line="945" selection-start-column="0" selection-end-line="945" selection-end-column="0" />
+          <folding>
+            <element signature="e#66#101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.259259">
+          <caret line="250" column="0" selection-start-line="250" selection-start-column="0" selection-end-line="250" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_test2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="46" selection-start-line="3" selection-start-column="46" selection-end-line="3" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.46376812">
+          <caret line="691" column="27" selection-start-line="691" selection-start-column="27" selection-end-line="691" selection-end-column="27" />
+          <folding />
         </state>
       </provider>
     </entry>

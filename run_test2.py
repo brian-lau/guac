@@ -1,7 +1,8 @@
 from core.experiment import experiment
 from core.experiment import experiment_conformal
 from core.experiment import experiment_multilabel_test
-from core.rnn import run_with_bayes_opt
+from core.experiment import run_with_bayes_opt
+#from core.rnn import run_with_bayes_opt
 from core.rnn import rnn_general
 from core.rnn import rnn_minibatch
 
@@ -13,7 +14,7 @@ experiment_multilabel_test.run_group_experiment('powerset_test',
                      model_type='LR', verbose=1)
 """
 
-result = rnn_minibatch.main()
+result = run_with_bayes_opt.main()
 
 
 #from core.rnn import rnn_general
