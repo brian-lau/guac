@@ -514,6 +514,9 @@ class RNN(object):
         for param in self.params:
             print param.name, param.get_value()
 
+    def save_embeddings(self, filename):
+        np.save(filename, self.emb)
+
 
 def contextwin(l, win):
     '''
@@ -546,7 +549,7 @@ def main(params=None):
             'test_fold': 0,
             'n_dev_folds': 1,
             'min_doc_thresh': 1,
-            'initialize_word_vectors': True,
+            'initialize_word_vectors': False,
             'vectors': 'chars_word2vec_25',  # default_word2vec_300, anes_word2vec_300, chars_word2vec_25, eye_1 ...
             'init_scale': 0.2,
             'add_OOV_dim': True,
@@ -629,6 +632,7 @@ def main(params=None):
         valid_lex, valid_y = valid_xy
         test_lex, test_y = test_xy
 
+
         #if params['minibatch_size'] > 1 or params['classify_minibatch_size'] > 1:
         print "padding input with zeros"
         all_data, all_masks = common.prepare_data(train_lex, valid_lex, test_lex)
@@ -674,6 +678,11 @@ def main(params=None):
             emb_dim = params['word2vec_dim']
         print "embedding dim =", emb_dim
 
+
+        temp_output = fh.make_filename(output_dir, 'embedding_labels', 'json')
+        fh.write_to_json(idx2words, temp_output)
+
+
         extra_input_dims = 0
         if params['add_DRLD']:
             extra_input_dims = 2
@@ -695,6 +704,8 @@ def main(params=None):
                   clip_gradients=params['clip_gradients']
                   )
 
+        temp_filename = fh.make_filename(output_dir, 'initial_embeddings', 'npy')
+        rnn.save_embeddings(temp_filename)
 
         train_likes = [1 if re.search('Likes', i) else 0 for i in train_items]
         dev_likes = [1 if re.search('Likes', i) else 0 for i in dev_items]
