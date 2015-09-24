@@ -115,11 +115,13 @@ def load_char_data(datasets, test_fold, dev_subfold):
 
 
 # this creates masks such that all input sequences are the same length
-def prepare_data(train_x, valid_x, test_x):
+def prepare_data(train_x, valid_x, test_x, preset_max=None):
 
     all_x = train_x + valid_x + test_x
     lengths = [len(x) for x in all_x]
     max_len = np.max(lengths)
+    if preset_max is not None:
+        max_len = min(max_len, preset_max)
 
     train_x, train_mask = prepare_part_of_data(train_x, max_len)
     valid_x, valid_mask = prepare_part_of_data(valid_x, max_len)
@@ -134,8 +136,15 @@ def prepare_part_of_data(group_x, max_len):
     for i, x in enumerate(group_x):
         long_x = np.zeros(max_len).astype('int32')
         mask = np.zeros(max_len).astype('int32')
-        long_x[:len(x)] = x
-        mask[:len(x)] = 1
+
+        length = min(len(x), max_len)
+        long_x[:length] = x[:length]
+
+        #long_x[:len(x)] = x
+
+        mask[:length] = 1
+        #mask[:len(x)] = 1
+
         long_xs.append(long_x)
         masks.append(mask)
 

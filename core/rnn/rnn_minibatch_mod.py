@@ -207,14 +207,10 @@ class RNN(object):
             x = self.emb[idxs].reshape((idxs.shape[0], idxs.shape[1], de*cs))  # [n_elements, minibatch_size, emb_dim]
             #x = self.emb[idxs]
 
-
         y = T.imatrix('y')
         mask = T.tensor3('mask')
         mask_3d = mask.repeat(nh, axis=2)
         minibatch_size = T.iscalar()
-
-
-
 
         def recurrence_basic(x_t, mask_t, h_tm1):
             #h_t = theano.printing.Print('h_t')(T.nnet.sigmoid(T.dot(x_t, self.W_xh) + T.dot(h_tm1, self.W_hh) + self.b_h))
@@ -376,11 +372,20 @@ class RNN(object):
         sentence_nll = T.mean(T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)), axis=1))
         #sentence_nll = T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)))
 
-
+        #sentence_gradients = T.printing.Print('grads')(T.grad(sentence_nll, self.params))
         sentence_gradients = T.grad(sentence_nll, self.params)
+
+        #grad_min = [T.min(g) for g in sentence_gradients]
+        #clipped_grads = [T.max(g, T.ones(g.shape)) for g in sentence_gradients]
+        clipped_grads = [T.clip(g, -1, 1) for g in sentence_gradients]
+        grad_max = [T.max(g) for g in clipped_grads]
+        #sentence_updates = OrderedDict((p, p - lr * T.max(g, 1)) for p, g in zip(self.params, [lr_emb_fac *
+        #                                                                    sentence_gradients[0]]
+        #                                                                    + sentence_gradients[1:]))
         sentence_updates = OrderedDict((p, p - lr * g) for p, g in zip(self.params, [lr_emb_fac *
-                                                                            sentence_gradients[0]]
-                                                                            + sentence_gradients[1:]))
+                                                                            clipped_grads[0]]
+                                                                            + clipped_grads[1:]))
+
 
         # theano functions to compile
         if extra_input_dims > 0:
@@ -388,6 +393,8 @@ class RNN(object):
             self.sentence_train = theano.function(inputs=[idxs, mask, extra, y, lr, lr_emb_fac, minibatch_size],
                                                   outputs=[sentence_nll, a_sum],
                                                   updates=sentence_updates)
+            self.get_gradients = theano.function(inputs=[idxs, mask, extra, y, minibatch_size],
+                                                 outputs=grad_max)
             #if pooling_method == 'attention1' or pooling_method == 'attention2':
             #    self.a_sum_check = theano.function(inputs=[idxs, extra], outputs=a_sum)
         else:
@@ -395,6 +402,8 @@ class RNN(object):
             self.sentence_train = theano.function(inputs=[idxs, mask, y, lr, lr_emb_fac, minibatch_size],
                                                   outputs=[sentence_nll, a_sum],
                                                   updates=sentence_updates)
+            self.get_gradients = theano.function(inputs=[idxs, mask, y, minibatch_size],
+                                                 outputs=grad_max)
             #if pooling_method == 'attention1' or pooling_method == 'attention2':
             #    self.a_sum_check = theano.function(inputs=[idxs, mask, minibatch_size], outputs=a_sum)
 
@@ -403,57 +412,6 @@ class RNN(object):
                                          .dimshuffle(0, 'x')})
 
     def classify(self, x, mask, window_size, extra_input_dims=0, extra=None):
-
-        #assert window_size == 1
-        #assert extra_input_dims == 0
-
-        #cwords = contextwin(x, window_size)
-        ## make an array of these windows
-        #words = map(lambda x: np.asarray(x).astype('int32'), cwords)
-
-        """
-        for i in range(x.shape[0]):
-            cwords = contextwin(list(x[i, :]), window_size)
-            words = map(lambda q: np.asarray(q).astype('int32'), cwords)
-            x[i, :] = words
-
-        if len(x.shape) == 2:
-            minibatch_size, seq_len = x.shape
-            words = np.array(x.T).astype('int32')
-            mask = np.array(mask.T).astype('int32').reshape((seq_len, minibatch_size, 1))
-        else:
-            minibatch_size = 1
-            seq_len = x.shape[0]
-            words = np.array(x).astype('int32').reshape((seq_len, minibatch_size))
-            mask = np.array(mask).astype('int32').reshape((seq_len, minibatch_size, 1))
-
-        """
-
-        """
-        if len(x.shape) == 2:
-            minibatch_size, seq_len = x.shape
-            words = np.zeros([seq_len, minibatch_size, window_size], dtype='int32')
-            if window_size > 1:
-                for i in range(minibatch_size):
-                    cwords = contextwin(list(x[i, :]), window_size)
-                    words_i = np.array(cwords, dtype='int32')
-                    #[words_i.extend(j) for j in cwords]
-                    words[:, i, :] = words_i
-                x = words.T
-
-            words = np.array(x.T).astype('int32').reshape((seq_len, minibatch_size, window_size))
-            mask = np.array(mask.T).astype('int32').reshape((seq_len, minibatch_size, 1))
-        else:
-            minibatch_size = 1
-            seq_len = x.shape[0]
-            words = np.zeros([seq_len, minibatch_size, window_size], dtype='int32')
-            cwords = contextwin(x, window_size)
-            words[:, 0, :] = np.array(cwords, dtype='int32')
-            #words = np.array(words).astype('int32').reshape((seq_len, minibatch_size, window_size))
-            mask = np.array(mask).astype('int32').reshape((seq_len, 1, 1))
-
-        """
-
         seq_len, minibatch_size, window_size = x.shape
         words = x
         mask = np.array(mask.T).astype('int32').reshape((seq_len, minibatch_size, 1))
@@ -465,56 +423,24 @@ class RNN(object):
             return self.sentence_classify(words, mask, minibatch_size)
 
     def train(self, x, mask, y, window_size, learning_rate, emb_lr_factor, extra_input_dims=0, extra=None):
-        #assert window_size == 1
-        #assert extra_input_dims == 0
-        # concatenate words in a window
-        #cwords = contextwin(x, window_size)
-        # make an array of these windows
-        #words = map(lambda x: np.asarray(x).astype('int32'), cwords)
-
-        # if minibatch_size is 1, X = 1D list of indices, i.e. X.shape[0] = seq_len
-        # if minibatch_size > 0, X = np.array([minibatch_size, seq_len])
-
-        """
-        if len(x.shape) == 2:
-            minibatch_size, seq_len = x.shape
-            words = np.zeros([seq_len, minibatch_size, window_size], dtype='int32')
-            if window_size > 1:
-                for i in range(minibatch_size):
-                    cwords = contextwin(list(x[i, :]), window_size)
-                    words_i = np.array(cwords, dtype='int32')
-                    #[words_i.extend(j) for j in cwords]
-                    words[:, i, :] = words_i
-                x = words.T
-
-            words = np.array(x.T).astype('int32').reshape((seq_len, minibatch_size, window_size))
-            mask = np.array(mask.T).astype('int32').reshape((seq_len, minibatch_size, 1))
-            y = np.array(y).astype('int32')
-        else:
-            minibatch_size = 1
-            seq_len = x.shape[0]
-            words = np.zeros([seq_len, minibatch_size, window_size], dtype='int32')
-            cwords = contextwin(x, window_size)
-            words[:, 0, :] = np.array(cwords, dtype='int32')
-            #words = np.array(words).astype('int32').reshape((seq_len, minibatch_size, window_size))
-            mask = np.array(mask).astype('int32').reshape((seq_len, 1, 1))
-            y = np.array(y).astype('int32').reshape((1, len(y)))
-        """
-
         seq_len, minibatch_size, window_size = x.shape
         words = x
         mask = np.array(mask.T).astype('int32').reshape((seq_len, minibatch_size, 1))
         y = np.array(y).astype('int32')
 
-
         # train on these sentences and normalize
         if extra_input_dims > 0:
             extra = np.array(extra).astype('int32').reshape((1, minibatch_size, extra_input_dims))
+            grads = self.get_gradients(words, mask, extra, y, minibatch_size)
             nll = self.sentence_train(words, mask, extra, y, learning_rate, emb_lr_factor, minibatch_size)
         else:
+            grads = self.get_gradients(words, mask, y, minibatch_size)
             nll = self.sentence_train(words, mask, y, learning_rate, emb_lr_factor, minibatch_size)
+        #print grads
         self.normalize()
-
+        #for g in gradients:
+        #    g = T.printing.Print('g')(T.sqrt(T.sum(g**2)))
+        #    nll = nll*g/float(g)
         return nll
 
     def save(self, output_dir):
@@ -528,6 +454,7 @@ class RNN(object):
     def print_embeddings(self):
         for param in self.params:
             print param.name, param.get_value()
+
 
 
 def contextwin(l, win):
@@ -564,16 +491,16 @@ def main(params=None):
             'initialize_word_vectors': False,
             'vectors': 'anes_word2vec_300',  # default_word2vec_300, anes_word2vec_300, chars_word2vec_25, eye_1 ...
             'init_scale': 0.2,
-            'add_OOV_dim': True,
+            'add_OOV_dim': False,
             'win': 1,                   # size of context window
             'add_DRLD': False,
             'rnn_type': 'LSTM',        # basic, GRU, or LSTM
-            'n_hidden': 20,             # size of hidden units
-            'pooling_method': 'max',    # max, mean, or attention1/2
+            'n_hidden': 50,             # size of hidden units
+            'pooling_method': 'last',    # max, mean, or attention1/2
             'bidirectional': False,
             'bi_combine': 'concat',        # concat, max, or mean
-            'train_embeddings': True,
-            'lr': 0.005,                  # learning rate
+            'train_embeddings': False,
+            'lr': 0.025,                  # learning rate
             'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
             'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
@@ -646,6 +573,7 @@ def main(params=None):
 
         #if params['minibatch_size'] > 1 or params['classify_minibatch_size'] > 1:
         print "padding input with zeros"
+        #all_data, all_masks = common.prepare_data(train_lex, valid_lex, test_lex, preset_max=100)
         all_data, all_masks = common.prepare_data(train_lex, valid_lex, test_lex)
         train_lex, valid_lex, test_lex = all_data
         train_masks, valid_masks, test_masks = all_masks
@@ -760,13 +688,17 @@ def main(params=None):
                                                                params['win'], i, ms, order,
                                                                params['add_OOV_noise'], params['OOV_noise_prob'])
 
-                #if i == 0:
+                #n_elements, _, _ = minibatch_x.shape
+                #if i > -1:
                 #    print '\n'.join([' '.join([idx2words[idx] for idx in minibatch_x[:, k, 0].tolist()]) for
                 #           k in range(ms)])
+                #    print minibatch_y
+
 
                 nll_i, a_sum = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'],
-                                params['clr'],
+                                params['clr'] / float(n_elements) * 20,
                                 params['lr_emb_fac'], extra_input_dims, minibatch_extra)
+
                 nll += nll_i
                 #rnn.train(x, mask, y, params['win'], params['clr'], params['lr_emb_fac'],
                 #          extra_input_dims, extra)

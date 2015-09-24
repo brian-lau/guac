@@ -188,7 +188,7 @@ def main():
     elif model == 'LSTM':
         space['arch']['unit'] = 'LSTM'
         space['arch']['n_hidden'] = hp.quniform('n_hidden', 5, 100, 5)
-        space['training']['learning_rate'] = hp.loguniform('learning_rate', -6, -2.5),
+        space['training']['learning_rate'] = hp.loguniform('learning_rate', -5, -1.5),
     else:
         sys.exit('Model not supported!')
 
@@ -196,6 +196,9 @@ def main():
 
     if reuse:
         output_dirname += '_reuse'
+
+    if mod:
+        output_dirname += '_mod'
 
     output_filename = fh.make_filename(defines.exp_dir, fh.get_basename(output_dirname), 'log')
 
