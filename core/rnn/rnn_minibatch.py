@@ -50,7 +50,7 @@ class RNN(object):
     def __init__(self, nh, nc, ne, de, cs, init_scale=0.2, initial_embeddings=None,
                  rnn_type='basic',      # 'basic', 'GRU', or 'LSTM'
                  pooling_method='max',  #'max', 'mean', 'attention1' or 'attention2',
-                 extra_input_dims=0, train_embeddings=True,
+                 extra_input_dims=0, train_embeddings=True, clip_gradients=False,
                  bidirectional=True, bi_combine='concat'   # 'concat', 'sum', or 'mean'
                 ):
         '''
@@ -354,14 +354,18 @@ class RNN(object):
         lr = T.scalar('lr_main')
         lr_emb_fac = T.scalar('lr_emb')
 
-        sentence_nll = T.mean(T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)), axis=1))
-        #sentence_nll = T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)))
+        #sentence_nll = T.mean(T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)), axis=1))
+        sentence_nll = T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)))
 
 
         sentence_gradients = T.grad(sentence_nll, self.params)
+        if clip_gradients:
+            sentence_gradients= [T.clip(g, -1, 1) for g in sentence_gradients]
+
         sentence_updates = OrderedDict((p, p - lr * g) for p, g in zip(self.params, [lr_emb_fac *
                                                                             sentence_gradients[0]]
                                                                             + sentence_gradients[1:]))
+
 
         # theano functions to compile
         if extra_input_dims > 0:
@@ -542,39 +546,40 @@ def main(params=None):
             'test_fold': 0,
             'n_dev_folds': 1,
             'min_doc_thresh': 1,
-            'initialize_word_vectors': False,
-            'vectors': 'anes_word2vec_300',  # default_word2vec_300, anes_word2vec_300, chars_word2vec_25, eye_1 ...
+            'initialize_word_vectors': True,
+            'vectors': 'chars_word2vec_25',  # default_word2vec_300, anes_word2vec_300, chars_word2vec_25, eye_1 ...
             'init_scale': 0.2,
             'add_OOV_dim': True,
             'win': 1,                   # size of context window
-            'add_DRLD': False,
-            'rnn_type': 'LSTM',        # basic, GRU, or LSTM
-            'n_hidden': 20,             # size of hidden units
+            'add_DRLD': True,
+            'rnn_type': 'basic',        # basic, GRU, or LSTM
+            'n_hidden': 50,             # size of hidden units
             'pooling_method': 'max',    # max, mean, or attention1/2
-            'bidirectional': False,
+            'bidirectional': True,
             'bi_combine': 'concat',        # concat, max, or mean
             'train_embeddings': True,
-            'lr': 0.005,                  # learning rate
-            'lr_emb_fac': 0.2,            # factor to modify learning rate for embeddings
-            'decay_delay': 5,           # number of epochs with no improvement before decreasing learning rate
+            'lr': 0.1,                  # learning rate
+            'lr_emb_fac': 1,            # factor to modify learning rate for embeddings
+            'decay_delay': 7,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
             'n_epochs': 100,
-            'add_OOV_noise': False,
+            'add_OOV_noise': True,
             'OOV_noise_prob': 0.01,
-            'minibatch_size': 1,
-            'classify_minibatch_size': 1,
+            'minibatch_size': 16,
+            'classify_minibatch_size': 64,
             'ensemble': False,
             'save_model': True,
             'seed': 42,
             'verbose': 1,
             'reuse': False,
             'orig_T': 0.04,
-            'tau': 0.01
+            'tau': 0.01,
+            'clip_gradients': True
         }
 
-    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_mod.json')
-    params['exp_name'] += '_best'
-    params['n_hidden'] = int(params['n_hidden'])
+    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_mod.json')
+    #params['exp_name'] += '_best'
+    #params['n_hidden'] = int(params['n_hidden'])
 
     keys = params.keys()
     keys.sort()
@@ -686,7 +691,8 @@ def main(params=None):
                   train_embeddings=params['train_embeddings'],
                   pooling_method=params['pooling_method'],
                   bidirectional=params['bidirectional'],
-                  bi_combine=params['bi_combine']
+                  bi_combine=params['bi_combine'],
+                  clip_gradients=params['clip_gradients']
                   )
 
 

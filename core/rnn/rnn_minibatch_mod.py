@@ -369,14 +369,11 @@ class RNN(object):
         lr = T.scalar('lr_main')
         lr_emb_fac = T.scalar('lr_emb')
 
-        sentence_nll = T.mean(T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)), axis=1))
-        #sentence_nll = T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)))
+        #sentence_nll = T.mean(T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)), axis=1))
+        sentence_nll = T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)))
 
-        #sentence_gradients = T.printing.Print('grads')(T.grad(sentence_nll, self.params))
         sentence_gradients = T.grad(sentence_nll, self.params)
 
-        #grad_min = [T.min(g) for g in sentence_gradients]
-        #clipped_grads = [T.max(g, T.ones(g.shape)) for g in sentence_gradients]
         clipped_grads = [T.clip(g, -1, 1) for g in sentence_gradients]
         grad_max = [T.max(g) for g in clipped_grads]
         #sentence_updates = OrderedDict((p, p - lr * T.max(g, 1)) for p, g in zip(self.params, [lr_emb_fac *
@@ -571,6 +568,9 @@ def main(params=None):
         valid_lex, valid_y = valid_xy
         test_lex, test_y = test_xy
 
+        train_lengths = [len(x) for x in train_lex]
+        length_order = np.argsort(train_lengths)
+
         #if params['minibatch_size'] > 1 or params['classify_minibatch_size'] > 1:
         print "padding input with zeros"
         #all_data, all_masks = common.prepare_data(train_lex, valid_lex, test_lex, preset_max=100)
@@ -662,7 +662,16 @@ def main(params=None):
         for e in xrange(params['n_epochs']):
             # shuffle
             #shuffle([train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
-            shuffle([order, train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
+
+            # sort by length on the first epoch
+            if e == 20:
+                order = length_order
+                train_lex = [train_lex[j] for j in order]
+                train_y = [train_y[j] for j in order]
+                train_extra = [train_extra[j] for j in order]
+                train_masks = [train_masks[j] for j in order]
+            else:
+                shuffle([order, train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
             params['ce'] = e                # store the current epoch
             tic = timeit.default_timer()
 
@@ -672,16 +681,6 @@ def main(params=None):
 
             #for i, orig_x in enumerate(train_lex):
             for iteration, i in enumerate(range(0, n_train, ms)):
-                #orig_x = train_lex[i]
-                #n_words = len(orig_x)
-                #if params['add_OOV_noise']:
-                #    draws = np.random.rand(n_words)
-                #    x = [OOV_index if draws[i] < params['OOV_noise_prob'] else orig_x[i] for i in range(n_words)]
-                #else:
-                #    x = orig_x
-                #y = train_y[i]
-                extra = train_extra[i]
-                #mask = train_masks[i]
 
                 minibatch_x, minibatch_mask,\
                 minibatch_extra, minibatch_y= select_minibatch(train_x_win, train_masks, train_extra, train_y,
