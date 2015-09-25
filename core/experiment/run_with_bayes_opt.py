@@ -366,7 +366,7 @@ def main():
     best = fmin(call_experiment,
                 space=space,
                 algo=tpe.suggest,
-                max_evals=100,
+                max_evals=40,
                 trials=trials)
 
     print space_eval(space, best)
