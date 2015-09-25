@@ -122,7 +122,7 @@ def call_experiment(args):
 
     params['seed'] = np.random.randint(0, 4294967294)
     params['verbose'] = 1
-    params['save_model'] = False
+    params['save_model'] = True
     params['dataset'] = dataset
 
     base_dir = fh.makedirs(defines.exp_dir, 'rnn')
