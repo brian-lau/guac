@@ -205,6 +205,8 @@ def main():
     if mod:
         output_dirname += '_mod'
 
+    output_dirname += '_' + dataset
+
     output_filename = fh.make_filename(defines.exp_dir, fh.get_basename(output_dirname), 'log')
 
     with codecs.open(output_filename, 'w') as output_file:
