@@ -545,11 +545,12 @@ def main(params=None):
 
     if params is None:
         params = {
+            'dataset': 'DRLD',
             'exp_name': 'char_test',
             'test_fold': 0,
             'n_dev_folds': 1,
             'min_doc_thresh': 1,
-            'initialize_word_vectors': False,
+            'initialize_word_vectors': True,
             'vectors': 'chars_word2vec_25',  # default_word2vec_300, anes_word2vec_300, chars_word2vec_25, eye_1 ...
             'init_scale': 0.2,
             'add_OOV_dim': True,
@@ -563,9 +564,9 @@ def main(params=None):
             'train_embeddings': True,
             'lr': 0.1,                  # learning rate
             'lr_emb_fac': 1,            # factor to modify learning rate for embeddings
-            'decay_delay': 7,           # number of epochs with no improvement before decreasing learning rate
+            'decay_delay': 10,           # number of epochs with no improvement before decreasing learning rate
             'decay_factor': 0.5,        # factor by which to multiply learning rate in case of delay
-            'n_epochs': 100,
+            'n_epochs': 300,
             'add_OOV_noise': True,
             'OOV_noise_prob': 0.01,
             'minibatch_size': 16,
@@ -577,7 +578,7 @@ def main(params=None):
             'reuse': False,
             'orig_T': 0.04,
             'tau': 0.01,
-            'clip_gradients': True
+            'clip_gradients': False
         }
 
     #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_mod.json')
@@ -601,7 +602,18 @@ def main(params=None):
     if params['reuse']:
         reuser = reusable_holdout.ReuseableHoldout(T=params['orig_T'], tau=params['tau'])
 
-    datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
+    if params['dataset'] == 'DRLD':
+        datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
+    elif params['dataset'] == 'MIP':
+        datasets = ['MIP-Personal-1', 'MIP-Personal-2', 'MIP-Political-1', 'MIP-Political-2']
+    elif params['dataset'] == 'MOLD':
+        datasets = ['McCain-Likes', 'McCain-Dislikes', 'Obama-Likes', 'Obama-Dislikes']
+    elif params['dataset'] == 'Primary':
+        datasets = ['Obama-Primary', 'Clinton-Primary']
+    elif params['dataset'] == 'General':
+        datasets = ['Obama-General', 'McCain-General']
+    else:
+        datasets = [params['dataset']]
 
     np.random.seed(params['seed'])
     random.seed(params['seed'])

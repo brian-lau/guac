@@ -664,7 +664,7 @@ def main(params=None):
             #shuffle([train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
 
             # sort by length on the first epoch
-            if e == 20:
+            if e == 0:
                 order = length_order
                 train_lex = [train_lex[j] for j in order]
                 train_y = [train_y[j] for j in order]

@@ -325,18 +325,22 @@ def main():
     if run == 'DRLD':
         add_DRLD()
         group = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
+        n_codes = 33
     elif run == 'MIP':
         add_MIP()
         group = ['MIP-Personal-1', 'MIP-Personal-2', 'MIP-Political-1', 'MIP-Political-2']
+        n_codes = 74
     elif run == 'MOLD':
         add_MOLD()
         group = ['McCain-Likes', 'McCain-Dislikes', 'Obama-Likes', 'Obama-Dislikes']
     elif run == 'Primary':
         add_obama()
         group = ['Obama-Primary', 'Clinton-Primary']
+        n_codes = 42
     elif run == 'General':
         add_obama()
         group = ['Obama-General', 'McCain-General']
+        n_codes = 41
     else:
         group = [run]
 

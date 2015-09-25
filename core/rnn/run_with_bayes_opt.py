@@ -21,6 +21,7 @@ output_dirname = None
 output_filename = None
 reuse = None
 mod = None
+dataset = None
 
 space = {
     'input': { 'min_doc_thresh': hp.choice('min_doc_thresh', [1, 2, 3, 4]) },
@@ -34,7 +35,6 @@ space = {
         ),
         'add_OOV_dim': hp.choice('add_OOV_dim', [True, False]),
         'init_scale': hp.uniform('init_scale', 0, 1)
-
         },
     'arch': {
         'window': hp.choice('window', [1, 3]),
@@ -56,7 +56,8 @@ space = {
         ]
         ),
         'minibatch_size': hp.choice('minibatch_size', [1, 4, 16]),
-        'classify_minibatch_size': hp.choice('classify_minibatch_size', [1, 64])
+        'classify_minibatch_size': hp.choice('classify_minibatch_size', [1, 64]),
+        'clip_gradients': hp.choice('clip_gradients', [True, False])
     }
     # 'regularization': {'dropout'... 'add_noise'..., 'corruption'...}
 }
@@ -64,9 +65,6 @@ space = {
 
 
 def call_experiment(args):
-    datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
-    basename = fh.get_basename(output_dirname)
-
     params = {}
 
     params['test_fold'] = 0
@@ -80,6 +78,8 @@ def call_experiment(args):
         params['vectors'] = 'reddit_word2vec_' + str(args['init']['vectors']['r_size'])
     elif args['init']['vectors']['vectors'] == 'anes_plus_reddit':
         params['vectors'] = 'anes_plus_reddit_word2vec_' + str(args['init']['vectors']['apr_size'])
+    #params['xavier_init'] = args['init']['xavier_init']
+
 
     params['add_OOV_dim'] = args['init']['add_OOV_dim']
     params['init_scale'] = args['init']['init_scale']
@@ -107,11 +107,11 @@ def call_experiment(args):
         params['OOV_noise_prob'] = 0.0
     params['minibatch_size'] = int(args['training']['minibatch_size'])
     params['classify_minibatch_size'] = int(args['training']['classify_minibatch_size'])
+    params['clip_gradients'] = args['training']['clip_gradients']
 
     params['ensemble'] = False
     params['n_dev_folds'] = 1
-    params['n_epochs'] = 50
-    params['xavier_init'] = True
+    params['n_epochs'] = 75
 
     if reuse:
         params['reuse'] = True
@@ -123,6 +123,7 @@ def call_experiment(args):
     params['seed'] = np.random.randint(0, 4294967294)
     params['verbose'] = 1
     params['save_model'] = False
+    params['dataset'] = dataset
 
     base_dir = fh.makedirs(defines.exp_dir, 'rnn')
     basename = fh.get_basename(output_dirname)
@@ -140,6 +141,7 @@ def call_experiment(args):
     params['exp_name'] = name
 
     if mod:
+        params['xavier_init'] = True
         result = rnn_minibatch_mod.main(params)
     else:
         result = rnn_minibatch.main(params)
@@ -157,7 +159,7 @@ def call_experiment(args):
 
 def main():
 
-    usage = "%prog"
+    usage = "%prog <DRLD|MOLD|MIP|Primary|General|PK-...>"
     parser = OptionParser(usage=usage)
     parser.add_option('-m', dest='model', default='basic',
                       help='Model: (basic|GRU|LSTM); default=%default')
@@ -171,11 +173,14 @@ def main():
 
     (options, args) = parser.parse_args()
 
-    global output_dirname, output_filename, reuse, search_alpha, space, mod
+
+    global output_dirname, output_filename, reuse, search_alpha, space, mod, dataset
     reuse = options.reuse
     output_dirname = options.output_dirname
     model = options.model
     mod = options.mod
+
+    dataset = args[0]
 
     if model == 'basic':
         space['arch']['unit'] = 'basic'
