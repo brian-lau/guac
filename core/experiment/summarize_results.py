@@ -28,14 +28,17 @@ def main():
         valid_file = fh.make_filename(results_dir, 'valid_cv_macro_f1', 'csv')
         masked_valid_file = fh.make_filename(results_dir, 'masked_valid_cv_macro_f1', 'csv')
 
-        test = pd.read_csv(test_file, header=False, index_col=0)
-        valid = pd.read_csv(valid_file, header=False, index_col=0)
-        masked_valid = pd.read_csv(masked_valid_file, header=False, index_col=0)
+        try:
+            test = pd.read_csv(test_file, header=False, index_col=0)
+            valid = pd.read_csv(valid_file, header=False, index_col=0)
+            masked_valid = pd.read_csv(masked_valid_file, header=False, index_col=0)
 
-        results.loc[i, 'masked'] = masked_valid['overall'].mean()
-        results.loc[i, 'test'] = test['overall'].mean()
-        results.loc[i, 'valid'] = valid['overall'].mean()
-        results.loc[i, 'dir'] = fh.get_basename(dir)
+            results.loc[i, 'masked'] = masked_valid['overall'].mean()
+            results.loc[i, 'test'] = test['overall'].mean()
+            results.loc[i, 'valid'] = valid['overall'].mean()
+            results.loc[i, 'dir'] = fh.get_basename(dir)
+        except:
+            pass
 
     order = np.argsort(results['masked'])
 
