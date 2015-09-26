@@ -27,6 +27,7 @@ def main():
         test_file = fh.make_filename(results_dir, 'test_macro_f1', 'csv')
         valid_file = fh.make_filename(results_dir, 'valid_cv_macro_f1', 'csv')
         masked_valid_file = fh.make_filename(results_dir, 'masked_valid_cv_macro_f1', 'csv')
+        print dir
 
         try:
             test = pd.read_csv(test_file, header=False, index_col=0)
@@ -38,7 +39,8 @@ def main():
             results.loc[i, 'valid'] = valid['overall'].mean()
             results.loc[i, 'dir'] = fh.get_basename(dir)
         except:
-            pass
+            continue
+
 
     sorted = results.sort('masked')
     print sorted
