@@ -40,9 +40,10 @@ def main():
         except:
             pass
 
-    order = np.argsort(results['masked'])
+    sorted = results.sort('masked')
+    print sorted
 
-    print results.loc[order, :]
+
 
 
 if __name__ == '__main__':

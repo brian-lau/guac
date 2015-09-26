@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="added error handler">
+    <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/summarize_results.py" afterPath="$PROJECT_DIR$/core/experiment/summarize_results.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -48,8 +48,8 @@
       <file leaf-file-name="summarize_results.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/experiment/summarize_results.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.27884614">
-              <caret line="24" column="38" selection-start-line="24" selection-start-column="38" selection-end-line="24" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.8557692">
+              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -746,12 +746,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00054" summary="fixed small bug in bayes opt setup">
-      <created>1442265182691</created>
-      <option name="number" value="00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1442265182691</updated>
-    </task>
     <task id="LOCAL-00055" summary="made some progress on minibatch, but still not working">
       <created>1442369048630</created>
       <option name="number" value="00055" />
@@ -1040,7 +1034,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443298248996</updated>
     </task>
-    <option name="localTasksCounter" value="103" />
+    <task id="LOCAL-00103" summary="added error handler">
+      <created>1443298370921</created>
+      <option name="number" value="00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1443298370921</updated>
+    </task>
+    <option name="localTasksCounter" value="104" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1110,7 +1110,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="fixed a bug in bayes opt for char rnn" />
     <MESSAGE value="fixed a wrong sign" />
     <MESSAGE value="correction to basic experiment bayesopt" />
     <MESSAGE value="found a small bug with one of the attention mechanisms" />
@@ -1135,7 +1134,8 @@
     <MESSAGE value="tried to align minibatch and minibatch_mod" />
     <MESSAGE value="make a quick script to summarize results" />
     <MESSAGE value="changed matrix to dataframe for ease" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed matrix to dataframe for ease" />
+    <MESSAGE value="added error handler" />
+    <option name="LAST_COMMIT_MESSAGE" value="added error handler" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1658,8 +1658,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/summarize_results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.27884614">
-          <caret line="24" column="38" selection-start-line="24" selection-start-column="38" selection-end-line="24" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.8557692">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
