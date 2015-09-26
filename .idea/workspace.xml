@@ -48,8 +48,8 @@
       <file leaf-file-name="summarize_results.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/experiment/summarize_results.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.92788464">
-              <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.8918269">
+              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -746,12 +746,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00057" summary="added a quick script to demonstrate how to call LDA from gensim">
-      <created>1442427601817</created>
-      <option name="number" value="00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1442427601818</updated>
-    </task>
     <task id="LOCAL-00058" summary="finally have minibatches more or less working I think">
       <created>1442442951954</created>
       <option name="number" value="00058" />
@@ -1040,7 +1034,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443298484618</updated>
     </task>
-    <option name="localTasksCounter" value="106" />
+    <task id="LOCAL-00106" summary="got it working, removing excess output">
+      <created>1443298673426</created>
+      <option name="number" value="00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1443298673426</updated>
+    </task>
+    <option name="localTasksCounter" value="107" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1110,7 +1110,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="found a small bug with one of the attention mechanisms" />
     <MESSAGE value="changed a dataset" />
     <MESSAGE value="removed some features temporarily" />
     <MESSAGE value="fiddling with bayes opt for linear" />
@@ -1135,7 +1134,8 @@
     <MESSAGE value="added error handler" />
     <MESSAGE value="chaned sorting" />
     <MESSAGE value="not working on server, adding output" />
-    <option name="LAST_COMMIT_MESSAGE" value="not working on server, adding output" />
+    <MESSAGE value="got it working, removing excess output" />
+    <option name="LAST_COMMIT_MESSAGE" value="got it working, removing excess output" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1658,8 +1658,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/summarize_results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.92788464">
-          <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.8918269">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

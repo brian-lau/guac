@@ -23,23 +23,25 @@ def main():
 
     run_dirs = glob.glob(os.path.join(exp_dir, 'test_fold_0', 'bayes*'))
     for i, dir in enumerate(run_dirs):
-        results_dir = os.path.join(dir, 'results')
-        test_file = fh.make_filename(results_dir, 'test_macro_f1', 'csv')
-        valid_file = fh.make_filename(results_dir, 'valid_cv_macro_f1', 'csv')
-        masked_valid_file = fh.make_filename(results_dir, 'masked_valid_cv_macro_f1', 'csv')
+        run_num = int(fh.get_basename(dir).split('_')[-1])
 
-        try:
-            test = pd.read_csv(test_file, header=False, index_col=0)
-            valid = pd.read_csv(valid_file, header=False, index_col=0)
-            masked_valid = pd.read_csv(masked_valid_file, header=False, index_col=0)
+        if run_num < 41:
+            results_dir = os.path.join(dir, 'results')
+            test_file = fh.make_filename(results_dir, 'test_macro_f1', 'csv')
+            valid_file = fh.make_filename(results_dir, 'valid_cv_macro_f1', 'csv')
+            masked_valid_file = fh.make_filename(results_dir, 'masked_valid_cv_macro_f1', 'csv')
 
-            results.loc[i, 'masked'] = masked_valid['overall'].mean()
-            results.loc[i, 'test'] = test['overall'].mean()
-            results.loc[i, 'valid'] = valid['overall'].mean()
-            results.loc[i, 'dir'] = fh.get_basename(dir)
-        except:
-            continue
+            try:
+                test = pd.read_csv(test_file, header=False, index_col=0)
+                valid = pd.read_csv(valid_file, header=False, index_col=0)
+                masked_valid = pd.read_csv(masked_valid_file, header=False, index_col=0)
 
+                results.loc[i, 'masked'] = masked_valid['overall'].mean()
+                results.loc[i, 'test'] = test['overall'].mean()
+                results.loc[i, 'valid'] = valid['overall'].mean()
+                results.loc[i, 'dir'] = fh.get_basename(dir)
+            except:
+                continue
 
     sorted = results.sort('masked')
     print sorted
