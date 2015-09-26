@@ -481,6 +481,7 @@ def main(params=None):
 
     if params is None:
         params = {
+            'dataset': 'DRLD',
             'exp_name': 'best_minibatch_mod',
             'test_fold': 0,
             'n_dev_folds': 1,
@@ -537,7 +538,18 @@ def main(params=None):
     if params['reuse']:
         reuser = reusable_holdout.ReuseableHoldout(T=params['orig_T'], tau=params['tau'])
 
-    datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
+    if params['dataset'] == 'DRLD':
+        datasets = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
+    elif params['dataset'] == 'MIP':
+        datasets = ['MIP-Personal-1', 'MIP-Personal-2', 'MIP-Political-1', 'MIP-Political-2']
+    elif params['dataset'] == 'MOLD':
+        datasets = ['McCain-Likes', 'McCain-Dislikes', 'Obama-Likes', 'Obama-Dislikes']
+    elif params['dataset'] == 'Primary':
+        datasets = ['Obama-Primary', 'Clinton-Primary']
+    elif params['dataset'] == 'General':
+        datasets = ['Obama-General', 'McCain-General']
+    else:
+        datasets = [params['dataset']]
 
     np.random.seed(params['seed'])
     random.seed(params['seed'])
@@ -664,7 +676,7 @@ def main(params=None):
             #shuffle([train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
 
             # sort by length on the first epoch
-            if e == 0:
+            if e < 0:
                 order = length_order
                 train_lex = [train_lex[j] for j in order]
                 train_y = [train_y[j] for j in order]
