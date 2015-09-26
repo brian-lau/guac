@@ -48,8 +48,8 @@
       <file leaf-file-name="summarize_results.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/experiment/summarize_results.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8557692">
-              <caret line="42" column="12" selection-start-line="42" selection-start-column="12" selection-end-line="42" selection-end-column="12" />
+            <state vertical-scroll-proportion="0.92788464">
+              <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -746,12 +746,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00056" summary="added script to extract text from reddit comments in prep for word2vec">
-      <created>1442422501890</created>
-      <option name="number" value="00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1442422501896</updated>
-    </task>
     <task id="LOCAL-00057" summary="added a quick script to demonstrate how to call LDA from gensim">
       <created>1442427601817</created>
       <option name="number" value="00057" />
@@ -1040,7 +1034,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443298437635</updated>
     </task>
-    <option name="localTasksCounter" value="105" />
+    <task id="LOCAL-00105" summary="not working on server, adding output">
+      <created>1443298484618</created>
+      <option name="number" value="00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1443298484618</updated>
+    </task>
+    <option name="localTasksCounter" value="106" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1110,7 +1110,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="correction to basic experiment bayesopt" />
     <MESSAGE value="found a small bug with one of the attention mechanisms" />
     <MESSAGE value="changed a dataset" />
     <MESSAGE value="removed some features temporarily" />
@@ -1135,7 +1134,8 @@
     <MESSAGE value="changed matrix to dataframe for ease" />
     <MESSAGE value="added error handler" />
     <MESSAGE value="chaned sorting" />
-    <option name="LAST_COMMIT_MESSAGE" value="chaned sorting" />
+    <MESSAGE value="not working on server, adding output" />
+    <option name="LAST_COMMIT_MESSAGE" value="not working on server, adding output" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1658,8 +1658,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/summarize_results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8557692">
-          <caret line="42" column="12" selection-start-line="42" selection-start-column="12" selection-end-line="42" selection-end-column="12" />
+        <state vertical-scroll-proportion="0.92788464">
+          <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
