@@ -706,7 +706,6 @@ def main(params=None):
             n_train = len(train_lex)
             nll = 0
 
-            """
             #for i, orig_x in enumerate(train_lex):
             for iteration, i in enumerate(range(0, n_train, ms)):
 
@@ -750,7 +749,6 @@ def main(params=None):
 
             # evaluation // back into the real world : idx -> words
             print ""
-            """
 
 
             #print "true y", train_y[-1]
