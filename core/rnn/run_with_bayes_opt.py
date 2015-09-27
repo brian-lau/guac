@@ -34,21 +34,22 @@ space = {
         ]
         ),
         'add_OOV_dim': hp.choice('add_OOV_dim', [True, False]),
-        'init_scale': hp.uniform('init_scale', 0, 1)
+        'init_scale': hp.uniform('init_scale', 0, 1),
+        'xavier_init': hp.choice('xavier_init', [True, False])
         },
     'arch': {
         'window': hp.choice('window', [1, 3]),
         'add_DRLD': hp.choice('add_DRLD', [True, False]),
         'train_embeddings': hp.choice('train_embeddings', [True, False]),
-        'pooling_method': hp.choice('pooling_method', ['max', 'attention1', 'attention2', 'last']),
+        'pooling_method': hp.choice('pooling_method', ['max', 'attention1', 'last']),
         'bidirectional': hp.choice('bidirectional', [
             {'bidirectional': False},
-            {'bidirectional': True, 'combine': hp.choice('combine', ['concat', 'max', 'mean'])}
+            {'bidirectional': True},
         ])
     },
     'training': {
         'lr_emb_fac': hp.uniform('lr_emb_fac', 0, 1),
-        'decay_delay': hp.choice('decay_delay', [3, 4, 5, 6, 7, 8]),
+        'decay_delay': hp.choice('decay_delay', [3, 4, 5, 6, 7, 8, 9]),
         'decay_factor': hp.uniform('decay_factor', 0, 1),
         'OOV_noise': hp.choice('OOV_noise', [
             {'OOV_noise': False},
@@ -78,8 +79,7 @@ def call_experiment(args):
         params['vectors'] = 'reddit_word2vec_' + str(args['init']['vectors']['r_size'])
     elif args['init']['vectors']['vectors'] == 'anes_plus_reddit':
         params['vectors'] = 'anes_plus_reddit_word2vec_' + str(args['init']['vectors']['apr_size'])
-    #params['xavier_init'] = args['init']['xavier_init']
-
+    params['xavier_init'] = args['init']['xavier_init']
 
     params['add_OOV_dim'] = args['init']['add_OOV_dim']
     params['init_scale'] = args['init']['init_scale']
@@ -91,7 +91,7 @@ def call_experiment(args):
     params['pooling_method'] = args['arch']['pooling_method']
     if args['arch']['bidirectional']['bidirectional']:
         params['bidirectional'] = True
-        params['bi_combine'] = args['arch']['bidirectional']['combine']
+        params['bi_combine'] = 'concat'
     else:
         params['bidirectional'] = False
         params['bi_combine'] = None
@@ -141,7 +141,6 @@ def call_experiment(args):
     params['exp_name'] = name
 
     if mod:
-        params['xavier_init'] = True
         result = rnn_minibatch_mod.main(params)
     else:
         result = rnn_minibatch.main(params)

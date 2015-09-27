@@ -106,6 +106,8 @@ class RNN(object):
 
         # Attention parameters
         if pooling_method == 'attention1' or pooling_method == 'attention2':
+            if xavier_init:
+                init_scale = np.sqrt(6/float(bi+nh))
             self.W_a = theano.shared(name='W_a', value=init_scale * np.random.uniform(-1.0, 1.0, (bi*nh, 1))
                                      .astype(theano.config.floatX))
             self.b_a = theano.shared(name='b_a', value=0.0)
@@ -177,7 +179,7 @@ class RNN(object):
         #self.params += [self.h_i_f]
         if train_embeddings:
             self.params += [self.emb]
-        if pooling_method == 'attention':
+        if pooling_method == 'attention1' or pooling_method == 'attention2':
             self.params += [self.W_a, self.b_a]
         if rnn_type == 'GRU':
             self.params += [self.W_xr, self.W_hr, self.b_r,
@@ -631,7 +633,7 @@ def main(params=None):
 
         extra_input_dims = 0
         if params['add_DRLD']:
-            extra_input_dims = 2
+            extra_input_dims = 4
 
         print "Building RNN"
         rnn = RNN(nh=params['n_hidden'],
@@ -650,7 +652,7 @@ def main(params=None):
                   xavier_init=params['xavier_init']
                   )
 
-
+        # add extra dimensions to differentiate between paired datasets
         train_likes = [1 if re.search('Likes', i) else 0 for i in train_items]
         dev_likes = [1 if re.search('Likes', i) else 0 for i in dev_items]
         test_likes = [1 if re.search('Likes', i) else 0 for i in test_items]
@@ -659,11 +661,17 @@ def main(params=None):
         dev_dem = [1 if re.search('Democrat', i) else 0 for i in dev_items]
         test_dem = [1 if re.search('Democrat', i) else 0 for i in test_items]
 
-        train_extra = [[train_likes[i], train_dem[i]] for i, t in enumerate(train_items)]
-        dev_extra = [[dev_likes[i], dev_dem[i]] for i, t in enumerate(dev_items)]
-        test_extra = [[test_likes[i], test_dem[i]] for i, t in enumerate(test_items)]
+        train_obama = [1 if re.search('Obama', i) else 0 for i in train_items]
+        dev_obama = [1 if re.search('Obama', i) else 0 for i in dev_items]
+        test_obama = [1 if re.search('Obama', i) else 0 for i in test_items]
 
+        train_personal = [1 if re.search('Personal', i) else 0 for i in train_items]
+        dev_personal = [1 if re.search('Personal', i) else 0 for i in dev_items]
+        test_personal = [1 if re.search('Personal', i) else 0 for i in test_items]
 
+        train_extra = [[train_likes[i], train_dem[i], train_obama[i], train_personal[i]] for i, t in enumerate(train_items)]
+        dev_extra = [[dev_likes[i], dev_dem[i], dev_obama[i], dev_personal[i]] for i, t in enumerate(dev_items)]
+        test_extra = [[test_likes[i], test_dem[i], test_obama[i], test_personal[i]] for i, t in enumerate(test_items)]
 
         ### LOAD
         #rnn.load(output_dir)
@@ -676,7 +684,7 @@ def main(params=None):
             #shuffle([train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
 
             # sort by length on the first epoch
-            if e < 0:
+            if e == 0:
                 order = length_order
                 train_lex = [train_lex[j] for j in order]
                 train_y = [train_y[j] for j in order]

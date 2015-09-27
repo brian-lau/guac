@@ -158,7 +158,7 @@ class RNN(object):
         #self.params += [self.h_i_f]
         if train_embeddings:
             self.params += [self.emb]
-        if pooling_method == 'attention':
+        if pooling_method == 'attention1' or pooling_method == 'attention2':
             self.params += [self.W_a, self.b_a]
         if rnn_type == 'GRU':
             self.params += [self.W_xr, self.W_hr, self.b_r,
