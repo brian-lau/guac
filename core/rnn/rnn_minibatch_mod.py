@@ -801,13 +801,13 @@ def main(params=None):
                 params['v_f1'] = valid_f1
                 params['be'] = e            # store the current epoch as a new best
 
-                if params['save_model']:
-                    print "Predicting and saving model"
-                    predictions_test = predict(len(test_y), params['classify_minibatch_size'], test_x_win, test_masks,
-                                                test_y, params['win'], extra_input_dims, test_extra, best_rnn)
-                    best_rnn.save(output_dir)
-                    common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_test, test_items, output_dir)
-                    print "Done"
+                #if params['save_model']:
+                #    print "Predicting and saving model"
+                #    predictions_test = predict(len(test_y), params['classify_minibatch_size'], test_x_win, test_masks,
+                #                                test_y, params['win'], extra_input_dims, test_extra, best_rnn)
+                #    best_rnn.save(output_dir)
+                #    common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_test, test_items, output_dir)
+                #    print "Done"
 
             # learning rate decay if no improvement in a given number of epochs
             if abs(params['be']-params['ce']) >= params['decay_delay']:
