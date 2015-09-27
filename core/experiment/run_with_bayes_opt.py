@@ -356,7 +356,7 @@ def main():
     if reuse:
         output_dirname += '_reuse'
 
-    output_filename = fh.make_filename(defines.exp_dir, fh.get_basename(output_dirname), 'log')
+    output_filename = fh.make_filename(defines.exp_dir, fh.get_basename(output_dirname) + '_' + run, 'log')
 
     with codecs.open(output_filename, 'w') as output_file:
         output_file.write(output_dirname + '\n')
