@@ -40,8 +40,8 @@
       <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8535156">
-              <caret line="356" column="34" selection-start-line="356" selection-start-column="34" selection-end-line="356" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.6777344">
+              <caret line="345" column="0" selection-start-line="345" selection-start-column="0" selection-end-line="345" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -804,12 +804,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00066" summary="got attention mechanisms working again">
-      <created>1442705057046</created>
-      <option name="number" value="00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1442705057046</updated>
-    </task>
     <task id="LOCAL-00067" summary="updated bayes opt params">
       <created>1442705951440</created>
       <option name="number" value="00067" />
@@ -1098,7 +1092,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443327894033</updated>
     </task>
-    <option name="localTasksCounter" value="115" />
+    <task id="LOCAL-00115" summary="improved naming for basic bayes opt runs">
+      <created>1443328154676</created>
+      <option name="number" value="00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1443328154676</updated>
+    </task>
+    <option name="localTasksCounter" value="116" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1168,7 +1168,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="added gradient clipping and lr scaling by sequence length to rnn_minibatch_mod" />
     <MESSAGE value="needed to uncomment one line" />
     <MESSAGE value="removed debugging line" />
     <MESSAGE value="added clipping gradients as an option for rnn_multitask" />
@@ -1193,7 +1192,8 @@
     <MESSAGE value="just realized I wasn't properly using the reusable holdout for linear models with bayes opt; now fixed" />
     <MESSAGE value="fixed a typo in common" />
     <MESSAGE value="corrected a file name" />
-    <option name="LAST_COMMIT_MESSAGE" value="corrected a file name" />
+    <MESSAGE value="improved naming for basic bayes opt runs" />
+    <option name="LAST_COMMIT_MESSAGE" value="improved naming for basic bayes opt runs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1688,8 +1688,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8535156">
-          <caret line="356" column="34" selection-start-line="356" selection-start-column="34" selection-end-line="356" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.6777344">
+          <caret line="345" column="0" selection-start-line="345" selection-start-column="0" selection-end-line="345" selection-end-column="0" />
           <folding />
         </state>
       </provider>

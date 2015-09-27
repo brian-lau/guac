@@ -334,6 +334,7 @@ def main():
     elif run == 'MOLD':
         add_MOLD()
         group = ['McCain-Likes', 'McCain-Dislikes', 'Obama-Likes', 'Obama-Dislikes']
+        n_codes = 34
     elif run == 'Primary':
         add_obama()
         group = ['Obama-Primary', 'Clinton-Primary']
