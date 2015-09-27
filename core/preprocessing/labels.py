@@ -6,6 +6,7 @@ from optparse import OptionParser
 import pandas as pd
 
 from ..util import file_handling as fh, defines
+import data_splitting as ds
 
 
 def make_label_metaindex():
@@ -91,16 +92,13 @@ def get_groups(group_file):
 
 
 def main():
-    parser = OptionParser()
-    (options, args) = parser.parse_args()
+    labels = get_labels(['Republican-Dislikes'])
+    train, dev, test = ds.get_all_splits(0, None)
 
-    group_file = args[0]
-    groups = get_groups(group_file)
-
-    for group in groups:
-        print group
-        output_label_counts(group)
-
+    df = pd.DataFrame(columns=labels.columns)
+    df.loc['n_train'] = labels.loc[train, :].sum(axis=0)
+    df.loc['n_test'] = labels.loc[test, :].sum(axis=0)
+    df.to_csv('/Users/dcard/Desktop/temp/counts.csv')
 
 if __name__ == '__main__':
     main()

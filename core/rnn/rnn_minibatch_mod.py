@@ -519,9 +519,8 @@ def main(params=None):
             'xavier_init': True
         }
 
-    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_mod.json')
-    #params['exp_name'] += '_best_minibatch_mod'
-    #params['n_hidden'] = int(params['n_hidden'])
+    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_DRLD_LSTM_params.json')
+    params['n_hidden'] = int(params['n_hidden'])
 
     keys = params.keys()
     keys.sort()
@@ -633,7 +632,8 @@ def main(params=None):
 
         extra_input_dims = 0
         if params['add_DRLD']:
-            extra_input_dims = 4
+            #extra_input_dims = 4
+            extra_input_dims = 2
 
         print "Building RNN"
         rnn = RNN(nh=params['n_hidden'],
@@ -661,6 +661,7 @@ def main(params=None):
         dev_dem = [1 if re.search('Democrat', i) else 0 for i in dev_items]
         test_dem = [1 if re.search('Democrat', i) else 0 for i in test_items]
 
+        """
         train_obama = [1 if re.search('Obama', i) else 0 for i in train_items]
         dev_obama = [1 if re.search('Obama', i) else 0 for i in dev_items]
         test_obama = [1 if re.search('Obama', i) else 0 for i in test_items]
@@ -672,6 +673,12 @@ def main(params=None):
         train_extra = [[train_likes[i], train_dem[i], train_obama[i], train_personal[i]] for i, t in enumerate(train_items)]
         dev_extra = [[dev_likes[i], dev_dem[i], dev_obama[i], dev_personal[i]] for i, t in enumerate(dev_items)]
         test_extra = [[test_likes[i], test_dem[i], test_obama[i], test_personal[i]] for i, t in enumerate(test_items)]
+        """
+
+        train_extra = [[train_likes[i], train_dem[i]] for i, t in enumerate(train_items)]
+        dev_extra = [[dev_likes[i], dev_dem[i]] for i, t in enumerate(dev_items)]
+        test_extra = [[test_likes[i], test_dem[i]] for i, t in enumerate(test_items)]
+
 
         ### LOAD
         #rnn.load(output_dir)
@@ -795,6 +802,13 @@ def main(params=None):
                 params['v_f1'] = valid_f1
                 params['be'] = e            # store the current epoch as a new best
 
+                if params['save_model']:
+                    predictions_test = predict(len(test_y), params['classify_minibatch_size'], test_x_win, test_masks,
+                                                test_y, params['win'], extra_input_dims, test_extra, best_rnn)
+                    best_rnn.save(output_dir)
+                    common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_test, test_items, output_dir)
+
+
             # learning rate decay if no improvement in a given number of epochs
             if abs(params['be']-params['ce']) >= params['decay_delay']:
                 params['clr'] *= params['decay_factor']
@@ -819,13 +833,10 @@ def main(params=None):
               'with the model', output_dir)
 
         if params['save_model']:
-            predictions_valid = predict(len(valid_y), params['classify_minibatch_size'], valid_x_win, valid_masks,
-                                        valid_y, params['win'], extra_input_dims, dev_extra, best_rnn)
-
-            #predictions_valid = [best_rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
+            predictions_test = predict(len(test_y), params['classify_minibatch_size'], test_x_win, test_masks,
+                                       test_y, params['win'], extra_input_dims, test_extra, best_rnn)
             best_rnn.save(output_dir)
-            common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_valid, dev_items, output_dir)
-
+            common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_test, test_items, output_dir)
 
         best_true_valid_f1s.append(params['v_f1'])
         best_test_f1s.append(params['te_f1'])

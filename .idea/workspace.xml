@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/preprocessing/labels.py" afterPath="$PROJECT_DIR$/core/preprocessing/labels.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_eval.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_eval.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -40,8 +42,8 @@
       <file leaf-file-name="experiment.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="10.222222">
-              <caret line="189" column="20" selection-start-line="189" selection-start-column="14" selection-end-line="189" selection-end-column="20" />
+            <state vertical-scroll-proportion="-4.7777777">
+              <caret line="481" column="34" selection-start-line="481" selection-start-column="25" selection-end-line="481" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -59,10 +61,22 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="common.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/rnn/common.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-5.3333335">
+              <caret line="242" column="19" selection-start-line="242" selection-start-column="19" selection-end-line="242" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="rnn_minibatch.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="20.037037">
+            <state vertical-scroll-proportion="28.925926">
               <caret line="161" column="47" selection-start-line="161" selection-start-column="47" selection-end-line="161" selection-end-column="47" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
@@ -74,9 +88,47 @@
       <file leaf-file-name="rnn_minibatch_mod.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.26682693">
-              <caret line="820" column="32" selection-start-line="820" selection-start-column="32" selection-end-line="820" selection-end-column="32" />
-              <folding />
+            <state vertical-scroll-proportion="0.62740386">
+              <caret line="839" column="0" selection-start-line="839" selection-start-column="0" selection-end-line="839" selection-end-column="0" />
+              <folding>
+                <element signature="e#66#101#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="evaluation.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/experiment/evaluation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-5.888889">
+              <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="labels.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/preprocessing/labels.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="100" column="51" selection-start-line="100" selection-start-column="51" selection-end-line="100" selection-end-column="51" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rnn_eval.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/rnn/rnn_eval.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="30" column="105" selection-start-line="30" selection-start-column="105" selection-end-line="30" selection-end-column="105" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -87,18 +139,6 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="782" column="0" selection-start-line="782" selection-start-column="0" selection-end-line="782" selection-end-column="0" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="visualize_vectors.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/word_vectors/visualize_vectors.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="50" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -129,7 +169,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/core/brown_clusters/brown_cluster_paths_to_vectors.py" />
         <option value="$PROJECT_DIR$/core/rnn/extract_ngram_tokens_for_rnn.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py" />
         <option value="$PROJECT_DIR$/core/stanford/stanford_preprocess.py" />
@@ -150,7 +189,6 @@
         <option value="$PROJECT_DIR$/core/gensim.py" />
         <option value="$PROJECT_DIR$/core/util/defines.py" />
         <option value="$PROJECT_DIR$/core/gensim_processing/lda.py" />
-        <option value="$PROJECT_DIR$/core/preprocessing/labels.py" />
         <option value="$PROJECT_DIR$/core/experiment/experiment_powerset.py" />
         <option value="$PROJECT_DIR$/core/models/sparse_model.py" />
         <option value="$PROJECT_DIR$/core/models/multilabel_model.py" />
@@ -167,7 +205,6 @@
         <option value="$PROJECT_DIR$/core/word_vectors/train_vectors.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_char.py" />
         <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_chars.py" />
-        <option value="$PROJECT_DIR$/core/experiment/experiment.py" />
         <option value="$PROJECT_DIR$/core/experiment/gather_results.py" />
         <option value="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
         <option value="$PROJECT_DIR$/core/rnn/common.py" />
@@ -179,6 +216,9 @@
         <option value="$PROJECT_DIR$/core/experiment/summarize_results.py" />
         <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch.py" />
+        <option value="$PROJECT_DIR$/core/preprocessing/labels.py" />
+        <option value="$PROJECT_DIR$/core/experiment/experiment.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_eval.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
       </list>
     </option>
@@ -310,6 +350,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="rnn" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="guac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="guac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="preprocessing" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -748,12 +806,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00060" summary="working towards batch prediction">
-      <created>1442444699193</created>
-      <option name="number" value="00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1442444699193</updated>
-    </task>
     <task id="LOCAL-00061" summary="added a powerset approach, though it's a bit hacky right now, and not currently beating other things on DRLD">
       <created>1442523028815</created>
       <option name="number" value="00061" />
@@ -1042,7 +1094,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443315777653</updated>
     </task>
-    <option name="localTasksCounter" value="109" />
+    <task id="LOCAL-00109" summary="moved the location of saving">
+      <created>1443318794282</created>
+      <option name="number" value="00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1443318794282</updated>
+    </task>
+    <option name="localTasksCounter" value="110" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1112,7 +1170,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="fiddling with bayes opt for linear" />
     <MESSAGE value="added some word decoartors" />
     <MESSAGE value="adjusted use of decorated words, and added all datasets as optiosn for linear bayes opt experiment" />
     <MESSAGE value="udpated initialization of bias terms in rnn_minibatch_mod" />
@@ -1137,7 +1194,8 @@
     <MESSAGE value="got it working, removing excess output" />
     <MESSAGE value="restricted search to runs 1-40" />
     <MESSAGE value="readded sorting of first epoch, also changed parameter space slightly, and caught a bug regarding the attention params" />
-    <option name="LAST_COMMIT_MESSAGE" value="readded sorting of first epoch, also changed parameter space slightly, and caught a bug regarding the attention params" />
+    <MESSAGE value="moved the location of saving" />
+    <option name="LAST_COMMIT_MESSAGE" value="moved the location of saving" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1239,23 +1297,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/util/file_handling.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="84" column="32" selection-start-line="84" selection-start-column="32" selection-end-line="84" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#9#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/brown_clusters/extract_text_from_reddit_comments.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="21" column="18" selection-start-line="21" selection-start-column="18" selection-end-line="21" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/brown_clusters/output_text_for_brown_clusters.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.91386557">
@@ -1274,6 +1315,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3326226">
           <caret line="478" column="4" selection-start-line="478" selection-start-column="4" selection-end-line="478" selection-end-column="4" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1295,14 +1337,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3324937">
           <caret line="148" column="52" selection-start-line="148" selection-start-column="48" selection-end-line="148" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/experiment/evaluation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1462,14 +1496,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/preprocessing/labels.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.6169724">
-          <caret line="58" column="38" selection-start-line="58" selection-start-column="38" selection-end-line="58" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/gather_results.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1614,40 +1640,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="10.222222">
-          <caret line="189" column="20" selection-start-line="189" selection-start-column="14" selection-end-line="189" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/summarize_results.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="38" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/common.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.7777777">
-          <caret line="177" column="21" selection-start-line="177" selection-start-column="20" selection-end-line="177" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="20.037037">
-          <caret line="161" column="47" selection-start-line="161" selection-start-column="47" selection-end-line="161" selection-end-column="47" />
-          <folding>
-            <element signature="e#66#101#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1662,11 +1660,79 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="28.925926">
+          <caret line="161" column="47" selection-start-line="161" selection-start-column="47" selection-end-line="161" selection-end-column="47" />
+          <folding>
+            <element signature="e#66#101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/preprocessing/data_splitting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33173078">
+          <caret line="86" column="4" selection-start-line="86" selection-start-column="4" selection-end-line="86" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/preprocessing/labels.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="100" column="51" selection-start-line="100" selection-start-column="51" selection-end-line="100" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/common.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.3333335">
+          <caret line="242" column="19" selection-start-line="242" selection-start-column="19" selection-end-line="242" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.7777777">
+          <caret line="481" column="34" selection-start-line="481" selection-start-column="25" selection-end-line="481" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/experiment/evaluation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.888889">
+          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_eval.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="105" selection-start-line="30" selection-start-column="105" selection-end-line="30" selection-end-column="105" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26682693">
-          <caret line="820" column="32" selection-start-line="820" selection-start-column="32" selection-end-line="820" selection-end-column="32" />
-          <folding />
+        <state vertical-scroll-proportion="0.62740386">
+          <caret line="839" column="0" selection-start-line="839" selection-start-column="0" selection-end-line="839" selection-end-column="0" />
+          <folding>
+            <element signature="e#66#101#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
