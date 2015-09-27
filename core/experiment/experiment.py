@@ -230,10 +230,10 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
         model = models[code]
         model.write_to_file(output_filename)
 
-    print {'valid_f1': valid_cv_summary['macrof1']['overall'].mean(),
+    print {'valid_f1': masked_valid_cv_summary['macrof1']['overall'].mean(),
            'test_f1': test_summary['macrof1'].loc['test', 'overall']}
 
-    return {'loss': -valid_cv_summary['macrof1']['overall'].mean(),
+    return {'loss': -masked_valid_cv_summary['macrof1']['overall'].mean(),
             'test_f1': test_summary['macrof1'].loc['test', 'overall'],
             'status': STATUS_OK
             }

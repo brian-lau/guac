@@ -234,7 +234,7 @@ def call_experiment(args):
     if reuse:
         kwargs['reuse'] = True
     else:
-        kwargs['false'] = True
+        kwargs['reuse'] = False
 
     alphas = None
     if search_alpha:
