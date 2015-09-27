@@ -812,19 +812,19 @@ def main(params=None):
             if best_f1 == 0 and e > 7:
                 break
 
-        if params['save_model']:
-            predictions_valid = predict(len(valid_y), params['classify_minibatch_size'], valid_x_win, valid_masks,
-                                        valid_y, params['win'], extra_input_dims, dev_extra, rnn)
-
-            #predictions_valid = [best_rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
-            best_rnn.save(output_dir)
-            common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_valid, dev_items, output_dir)
-
         print('BEST RESULT: epoch', params['be'],
               'train F1 ', params['tr_f1'],
               'valid F1', params['v_f1'],
               'best test F1', params['te_f1'],
               'with the model', output_dir)
+
+        if params['save_model']:
+            predictions_valid = predict(len(valid_y), params['classify_minibatch_size'], valid_x_win, valid_masks,
+                                        valid_y, params['win'], extra_input_dims, dev_extra, best_rnn)
+
+            #predictions_valid = [best_rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
+            best_rnn.save(output_dir)
+            common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_valid, dev_items, output_dir)
 
 
         best_true_valid_f1s.append(params['v_f1'])
