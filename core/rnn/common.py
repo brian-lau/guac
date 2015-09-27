@@ -208,7 +208,7 @@ def write_predictions(datasets, test_fold, dev_fold, predictions, items, output_
         predictions_df.loc[item] = predictions[i]
     count = 0
     for d in datasets:
-        test_items = ds.get_test_documents(d, test_fold, dev_fold)
+        test_items = ds.get_test_documents(d, test_fold)
         true_labels = labels.get_dataset_labels(d)
         print count, len(test_items)
         output_df = predictions_df.loc[test_items]
