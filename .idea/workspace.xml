@@ -96,8 +96,8 @@
       <file leaf-file-name="rnn_minibatch_mod.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.19175258">
-              <caret line="637" column="28" selection-start-line="637" selection-start-column="28" selection-end-line="637" selection-end-column="28" />
+            <state vertical-scroll-proportion="0.39648438">
+              <caret line="681" column="9" selection-start-line="681" selection-start-column="9" selection-end-line="681" selection-end-column="9" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
               </folding>
@@ -235,8 +235,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1444" />
-    <option name="y" value="39" />
+    <option name="x" value="1460" />
+    <option name="y" value="38" />
     <option name="width" value="1247" />
     <option name="height" value="871" />
   </component>
@@ -804,12 +804,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00070" summary="fixed a typo for bidirectional LSTM">
-      <created>1442711472518</created>
-      <option name="number" value="00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1442711472518</updated>
-    </task>
     <task id="LOCAL-00071" summary="reset a couple of settings">
       <created>1442711540524</created>
       <option name="number" value="00071" />
@@ -1098,11 +1092,17 @@
       <option name="project" value="LOCAL" />
       <updated>1443328868481</updated>
     </task>
-    <option name="localTasksCounter" value="119" />
+    <task id="LOCAL-00119" summary="restored extra input dims">
+      <created>1443328906780</created>
+      <option name="number" value="00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1443328906780</updated>
+    </task>
+    <option name="localTasksCounter" value="120" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1444" y="39" width="1247" height="871" extended-state="0" />
+    <frame x="1460" y="38" width="1247" height="871" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1168,7 +1168,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="added a script to visualize vectors with t-SNE" />
     <MESSAGE value="updated rnn to run on multiple datasets, hopefully" />
     <MESSAGE value="updated experiment naming" />
     <MESSAGE value="updated number of runs" />
@@ -1193,7 +1192,8 @@
     <MESSAGE value="added one number" />
     <MESSAGE value="removed code to load saved model" />
     <MESSAGE value="uncommented rnn training...." />
-    <option name="LAST_COMMIT_MESSAGE" value="uncommented rnn training...." />
+    <MESSAGE value="restored extra input dims" />
+    <option name="LAST_COMMIT_MESSAGE" value="restored extra input dims" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1686,8 +1686,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.19175258">
-          <caret line="637" column="28" selection-start-line="637" selection-start-column="28" selection-end-line="637" selection-end-column="28" />
+        <state vertical-scroll-proportion="0.39648438">
+          <caret line="681" column="9" selection-start-line="681" selection-start-column="9" selection-end-line="681" selection-end-column="9" />
           <folding>
             <element signature="e#66#101#0" expanded="true" />
           </folding>

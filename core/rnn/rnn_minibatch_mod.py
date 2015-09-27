@@ -679,7 +679,7 @@ def main(params=None):
 
 
         ### LOAD
-        rnn.load(output_dir)
+        #rnn.load(output_dir)
 
         # train with early stopping on validation set
         best_f1 = -np.inf
