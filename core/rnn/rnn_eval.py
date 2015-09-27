@@ -15,11 +15,11 @@ def main(param=None):
     (options, args) = parser.parse_args()
     folder = args[0]
 
-    datasets = ['Democrat-Dislikes']
+    datasets = ['Republican-Dislikes']
 
     # evaluate performance
     for d in datasets:
-        test_items = ds.get_test_documents(d, 0, 0)
+        test_items = ds.get_test_documents(d, 0)
         true_labels = labels.get_dataset_labels(d)
 
         report_header = evaluation.get_report_header(d, test_fold=0, dev_subfold=0)

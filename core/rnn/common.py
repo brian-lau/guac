@@ -224,11 +224,11 @@ def write_predictions(datasets, test_fold, dev_fold, predictions, items, output_
         f1s.append(f1)
         pps.append(pp)
 
-    output_filename = fh.make_filename(output_dir, 'valid_summary_f1', 'csv')
+    output_filename = fh.make_filename(output_dir, 'test_summary_f1', 'csv')
     question_f1s_df = pd.DataFrame(np.array(f1s).reshape([1, len(datasets)]),
                                    index=['macro f1'], columns=datasets)
     question_f1s_df.to_csv(output_filename)
-    output_filename = fh.make_filename(output_dir, 'valid_summary_pp', 'csv')
+    output_filename = fh.make_filename(output_dir, 'test_summary_pp', 'csv')
     question_pps_df = pd.DataFrame(np.array(pps).reshape([1, len(datasets)]),
                                    index=['percent perfect'], columns=datasets)
     question_pps_df.to_csv(output_filename)
