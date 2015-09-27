@@ -231,9 +231,10 @@ def call_experiment(args):
         brown = 'brown,clusters=anes,binarize=' + args['features']['brown_vectors']['bc_binarize']
         feature_list.append(brown)
 
-
     if reuse:
         kwargs['reuse'] = True
+    else:
+        kwargs['false'] = True
 
     alphas = None
     if search_alpha:

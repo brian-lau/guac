@@ -681,7 +681,7 @@ def main(params=None):
 
 
         ### LOAD
-        #rnn.load(output_dir)
+        rnn.load(output_dir)
 
         # train with early stopping on validation set
         best_f1 = -np.inf
@@ -706,6 +706,7 @@ def main(params=None):
             n_train = len(train_lex)
             nll = 0
 
+            """
             #for i, orig_x in enumerate(train_lex):
             for iteration, i in enumerate(range(0, n_train, ms)):
 
@@ -749,6 +750,8 @@ def main(params=None):
 
             # evaluation // back into the real world : idx -> words
             print ""
+            """
+
 
             #print "true y", train_y[-1]
             #y_pred = rnn.classify(np.array(train_x_win[-1]).reshape((1, len(train_x_win[-1]))),
@@ -803,11 +806,12 @@ def main(params=None):
                 params['be'] = e            # store the current epoch as a new best
 
                 if params['save_model']:
+                    print "Predicting and saving model"
                     predictions_test = predict(len(test_y), params['classify_minibatch_size'], test_x_win, test_masks,
                                                 test_y, params['win'], extra_input_dims, test_extra, best_rnn)
                     best_rnn.save(output_dir)
                     common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_test, test_items, output_dir)
-
+                    print "Done"
 
             # learning rate decay if no improvement in a given number of epochs
             if abs(params['be']-params['ce']) >= params['decay_delay']:

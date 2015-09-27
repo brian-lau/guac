@@ -208,17 +208,17 @@ def write_predictions(datasets, test_fold, dev_fold, predictions, items, output_
         predictions_df.loc[item] = predictions[i]
     count = 0
     for d in datasets:
-        dev_items = ds.get_dev_documents(d, test_fold, dev_fold)
+        test_items = ds.get_test_documents(d, test_fold, dev_fold)
         true_labels = labels.get_dataset_labels(d)
-        print count, len(dev_items)
-        output_df = predictions_df.loc[dev_items]
+        print count, len(test_items)
+        output_df = predictions_df.loc[test_items]
         #output_df = pd.DataFrame(np.zeros([len(items), len(true_labels.columns)]),
         #                         index=items, columns=true_labels.columns)
         #for i, item in enumerate(items):
         #    output_df.loc[item] = predictions[count+i]
         output_filename = fh.make_filename(output_dir, fh.get_basename(d), 'csv')
         output_df.to_csv(output_filename)
-        f1, pp = evaluation.calc_macro_mean_f1_pp(true_labels.loc[dev_items], output_df)
+        f1, pp = evaluation.calc_macro_mean_f1_pp(true_labels.loc[test_items], output_df)
         print d, f1, pp
         #count += len(items)
         f1s.append(f1)

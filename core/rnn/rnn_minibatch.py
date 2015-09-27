@@ -870,12 +870,10 @@ def main(params=None):
                 break
 
         if params['save_model']:
-            predictions_valid = predict(len(valid_y), params['classify_minibatch_size'], valid_x_win, valid_masks,
-                                        valid_y, params['win'], extra_input_dims, dev_extra, rnn)
-
-            #predictions_valid = [best_rnn.classify(np.asarray(contextwin(x, params['win'])).astype('int32')) for x in valid_lex]
+            predictions_test = predict(len(test_y), params['classify_minibatch_size'], test_x_win, test_masks,
+                                       test_y, params['win'], extra_input_dims, test_extra, best_rnn)
             best_rnn.save(output_dir)
-            common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_valid, dev_items, output_dir)
+            common.write_predictions(datasets, params['test_fold'], dev_fold, predictions_test, test_items, output_dir)
 
         print('BEST RESULT: epoch', params['be'],
               'train F1 ', params['tr_f1'],
