@@ -519,8 +519,8 @@ def main(params=None):
             'xavier_init': True
         }
 
-    params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_DRLD_LSTM_params.json')
-    params['n_hidden'] = int(params['n_hidden'])
+    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_DRLD_LSTM_params.json')
+    #params['n_hidden'] = int(params['n_hidden'])
 
     keys = params.keys()
     keys.sort()
