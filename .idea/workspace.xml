@@ -96,8 +96,8 @@
       <file leaf-file-name="rnn_minibatch_mod.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.62474227">
-              <caret line="752" column="0" selection-start-line="752" selection-start-column="0" selection-end-line="752" selection-end-column="0" />
+            <state vertical-scroll-proportion="-0.19175258">
+              <caret line="637" column="28" selection-start-line="637" selection-start-column="28" selection-end-line="637" selection-end-column="28" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
               </folding>
@@ -804,12 +804,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00069" summary="reverted back to standard word2vec vectors">
-      <created>1442710473385</created>
-      <option name="number" value="00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1442710473385</updated>
-    </task>
     <task id="LOCAL-00070" summary="fixed a typo for bidirectional LSTM">
       <created>1442711472518</created>
       <option name="number" value="00070" />
@@ -1098,7 +1092,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443328763712</updated>
     </task>
-    <option name="localTasksCounter" value="118" />
+    <task id="LOCAL-00118" summary="uncommented rnn training....">
+      <created>1443328868481</created>
+      <option name="number" value="00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1443328868481</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1168,7 +1168,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="added clipping gradients as an option for rnn_multitask" />
     <MESSAGE value="added a script to visualize vectors with t-SNE" />
     <MESSAGE value="updated rnn to run on multiple datasets, hopefully" />
     <MESSAGE value="updated experiment naming" />
@@ -1193,7 +1192,8 @@
     <MESSAGE value="improved naming for basic bayes opt runs" />
     <MESSAGE value="added one number" />
     <MESSAGE value="removed code to load saved model" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed code to load saved model" />
+    <MESSAGE value="uncommented rnn training...." />
+    <option name="LAST_COMMIT_MESSAGE" value="uncommented rnn training...." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1686,8 +1686,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.62474227">
-          <caret line="752" column="0" selection-start-line="752" selection-start-column="0" selection-end-line="752" selection-end-column="0" />
+        <state vertical-scroll-proportion="-0.19175258">
+          <caret line="637" column="28" selection-start-line="637" selection-start-column="28" selection-end-line="637" selection-end-column="28" />
           <folding>
             <element signature="e#66#101#0" expanded="true" />
           </folding>

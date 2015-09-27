@@ -633,7 +633,7 @@ def main(params=None):
         extra_input_dims = 0
         if params['add_DRLD']:
             #extra_input_dims = 4
-            extra_input_dims = 2
+            extra_input_dims = 4
 
         print "Building RNN"
         rnn = RNN(nh=params['n_hidden'],
@@ -661,7 +661,6 @@ def main(params=None):
         dev_dem = [1 if re.search('Democrat', i) else 0 for i in dev_items]
         test_dem = [1 if re.search('Democrat', i) else 0 for i in test_items]
 
-        """
         train_obama = [1 if re.search('Obama', i) else 0 for i in train_items]
         dev_obama = [1 if re.search('Obama', i) else 0 for i in dev_items]
         test_obama = [1 if re.search('Obama', i) else 0 for i in test_items]
@@ -673,11 +672,10 @@ def main(params=None):
         train_extra = [[train_likes[i], train_dem[i], train_obama[i], train_personal[i]] for i, t in enumerate(train_items)]
         dev_extra = [[dev_likes[i], dev_dem[i], dev_obama[i], dev_personal[i]] for i, t in enumerate(dev_items)]
         test_extra = [[test_likes[i], test_dem[i], test_obama[i], test_personal[i]] for i, t in enumerate(test_items)]
-        """
 
-        train_extra = [[train_likes[i], train_dem[i]] for i, t in enumerate(train_items)]
-        dev_extra = [[dev_likes[i], dev_dem[i]] for i, t in enumerate(dev_items)]
-        test_extra = [[test_likes[i], test_dem[i]] for i, t in enumerate(test_items)]
+        #train_extra = [[train_likes[i], train_dem[i]] for i, t in enumerate(train_items)]
+        #dev_extra = [[dev_likes[i], dev_dem[i]] for i, t in enumerate(dev_items)]
+        #test_extra = [[test_likes[i], test_dem[i]] for i, t in enumerate(test_items)]
 
 
         ### LOAD
