@@ -13,7 +13,7 @@ from ..util import defines
 from ..util import file_handling as fh
 
 
-def load_data(datasets, test_fold, dev_subfold, min_doc_thresh):
+def load_data(datasets, test_fold, dev_subfold, min_doc_thresh, test_item=None):
     train_items = []
     dev_items = []
     test_items = []
@@ -25,6 +25,9 @@ def load_data(datasets, test_fold, dev_subfold, min_doc_thresh):
         dev_items.extend(ds.get_dev_documents(d, test_fold, dev_subfold))
         test_items.extend(ds.get_test_documents(d, test_fold))
         label_list.append(labels.get_dataset_labels(d))
+
+    if test_item is not None:
+        test_items = [test_item]
 
     items = (train_items, dev_items, test_items)
 
