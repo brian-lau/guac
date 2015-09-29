@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="reorganized a bit">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/evaluation/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/evaluation/find_most_errors.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/experiment/gather_results.py" afterPath="$PROJECT_DIR$/core/evaluation/gather_results.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/core/experiment/summarize_results.py" afterPath="$PROJECT_DIR$/core/evaluation/summarize_results.py" />
+    <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/experiment_multilabel_test.py" afterPath="$PROJECT_DIR$/core/experiment/experiment_multilabel_test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -64,24 +59,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="experiment_multilabel_test.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="experiment_multilabel_test.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/experiment/experiment_multilabel_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.185185">
-              <caret line="487" column="57" selection-start-line="487" selection-start-column="57" selection-end-line="487" selection-end-column="57" />
+            <state vertical-scroll-proportion="1.0496614">
+              <caret line="95" column="58" selection-start-line="95" selection-start-column="58" selection-end-line="95" selection-end-column="58" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="experiment_powerset.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/experiment/experiment_powerset.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="148" column="52" selection-start-line="148" selection-start-column="48" selection-end-line="148" selection-end-column="52" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -108,10 +93,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rnn_minibatch_mod.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rnn_minibatch_mod.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.70212764">
+            <state vertical-scroll-proportion="0.0">
               <caret line="522" column="5" selection-start-line="522" selection-start-column="5" selection-end-line="522" selection-end-column="5" />
               <folding>
                 <element signature="e#66#101#0" expanded="true" />
@@ -195,8 +180,8 @@
         <option value="$PROJECT_DIR$/core/evaluation/gather_results.py" />
         <option value="$PROJECT_DIR$/core/evaluation/summarize_results.py" />
         <option value="$PROJECT_DIR$/core/evaluation/find_most_errors.py" />
-        <option value="$PROJECT_DIR$/core/experiment/experiment_multilabel_test.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
+        <option value="$PROJECT_DIR$/core/experiment/experiment_multilabel_test.py" />
       </list>
     </option>
   </component>
@@ -803,12 +788,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00075" summary="added training error to output of bayesopt">
-      <created>1442938606321</created>
-      <option name="number" value="00075" />
-      <option name="project" value="LOCAL" />
-      <updated>1442938606321</updated>
-    </task>
     <task id="LOCAL-00076" summary="added character RNN into rnn_minibatch">
       <created>1442941077889</created>
       <option name="number" value="00076" />
@@ -1097,7 +1076,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443405321437</updated>
     </task>
-    <option name="localTasksCounter" value="124" />
+    <task id="LOCAL-00124" summary="reorganized a bit">
+      <created>1443533768492</created>
+      <option name="number" value="00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1443533768492</updated>
+    </task>
+    <option name="localTasksCounter" value="125" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1167,7 +1152,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="tried to align minibatch and minibatch_mod" />
     <MESSAGE value="make a quick script to summarize results" />
     <MESSAGE value="changed matrix to dataframe for ease" />
     <MESSAGE value="added error handler" />
@@ -1192,7 +1176,8 @@
     <MESSAGE value="commented out unnecessary saving" />
     <MESSAGE value="corrected bayes opt naming" />
     <MESSAGE value="setup rnn mod to output probs" />
-    <option name="LAST_COMMIT_MESSAGE" value="setup rnn mod to output probs" />
+    <MESSAGE value="reorganized a bit" />
+    <option name="LAST_COMMIT_MESSAGE" value="reorganized a bit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1680,6 +1665,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="522" column="5" selection-start-line="522" selection-start-column="5" selection-end-line="522" selection-end-column="5" />
+          <folding>
+            <element signature="e#66#101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/experiment/experiment_powerset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5893617">
+          <caret line="148" column="52" selection-start-line="148" selection-start-column="48" selection-end-line="148" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/experiment.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1688,30 +1691,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/experiment/experiment_powerset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="148" column="52" selection-start-line="148" selection-start-column="48" selection-end-line="148" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/experiment_multilabel_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.185185">
-          <caret line="487" column="57" selection-start-line="487" selection-start-column="57" selection-end-line="487" selection-end-column="57" />
+        <state vertical-scroll-proportion="1.0496614">
+          <caret line="95" column="58" selection-start-line="95" selection-start-column="58" selection-end-line="95" selection-end-column="58" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.70212764">
-          <caret line="522" column="5" selection-start-line="522" selection-start-column="5" selection-end-line="522" selection-end-column="5" />
-          <folding>
-            <element signature="e#66#101#0" expanded="true" />
           </folding>
         </state>
       </provider>

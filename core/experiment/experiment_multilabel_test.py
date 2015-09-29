@@ -93,7 +93,7 @@ def write_log(exp_dir, names_list, values_list):
 
 # Run an experiment on a group of questions
 def run_group_experiment(name, datasets, test_fold, feature_list, model_type, unique_name=False,
-                         min_alpha_exp=0, max_alpha_exp=0, alpha_exp_base=np.sqrt(10),
+                         min_alpha_exp=-1, max_alpha_exp=8, alpha_exp_base=np.sqrt(10),
                          reuse=False, orig_T=0.04, tau=0.01, verbose=1, best_alphas=None,
                          **kwargs):
     print model_type
