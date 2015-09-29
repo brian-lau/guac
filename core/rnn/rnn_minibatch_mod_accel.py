@@ -177,6 +177,8 @@ class RNN(object):
                        self.W_s]
         self.params += [self.b_s]
 
+        self.old_params = copy.deepcopy(self.params)
+
         #self.params += [self.h_i_f]
         if train_embeddings:
             self.params += [self.emb]
@@ -375,7 +377,8 @@ class RNN(object):
         #sentence_nll = T.mean(T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)), axis=1))
         sentence_nll = T.sum(-T.log(y*p_y_given_x_sentence + (1-y)*(1-p_y_given_x_sentence)))
 
-        sentence_gradients = T.grad(sentence_nll, self.params)
+        #k = T.iscalar('k')
+        #sentence_gradients = T.grad(sentence_nll, self.params + (k-2)/(k-1)*(self.params))
 
         clipped_grads = [T.clip(g, -1, 1) for g in sentence_gradients]
         grad_max = [T.max(g) for g in clipped_grads]

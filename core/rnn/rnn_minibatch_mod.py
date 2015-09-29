@@ -632,8 +632,11 @@ def main(params=None):
 
         extra_input_dims = 0
         if params['add_DRLD']:
-            #extra_input_dims = 4
-            extra_input_dims = 2
+            if params['dataset'] == 'DRLD':
+                extra_input_dims = 2
+            else:
+                extra_input_dims = 4
+
 
         print "Building RNN"
         rnn = RNN(nh=params['n_hidden'],

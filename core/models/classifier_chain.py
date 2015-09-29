@@ -53,9 +53,9 @@ class ClassifierChain(MultilabelModel):
                                                                         reuser=reuser, verbose=verbose)
             alphas.loc['alpha', code] = best_alpha
             predictions = sparse.csc_matrix(model.predict(X))
-            if predictions.T.shape[0] == 1:
-                predictions = predictions.T
-            X = sparse.csc_matrix(sparse.hstack([X, predictions.T]))
+
+            predictions = predictions.reshape((predictions.size, 1))
+            X = sparse.csc_matrix(sparse.hstack([X, predictions]))
             if verbose > 0:
                 print i, code, y.sum(), best_alpha, valid_f1_summary.mean(axis=0)[str(best_alpha)]
 
