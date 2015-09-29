@@ -21,6 +21,7 @@ reuse = None
 search_alpha = None
 run = None
 group = None
+test_fold = None
 
 
 space = {
@@ -243,7 +244,7 @@ def call_experiment(args):
             alphas.append(float(alpha))
         kwargs['best_alphas'] = alphas
 
-    base_dir = fh.makedirs(defines.exp_dir, '_'.join(group), "test_fold_0")
+    base_dir = fh.makedirs(defines.exp_dir, '_'.join(group), "test_fold_" + str(test_fold))
     basename = fh.get_basename(output_dirname)
     existing_dirs = glob.glob(os.path.join(base_dir, basename + '*'))
     max_num = 0
@@ -257,7 +258,7 @@ def call_experiment(args):
     name = fh.get_basename(output_filename) + '_' + str(max_num + 1)
 
     print feature_list
-    result = experiment.run_group_experiment(name, group, 0, feature_list, model_type=model, **kwargs)
+    result = experiment.run_group_experiment(name, group, test_fold, feature_list, model_type=model, **kwargs)
     print result
 
     with codecs.open(output_filename, 'a') as output_file:
@@ -274,6 +275,8 @@ def main():
     parser = OptionParser(usage=usage)
     parser.add_option('-m', dest='model', default='LR',
                       help='Model: (LR|SVM|MNB|SVMNB); default=%default')
+    parser.add_option('-t', dest='test_fold', default=0,
+                      help='Test fold; default=%default')
     parser.add_option('-o', dest='output_dirname', default='bayes_opt',
                       help='Output directory name')
     parser.add_option('--reuse', dest='reuse', action="store_true", default=False,
@@ -287,12 +290,13 @@ def main():
 
     run = args[0]
 
-    global output_dirname, output_filename, reuse, search_alpha, space, run, group
+    global output_dirname, output_filename, reuse, search_alpha, space, run, group, test_fold
     reuse = options.reuse
     search_alpha = options.alpha
     n_codes = int(options.n_codes)
     output_dirname = options.output_dirname
     model = options.model
+    test_fold = int(options.test_fold)
 
     # allow user to specfiy a particular choice of model
     if model == 'LR':
