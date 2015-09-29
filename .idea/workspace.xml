@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_mod.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/models/classifier_chain.py" afterPath="$PROJECT_DIR$/core/models/classifier_chain.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_accel.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_accel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_mod.py" afterPath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_mod.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -43,8 +40,8 @@
       <file leaf-file-name="run_with_bayes_opt_mod.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt_mod.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="5.840708">
-              <caret line="192" column="28" selection-start-line="192" selection-start-column="28" selection-end-line="192" selection-end-column="28" />
+            <state vertical-scroll-proportion="0.43141592">
+              <caret line="142" column="58" selection-start-line="142" selection-start-column="58" selection-end-line="142" selection-end-column="58" />
               <folding />
             </state>
           </provider>
@@ -837,12 +834,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00078" summary="changed exit conditions on nan or inf">
-      <created>1442947950323</created>
-      <option name="number" value="00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1442947950323</updated>
-    </task>
     <task id="LOCAL-00079" summary="fixed a bug in bayes opt for char rnn">
       <created>1442947983289</created>
       <option name="number" value="00079" />
@@ -1131,7 +1122,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443546234102</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="made some modifications to bayes opt for rnns">
+      <created>1443551338882</created>
+      <option name="number" value="00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1443551338882</updated>
+    </task>
+    <option name="localTasksCounter" value="128" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1201,7 +1198,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="added error handler" />
     <MESSAGE value="chaned sorting" />
     <MESSAGE value="not working on server, adding output" />
     <MESSAGE value="got it working, removing excess output" />
@@ -1226,7 +1222,8 @@
     <MESSAGE value="reorganized a bit" />
     <MESSAGE value="reset a param" />
     <MESSAGE value="found a bug in classifier chains and fixed it" />
-    <option name="LAST_COMMIT_MESSAGE" value="found a bug in classifier chains and fixed it" />
+    <MESSAGE value="made some modifications to bayes opt for rnns" />
+    <option name="LAST_COMMIT_MESSAGE" value="made some modifications to bayes opt for rnns" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1730,8 +1727,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt_mod.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="5.840708">
-          <caret line="192" column="28" selection-start-line="192" selection-start-column="28" selection-end-line="192" selection-end-column="28" />
+        <state vertical-scroll-proportion="0.43141592">
+          <caret line="142" column="58" selection-start-line="142" selection-start-column="58" selection-end-line="142" selection-end-column="58" />
           <folding />
         </state>
       </provider>

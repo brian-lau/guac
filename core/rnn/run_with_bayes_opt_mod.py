@@ -136,7 +136,7 @@ def main():
     parser = OptionParser(usage=usage)
     parser.add_option('-m', dest='model', default='basic',
                       help='Model: (basic|GRU|LSTM); default=%default')
-    parser.add_option('-o', dest='output_dirname', default='bayes_opt_rnn',
+    parser.add_option('-o', dest='output_dirname', default='bayes_opt_rnn_mod',
                       help='Output directory name')
     parser.add_option('--reuse', dest='reuse', action="store_true", default=False,
                       help='Use reusable holdout; default=%default')
