@@ -10,7 +10,7 @@ class ECC:
 
     chains = None
 
-    def __init__(self, model_type, codes, feature_names=None, alphas=None, n_chains=5, **kwargs):
+    def __init__(self, model_type, codes, feature_names=None, alphas=None, n_chains=10, **kwargs):
         self.chains = []
         for i in range(n_chains):
             chain = ClassifierChain(model_type, codes, feature_names, alphas, **kwargs)
