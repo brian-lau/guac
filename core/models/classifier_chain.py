@@ -1,3 +1,4 @@
+import sys
 import re
 import random
 
@@ -36,8 +37,15 @@ class ClassifierChain(MultilabelModel):
             y = all_y[code].as_matrix()
             model = self.models[code]
             model.fit(X, y)
-            predictions = sparse.csc_matrix(model.predict(X))
-            X = sparse.csr_matrix(sparse.hstack([X, predictions.T]))
+            predictions = model.predict(X)
+            if len(predictions.shape) == 1:
+                predictions = predictions.reshape((predictions.size, 1))
+                predictions_sp = sparse.csc_matrix(predictions)
+            elif predictions.shape[0] == 1:
+                predictions_sp = sparse.csc_matrix(predictions.T)
+            else:
+                predictions_sp = sparse.csc_matrix(predictions)
+            X = sparse.csr_matrix(sparse.hstack([X, predictions_sp]))
 
     def tune_by_cv(self, orig_X, all_y, alpha_values, td_splits, n_dev_folds, reuser=None, verbose=1):
         X = sparse.csc_matrix(orig_X)
@@ -52,10 +60,17 @@ class ClassifierChain(MultilabelModel):
             valid_f1_summary, best_alpha = model.tune_by_cv(X, y, alpha_values, td_splits, n_dev_folds,
                                                                         reuser=reuser, verbose=verbose)
             alphas.loc['alpha', code] = best_alpha
-            predictions = sparse.csc_matrix(model.predict(X))
+            predictions = model.predict(X)
+            if len(predictions.shape) == 1:
+                predictions = predictions.reshape((predictions.size, 1))
+                predictions_sp = sparse.csc_matrix(predictions)
+            elif predictions.shape[0] == 1:
+                predictions_sp = sparse.csc_matrix(predictions.T)
+            else:
+                predictions_sp = sparse.csc_matrix(predictions)
 
-            predictions = predictions.reshape((predictions.size, 1))
-            X = sparse.csc_matrix(sparse.hstack([X, predictions]))
+            X = sparse.csc_matrix(sparse.hstack([X, predictions_sp]))
+
             if verbose > 0:
                 print i, code, y.sum(), best_alpha, valid_f1_summary.mean(axis=0)[str(best_alpha)]
 
