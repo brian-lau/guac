@@ -5,8 +5,8 @@ import glob
 import numpy as np
 import pandas as pd
 
-from ..util import defines
-from ..util import file_handling as fh
+from core.util import defines
+from core.util import file_handling as fh
 
 
 

@@ -1,12 +1,13 @@
 import os
 import glob
 
+import numpy as np
 import pandas as pd
 
-from ..util import defines
-from ..util import file_handling as fh
+from core.util import defines
+from core.util import file_handling as fh
 
-from ..preprocessing import labels
+from core.preprocessing import labels
 
 
 def main():
@@ -43,6 +44,14 @@ def gather_results(df, files, rowname):
         for d in datasets:
             results = pd.read_csv(file, header=False)
             df.loc[rowname, d] = results.loc[0, d]
+
+def find_most_errors(dataset, filename):
+    predicted = pd.read_csv(filename)
+    df_labels = labels.get_dataset_labels(dataset)
+
+    for i in predicted.index:
+        print np.sum(np.abs(predicted.loc[i, :] - df_labels.loc[i, :]))
+
 
 if __name__ == '__main__':
     main()

@@ -146,14 +146,14 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
         X_train = X[train_indices, :]
         y_train = all_y.loc[train_items, :]
 
-        multilabel_model = PowersetModel(model_type=model_type, codes=codes, feature_names=column_names,
+        multilabel_model = ECC(model_type=model_type, codes=codes, feature_names=column_names,
                                            **kwargs)
         multilabel_model.tune_by_cv(X_train, y_train, alphas, td_split_list, n_dev_folds,
                                                         reuser=reuser, verbose=2)
         #best_alphas = np.repeat(0, len(codes))
 
     else:
-        multilabel_model = PowersetModel(model_type=model_type, codes=codes, feature_names=column_names,
+        multilabel_model = ECC(model_type=model_type, codes=codes, feature_names=column_names,
                                            alphas=best_alphas, reuse=True, **kwargs)
 
     # re-run above, with best lambda, to get predictions (to estimate expected dev performance)
@@ -310,7 +310,7 @@ def train_and_predict(datasets, X, index, column_names, all_y, train_dict, valid
     y_train = all_y.loc[train_items, :]
 
     # for PowerSet:
-    y_train = all_y.loc[train_items, :].as_matrix()
+    #y_train = all_y.loc[train_items, :].as_matrix()
 
     multilabel_model.fit(X_train, y_train)
 

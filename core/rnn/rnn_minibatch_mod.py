@@ -633,7 +633,7 @@ def main(params=None):
         extra_input_dims = 0
         if params['add_DRLD']:
             #extra_input_dims = 4
-            extra_input_dims = 4
+            extra_input_dims = 2
 
         print "Building RNN"
         rnn = RNN(nh=params['n_hidden'],
@@ -669,25 +669,20 @@ def main(params=None):
         dev_personal = [1 if re.search('Personal', i) else 0 for i in dev_items]
         test_personal = [1 if re.search('Personal', i) else 0 for i in test_items]
 
-        train_extra = [[train_likes[i], train_dem[i], train_obama[i], train_personal[i]] for i, t in enumerate(train_items)]
-        dev_extra = [[dev_likes[i], dev_dem[i], dev_obama[i], dev_personal[i]] for i, t in enumerate(dev_items)]
-        test_extra = [[test_likes[i], test_dem[i], test_obama[i], test_personal[i]] for i, t in enumerate(test_items)]
-
-        #train_extra = [[train_likes[i], train_dem[i]] for i, t in enumerate(train_items)]
-        #dev_extra = [[dev_likes[i], dev_dem[i]] for i, t in enumerate(dev_items)]
-        #test_extra = [[test_likes[i], test_dem[i]] for i, t in enumerate(test_items)]
-
-
-        ### LOAD
-        #rnn.load(output_dir)
+        # HACK, because I added something to the model after training the best model for DRLD
+        if params['dataset'] == 'DRLD':
+            train_extra = [[train_likes[i], train_dem[i]] for i, t in enumerate(train_items)]
+            dev_extra = [[dev_likes[i], dev_dem[i]] for i, t in enumerate(dev_items)]
+            test_extra = [[test_likes[i], test_dem[i]] for i, t in enumerate(test_items)]
+        else:
+            train_extra = [[train_likes[i], train_dem[i], train_obama[i], train_personal[i]] for i, t in enumerate(train_items)]
+            dev_extra = [[dev_likes[i], dev_dem[i], dev_obama[i], dev_personal[i]] for i, t in enumerate(dev_items)]
+            test_extra = [[test_likes[i], test_dem[i], test_obama[i], test_personal[i]] for i, t in enumerate(test_items)]
 
         # train with early stopping on validation set
         best_f1 = -np.inf
         params['clr'] = params['lr']
         for e in xrange(params['n_epochs']):
-            # shuffle
-            #shuffle([train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
-
             # sort by length on the first epoch
             if e == 0:
                 order = length_order
@@ -696,6 +691,7 @@ def main(params=None):
                 train_extra = [train_extra[j] for j in order]
                 train_masks = [train_masks[j] for j in order]
             else:
+                # otherwise, shuffle everything consistently
                 shuffle([order, train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
             params['ce'] = e                # store the current epoch
             tic = timeit.default_timer()
@@ -704,7 +700,7 @@ def main(params=None):
             n_train = len(train_lex)
             nll = 0
 
-            #for i, orig_x in enumerate(train_lex):
+            # loop through all minibatches
             for iteration, i in enumerate(range(0, n_train, ms)):
 
                 minibatch_x, minibatch_mask,\
