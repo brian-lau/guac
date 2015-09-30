@@ -84,8 +84,16 @@ class ClassifierChain(MultilabelModel):
         for i, code in enumerate(self.order):
             model = self.models[code]
             predictions = model.predict(X)
-            predictions_csc = sparse.csc_matrix(predictions)
-            X = sparse.csr_matrix(sparse.hstack([X, predictions_csc.T]))
+            if len(predictions.shape) == 1:
+                predictions = predictions.reshape((predictions.size, 1))
+                predictions_sp = sparse.csc_matrix(predictions)
+            elif predictions.shape[0] == 1:
+                predictions_sp = sparse.csc_matrix(predictions.T)
+            else:
+                predictions_sp = sparse.csc_matrix(predictions)
+            X = sparse.csr_matrix(sparse.hstack([X, predictions_sp]))            
+            #predictions_csc = sparse.csc_matrix(predictions)
+            #X = sparse.csr_matrix(sparse.hstack([X, predictions_csc.T]))
             predictions_df[code] = predictions
 
         return predictions_df
@@ -98,8 +106,17 @@ class ClassifierChain(MultilabelModel):
         for i, code in enumerate(self.order):
             model = self.models[code]
             log_probs[code] = model.predict_p_y_eq_1(X)
-            predictions = sparse.csc_matrix(model.predict(X))
-            X = sparse.csr_matrix(sparse.hstack([X, predictions.T]))
+            #predictions = sparse.csc_matrix(model.predict(X))
+            #X = sparse.csr_matrix(sparse.hstack([X, predictions.T]))
+            predictions = model.predict(X)
+            if len(predictions.shape) == 1:
+                predictions = predictions.reshape((predictions.size, 1))
+                predictions_sp = sparse.csc_matrix(predictions)
+            elif predictions.shape[0] == 1:
+                predictions_sp = sparse.csc_matrix(predictions.T)
+            else:
+                predictions_sp = sparse.csc_matrix(predictions)
+            X = sparse.csr_matrix(sparse.hstack([X, predictions_sp]))             
 
         return log_probs
 
