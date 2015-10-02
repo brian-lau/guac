@@ -60,7 +60,7 @@ space = {
                     'use': True,
                     'pos_binarize': hp.choice('pos_binarize', ['True', 'False']),
                 }
-            ] ),
+            ]),
         'NER':
             hp.choice('NER', [
                 {
@@ -69,7 +69,7 @@ space = {
                 {
                     'use': True,
                 }
-            ] ),
+            ]),
         'brown_vectors':
             hp.choice('brown_vectors', [
                 {
@@ -79,11 +79,11 @@ space = {
                     'use': True,
                     'bc_binarize': hp.choice('bc_binarize', ['True', 'False'])
                 }
-            ] )
+            ])
     }
 }
 
-def add_DRLD():
+def add_drld():
     space['features']['like-dislike'] = hp.choice('like-dislike', [
             {
                 'use': False
@@ -91,9 +91,9 @@ def add_DRLD():
             {
                 'use': True,
                 'ld_binarize': hp.choice('ld_binarize', ['True', 'False']),
-                'ld_min_doc_threshold': hp.choice('ld_min_doc_threshold', [1,2,3,4,5])
+                'ld_min_doc_threshold': hp.choice('ld_min_doc_threshold', [1, 2, 3, 4, 5])
             }
-        ] )
+        ])
     space['features']['dem-rep'] = hp.choice('dem-rep', [
             {
                 'use': False
@@ -101,9 +101,9 @@ def add_DRLD():
             {
                 'use': True,
                 'dr_binarize': hp.choice('dr_binarize', ['True', 'False']),
-                'dr_min_doc_threshold': hp.choice('dr_min_doc_threshold', [1,2,3,4,5])
+                'dr_min_doc_threshold': hp.choice('dr_min_doc_threshold', [1, 2, 3, 4, 5])
             }
-        ] )
+        ])
 
 
 def add_MIP():
@@ -114,9 +114,9 @@ def add_MIP():
         {
             'use': True,
             'per_binarize': hp.choice('per_binarize', ['True', 'False']),
-            'per_min_doc_threshold': hp.choice('per_min_doc_threshold', [1,2,3,4,5])
+            'per_min_doc_threshold': hp.choice('per_min_doc_threshold', [1, 2, 3, 4, 5])
         }
-    ] )
+    ])
 
 
 def add_MOLD():
@@ -127,9 +127,9 @@ def add_MOLD():
         {
             'use': True,
             'ld_binarize': hp.choice('ld_binarize', ['True', 'False']),
-            'ld_min_doc_threshold': hp.choice('ld_min_doc_threshold', [1,2,3,4,5])
+            'ld_min_doc_threshold': hp.choice('ld_min_doc_threshold', [1, 2, 3, 4, 5])
         }
-    ] )
+    ])
     add_obama()
     add_mccain()
 
@@ -141,9 +141,9 @@ def add_obama():
         {
             'use': True,
             'ob_binarize': hp.choice('ob_binarize', ['True', 'False']),
-            'ob_min_doc_threshold': hp.choice('ob_min_doc_threshold', [1,2,3,4,5])
+            'ob_min_doc_threshold': hp.choice('ob_min_doc_threshold', [1, 2, 3, 4, 5])
         }
-    ] )
+    ])
 
 
 def add_clinton():
@@ -360,7 +360,7 @@ def main():
         sys.exit('Choice of model not supported!')
 
     if run == 'DRLD':
-        add_DRLD()
+        add_drld()
         group = ['Democrat-Likes', 'Democrat-Dislikes', 'Republican-Likes', 'Republican-Dislikes']
         n_codes = 33
     elif run == 'MIP':

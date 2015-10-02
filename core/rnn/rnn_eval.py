@@ -15,7 +15,7 @@ def main(param=None):
     (options, args) = parser.parse_args()
     folder = args[0]
 
-    datasets = ['Republican-Dislikes']
+    datasets = ['Democrat-Likes']
 
     # evaluate performance
     for d in datasets:

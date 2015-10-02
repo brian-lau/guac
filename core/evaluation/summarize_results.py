@@ -16,12 +16,16 @@ def main():
     usage = "%prog exp_dir"
     parser = OptionParser(usage=usage)
 
+    parser.add_option('-t', dest='test_fold', default=0,
+                      help='Test fold; default=%default')
+
     (options, args) = parser.parse_args()
+    test_fold = options.test_fold
     exp_dir = args[0]
 
     results = pd.DataFrame(columns=('masked', 'test', 'valid', 'dir'))
 
-    run_dirs = glob.glob(os.path.join(exp_dir, 'test_fold_0', 'bayes*'))
+    run_dirs = glob.glob(os.path.join(exp_dir, 'test_fold_' + test_fold, 'bayes*'))
     for i, dir in enumerate(run_dirs):
         run_num = int(fh.get_basename(dir).split('_')[-1])
 
@@ -42,6 +46,8 @@ def main():
                 results.loc[i, 'dir'] = fh.get_basename(dir)
             except:
                 continue
+
+    results.to_csv(fh.make_filename(exp_dir, 'summary', 'csv'))
 
     sorted = results.sort('masked')
     print sorted
