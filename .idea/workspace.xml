@@ -48,8 +48,8 @@
       <file leaf-file-name="summarize_results.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/evaluation/summarize_results.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.21551724">
-              <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.3448276">
+              <caret line="27" column="91" selection-start-line="27" selection-start-column="91" selection-end-line="27" selection-end-column="91" />
               <folding />
             </state>
           </provider>
@@ -845,12 +845,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00088" summary="udpated initialization of bias terms in rnn_minibatch_mod">
-      <created>1443032564407</created>
-      <option name="number" value="00088" />
-      <option name="project" value="LOCAL" />
-      <updated>1443032564407</updated>
-    </task>
     <task id="LOCAL-00089" summary="updated rnn_minibatch_mod to use xavier init (for basic params)">
       <created>1443033011433</created>
       <option name="number" value="00089" />
@@ -1139,7 +1133,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443825534680</updated>
     </task>
-    <option name="localTasksCounter" value="137" />
+    <task id="LOCAL-00137" summary="bug fix">
+      <created>1443825604134</created>
+      <option name="number" value="00137" />
+      <option name="project" value="LOCAL" />
+      <updated>1443825604134</updated>
+    </task>
+    <option name="localTasksCounter" value="138" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1209,7 +1209,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="just realized I wasn't properly using the reusable holdout for linear models with bayes opt; now fixed" />
     <MESSAGE value="fixed a typo in common" />
     <MESSAGE value="corrected a file name" />
     <MESSAGE value="improved naming for basic bayes opt runs" />
@@ -1234,7 +1233,8 @@
     <MESSAGE value="minor updates to running scripts" />
     <MESSAGE value="removed debug line" />
     <MESSAGE value="update to summary script" />
-    <option name="LAST_COMMIT_MESSAGE" value="update to summary script" />
+    <MESSAGE value="bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1714,8 +1714,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/evaluation/summarize_results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21551724">
-          <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.3448276">
+          <caret line="27" column="91" selection-start-line="27" selection-start-column="91" selection-end-line="27" selection-end-column="91" />
           <folding />
         </state>
       </provider>
