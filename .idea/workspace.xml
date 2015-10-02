@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/preprocessing/decorate_words.py" afterPath="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/experiment.py" afterPath="$PROJECT_DIR$/core/experiment/experiment.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py" afterPath="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -51,8 +48,8 @@
       <file leaf-file-name="run_with_bayes_opt.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.2145925">
-              <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="12" />
+            <state vertical-scroll-proportion="-0.49785408">
+              <caret line="81" column="48" selection-start-line="81" selection-start-column="42" selection-end-line="81" selection-end-column="48" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -196,8 +193,8 @@
         <option value="$PROJECT_DIR$/core/preprocessing/decorate_words.py" />
         <option value="$PROJECT_DIR$/core/experiment/experiment.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/feature_extractor_counts_ngrams.py" />
-        <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod.py" />
+        <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py" />
       </list>
     </option>
   </component>
@@ -839,12 +836,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00082" summary="found a small bug with one of the attention mechanisms">
-      <created>1442961582847</created>
-      <option name="number" value="00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1442961582847</updated>
-    </task>
     <task id="LOCAL-00083" summary="changed a dataset">
       <created>1442963630731</created>
       <option name="number" value="00083" />
@@ -1133,7 +1124,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443559605722</updated>
     </task>
-    <option name="localTasksCounter" value="131" />
+    <task id="LOCAL-00131" summary="fixed word decorations; need to rerun all linear models">
+      <created>1443760507408</created>
+      <option name="number" value="00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1443760507411</updated>
+    </task>
+    <option name="localTasksCounter" value="132" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1203,7 +1200,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="restricted search to runs 1-40" />
     <MESSAGE value="readded sorting of first epoch, also changed parameter space slightly, and caught a bug regarding the attention params" />
     <MESSAGE value="moved the location of saving" />
     <MESSAGE value="chaned saved output to test predictions (rather than dev)" />
@@ -1228,7 +1224,8 @@
     <MESSAGE value="changed a name" />
     <MESSAGE value="added test fold option to experiment bayesopt" />
     <MESSAGE value="changes to ecc" />
-    <option name="LAST_COMMIT_MESSAGE" value="changes to ecc" />
+    <MESSAGE value="fixed word decorations; need to rerun all linear models" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed word decorations; need to rerun all linear models" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1469,13 +1466,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt_chars.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="74" column="33" selection-start-line="74" selection-start-column="33" selection-end-line="74" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/experiment/reusable_holdout.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.031914894">
@@ -1701,10 +1691,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt_chars.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.38626608">
+          <caret line="85" column="9" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/run_with_bayes_opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.2145925">
-          <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="12" />
+        <state vertical-scroll-proportion="-0.49785408">
+          <caret line="81" column="48" selection-start-line="81" selection-start-column="42" selection-end-line="81" selection-end-column="48" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

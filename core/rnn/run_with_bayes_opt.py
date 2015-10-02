@@ -44,7 +44,7 @@ space = {
         'pooling_method': hp.choice('pooling_method', ['max', 'attention1', 'last']),
         'bidirectional': hp.choice('bidirectional', [
             {'bidirectional': False},
-            {'bidirectional': True, hp.choice('bi_combine', ['concat', 'max', 'mean'])}
+            {'bidirectional': True, 'bi_combine': hp.choice('bi_combine', ['concat', 'max', 'mean'])}
         ])
     },
     'training': {
@@ -91,7 +91,7 @@ def call_experiment(args):
     params['pooling_method'] = args['arch']['pooling_method']
     if args['arch']['bidirectional']['bidirectional']:
         params['bidirectional'] = True
-        params['bi_combine'] = 'concat'
+        params['bi_combine'] = args['arch']['bidirectional']['bi_combine']
     else:
         params['bidirectional'] = False
         params['bi_combine'] = None
