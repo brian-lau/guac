@@ -590,8 +590,8 @@ def get_groups(group_file):
 
 
 def make_exp_dir(group, test_fold, name):
-    #return fh.makedirs(defines.exp_dir, '_'.join(group), "test_fold_" + str(test_fold), name)
-    return fh.makedirs('test', "test_fold_" + str(test_fold), name)
+    return fh.makedirs(defines.exp_dir, '_'.join(group), "test_fold_" + str(test_fold), name)
+    #return fh.makedirs('test', "test_fold_" + str(test_fold), name)
 
 def make_training_dir(exp_dir):
     return fh.makedirs(exp_dir, 'training')
