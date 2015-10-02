@@ -40,10 +40,11 @@ def main():
                 valid = pd.read_csv(valid_file, header=False, index_col=0)
                 masked_valid = pd.read_csv(masked_valid_file, header=False, index_col=0)
 
-                results.loc[i, 'masked'] = masked_valid['overall'].mean()
-                results.loc[i, 'test'] = test['overall'].mean()
-                results.loc[i, 'valid'] = valid['overall'].mean()
-                results.loc[i, 'dir'] = fh.get_basename(dir)
+                #results.loc[run_num, 'iteration'] = run_num
+                results.loc[run_num, 'masked'] = masked_valid['overall'].mean()
+                results.loc[run_num, 'test'] = test['overall'].mean()
+                results.loc[run_num, 'valid'] = valid['overall'].mean()
+                results.loc[run_num, 'dir'] = fh.get_basename(dir)
             except:
                 continue
 
