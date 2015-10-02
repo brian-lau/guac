@@ -105,24 +105,27 @@ class FeatureExtractorCountsNgrams(FeatureExtractorCounts):
         dataset = fh.get_basename(input_filename)
 
         for rid in rids:
-            text = responses[rid].lower()
-            text = text.lstrip()
-            text = text.rstrip()
-            tokens = []
+            if rid in responses:
+                text = responses[rid].lower()
+                text = text.lstrip()
+                text = text.rstrip()
+                tokens = []
 
-            sentences = tokenizer.split_sentences(text)
-            for s in sentences:
-                sent_tokens = tokenizer.make_ngrams(s, n)
-                #sent_tokens = [t.rstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
-                #sent_tokens = [t.lstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
-                tokens = tokens + sent_tokens
+                sentences = tokenizer.split_sentences(text)
+                for s in sentences:
+                    sent_tokens = tokenizer.make_ngrams(s, n)
+                    #sent_tokens = [t.rstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
+                    #sent_tokens = [t.lstrip('`"\'') if re.search('[a-z]', t) else t for t in sent_tokens]
+                    tokens = tokens + sent_tokens
 
-            tokens = [self.get_prefix() + t for t in tokens]
-            if self.params['source'] != 'normalized':
-                tokens = [t + '_<' + self.params['source'] + '>' for t in tokens]
-            if self.params['append_dataset']:
-                tokens = [t + '_' + dataset for t in tokens]
-            token_dict[rid] = tokens
+                tokens = [self.get_prefix() + t for t in tokens]
+                if self.params['source'] != 'normalized':
+                    tokens = [t + '_<' + self.params['source'] + '>' for t in tokens]
+                if self.params['append_dataset']:
+                    tokens = [t + '_' + dataset for t in tokens]
+                token_dict[rid] = tokens
+            else:
+                token_dict[rid] = []
 
     def get_counts(self):
         if self.params['concat_oov_counts']:

@@ -44,7 +44,7 @@ space = {
         'pooling_method': hp.choice('pooling_method', ['max', 'attention1', 'last']),
         'bidirectional': hp.choice('bidirectional', [
             {'bidirectional': False},
-            {'bidirectional': True},
+            {'bidirectional': True, hp.choice('bi_combine', ['concat', 'max', 'mean'])}
         ])
     },
     'training': {
