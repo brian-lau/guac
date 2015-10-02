@@ -48,8 +48,8 @@
       <file leaf-file-name="summarize_results.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/evaluation/summarize_results.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.79741377">
-              <caret line="46" column="35" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.04310345">
+              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -845,12 +845,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00090" summary="tried updating bayes opt for mod">
-      <created>1443037448287</created>
-      <option name="number" value="00090" />
-      <option name="project" value="LOCAL" />
-      <updated>1443037448287</updated>
-    </task>
     <task id="LOCAL-00091" summary="forgot xavier init">
       <created>1443037602621</created>
       <option name="number" value="00091" />
@@ -1139,7 +1133,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443825643871</updated>
     </task>
-    <option name="localTasksCounter" value="139" />
+    <task id="LOCAL-00139" summary="update to summary script">
+      <created>1443825795426</created>
+      <option name="number" value="00139" />
+      <option name="project" value="LOCAL" />
+      <updated>1443825795426</updated>
+    </task>
+    <option name="localTasksCounter" value="140" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1231,10 +1231,10 @@
     <MESSAGE value="updated bayesopt" />
     <MESSAGE value="minor updates to running scripts" />
     <MESSAGE value="removed debug line" />
-    <MESSAGE value="update to summary script" />
     <MESSAGE value="bug fix" />
     <MESSAGE value="restricted summary to reuse" />
-    <option name="LAST_COMMIT_MESSAGE" value="restricted summary to reuse" />
+    <MESSAGE value="update to summary script" />
+    <option name="LAST_COMMIT_MESSAGE" value="update to summary script" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1714,8 +1714,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/evaluation/summarize_results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.79741377">
-          <caret line="46" column="35" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.04310345">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
           <folding />
         </state>
       </provider>
