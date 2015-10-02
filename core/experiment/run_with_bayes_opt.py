@@ -130,17 +130,8 @@ def add_MOLD():
             'ld_min_doc_threshold': hp.choice('ld_min_doc_threshold', [1,2,3,4,5])
         }
     ] )
-    space['features']['obama'] = hp.choice('obama', [
-        {
-            'use': False
-        },
-        {
-            'use': True,
-            'om_binarize': hp.choice('om_binarize', ['True', 'False']),
-            'om_min_doc_threshold': hp.choice('om_min_doc_threshold', [1,2,3,4,5])
-        }
-    ] )
-
+    add_obama()
+    add_mccain()
 
 def add_obama():
     space['features']['obama'] = hp.choice('obama', [
@@ -149,11 +140,37 @@ def add_obama():
         },
         {
             'use': True,
+            'ob_binarize': hp.choice('ob_binarize', ['True', 'False']),
+            'ob_min_doc_threshold': hp.choice('ob_min_doc_threshold', [1,2,3,4,5])
+        }
+    ] )
+
+
+def add_clinton():
+    space['features']['clinton'] = hp.choice('clinton', [
+        {
+            'use': False
+        },
+        {
+            'use': True,
+            'oc_binarize': hp.choice('oc_binarize', ['True', 'False']),
+            'oc_min_doc_threshold': hp.choice('oc_min_doc_threshold', [1,2,3,4,5])
+        }
+    ] )
+
+
+
+def add_mccain():
+    space['features']['mccain'] = hp.choice('mccain', [
+        {
+            'use': False
+        },
+        {
+            'use': True,
             'om_binarize': hp.choice('om_binarize', ['True', 'False']),
             'om_min_doc_threshold': hp.choice('om_min_doc_threshold', [1,2,3,4,5])
         }
     ] )
-
 
 def call_experiment(args):
     kwargs = {}
@@ -193,7 +210,7 @@ def call_experiment(args):
             likes = base + ',source=decorated_likes'
             dislikes = base + ',source=decorated_dislikes'
             feature_list.append(likes)
-            #feature_list.append(dislikes)
+            feature_list.append(dislikes)
     if 'dem-rep' in args['features']:
         if args['features']['dem-rep']['use']:
             base = 'ngrams' + \
@@ -202,7 +219,7 @@ def call_experiment(args):
             dem = base + ',source=decorated_dem'
             rep = base + ',source=decorated_rep'
             feature_list.append(dem)
-            #feature_list.append(rep)
+            feature_list.append(rep)
     if 'personal' in args['features']:
         if args['features']['personal']['use']:
             base = 'ngrams' + \
@@ -211,14 +228,29 @@ def call_experiment(args):
             personal = base + ',source=decorated_personal'
             political = base + ',source=decorated_political'
             feature_list.append(personal)
-            #feature_list.append(political)
+            feature_list.append(political)
     if 'obama' in args['features']:
         if args['features']['obama']['use']:
             base = 'ngrams' + \
-                   ',binarize=' + args['features']['obama']['om_binarize'] + \
-                   ',min_doc_threshold=' + str(args['features']['obama']['om_min_doc_threshold'])
+                   ',binarize=' + args['features']['obama']['ob_binarize'] + \
+                   ',min_doc_threshold=' + str(args['features']['obama']['ob_min_doc_threshold'])
             obama = base + ',source=decorated_obama'
             feature_list.append(obama)
+    if 'clinton' in args['features']:
+        if args['features']['clinton']['use']:
+            base = 'ngrams' + \
+                   ',binarize=' + args['features']['clinton']['oc_binarize'] + \
+                   ',min_doc_threshold=' + str(args['features']['clinton']['oc_min_doc_threshold'])
+            clinton = base + ',source=decorated_clinton'
+            feature_list.append(clinton)
+    if 'mccain' in args['features']:
+        if args['features']['mccain']['use']:
+            base = 'ngrams' + \
+                   ',binarize=' + args['features']['mccain']['om_binarize'] + \
+                   ',min_doc_threshold=' + str(args['features']['mccain']['om_min_doc_threshold'])
+            mccain = base + ',source=decorated_mccain'
+            feature_list.append(mccain)
+
 
     if args['features']['POS_tags']['use']:
         pos_tags = 'ngrams' + \
@@ -341,10 +373,12 @@ def main():
         n_codes = 34
     elif run == 'Primary':
         add_obama()
+        add_clinton()
         group = ['Obama-Primary', 'Clinton-Primary']
         n_codes = 42
     elif run == 'General':
         add_obama()
+        add_mccain()
         group = ['Obama-General', 'McCain-General']
         n_codes = 41
     else:
