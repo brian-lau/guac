@@ -315,8 +315,8 @@ def main():
                       help='Use reusable holdout; default=%default')
     parser.add_option('--alpha', dest='alpha', action="store_true", default=False,
                       help='Include alpha in search space (instead of grid search); default=%default')
-    parser.add_option('--codes', dest='n_codes', default=33,
-                      help='Number of codes (only matters with --alpha); default=%default')
+    #parser.add_option('--codes', dest='n_codes', default=33,
+    #                  help='Number of codes (only matters with --alpha); default=%default')
 
     (options, args) = parser.parse_args()
 
@@ -325,7 +325,7 @@ def main():
     global output_dirname, output_filename, reuse, search_alpha, space, run, group, test_fold
     reuse = options.reuse
     search_alpha = options.alpha
-    n_codes = int(options.n_codes)
+    #n_codes = int(options.n_codes)
     output_dirname = options.output_dirname
     model = options.model
     test_fold = int(options.test_fold)
@@ -381,8 +381,23 @@ def main():
         add_mccain()
         group = ['Obama-General', 'McCain-General']
         n_codes = 41
-    else:
+    elif run == 'Terrorists':
         group = [run]
+        n_codes = 28
+    elif run == 'PK-Brown':
+        group = [run]
+        n_codes = 14
+    elif run == 'PK-Cheney':
+        group = [run]
+        n_codes = 12
+    elif run == 'PK-Pelosi':
+        group = [run]
+        n_codes = 15
+    elif run == 'PK-Roberts':
+        group = [run]
+        n_codes = 14
+    else:
+        sys.exit('Dataset not recognized')
 
     output_dirname += '_' + model
 

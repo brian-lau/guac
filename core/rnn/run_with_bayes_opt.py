@@ -57,7 +57,6 @@ space = {
         ]
         ),
         'minibatch_size': hp.choice('minibatch_size', [1, 4, 16]),
-        'classify_minibatch_size': hp.choice('classify_minibatch_size', [1, 64]),
         'clip_gradients': hp.choice('clip_gradients', [True, False])
     }
     # 'regularization': {'dropout'... 'add_noise'..., 'corruption'...}
@@ -106,7 +105,7 @@ def call_experiment(args):
         params['add_OOV_noise'] = False
         params['OOV_noise_prob'] = 0.0
     params['minibatch_size'] = int(args['training']['minibatch_size'])
-    params['classify_minibatch_size'] = int(args['training']['classify_minibatch_size'])
+    params['classify_minibatch_size'] = 64
     params['clip_gradients'] = args['training']['clip_gradients']
 
     params['ensemble'] = False
