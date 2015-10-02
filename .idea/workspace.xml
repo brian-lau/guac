@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_eval.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_eval.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" afterPath="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/evaluation/summarize_results.py" afterPath="$PROJECT_DIR$/core/evaluation/summarize_results.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -50,8 +48,8 @@
       <file leaf-file-name="summarize_results.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/evaluation/summarize_results.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.021551725">
-              <caret line="18" column="56" selection-start-line="18" selection-start-column="56" selection-end-line="18" selection-end-column="56" />
+            <state vertical-scroll-proportion="0.21551724">
+              <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -847,12 +845,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00087" summary="adjusted use of decorated words, and added all datasets as optiosn for linear bayes opt experiment">
-      <created>1443031528328</created>
-      <option name="number" value="00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1443031528328</updated>
-    </task>
     <task id="LOCAL-00088" summary="udpated initialization of bias terms in rnn_minibatch_mod">
       <created>1443032564407</created>
       <option name="number" value="00088" />
@@ -1141,7 +1133,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443807080471</updated>
     </task>
-    <option name="localTasksCounter" value="136" />
+    <task id="LOCAL-00136" summary="update to summary script">
+      <created>1443825534680</created>
+      <option name="number" value="00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1443825534680</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1211,7 +1209,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="rejiggered saving a bit" />
     <MESSAGE value="just realized I wasn't properly using the reusable holdout for linear models with bayes opt; now fixed" />
     <MESSAGE value="fixed a typo in common" />
     <MESSAGE value="corrected a file name" />
@@ -1236,7 +1233,8 @@
     <MESSAGE value="updated bayesopt" />
     <MESSAGE value="minor updates to running scripts" />
     <MESSAGE value="removed debug line" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed debug line" />
+    <MESSAGE value="update to summary script" />
+    <option name="LAST_COMMIT_MESSAGE" value="update to summary script" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1716,8 +1714,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/evaluation/summarize_results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.021551725">
-          <caret line="18" column="56" selection-start-line="18" selection-start-column="56" selection-end-line="18" selection-end-column="56" />
+        <state vertical-scroll-proportion="0.21551724">
+          <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
           <folding />
         </state>
       </provider>

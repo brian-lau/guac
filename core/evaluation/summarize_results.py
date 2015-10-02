@@ -25,7 +25,7 @@ def main():
 
     results = pd.DataFrame(columns=('masked', 'test', 'valid', 'dir'))
 
-    run_dirs = glob.glob(os.path.join(exp_dir, 'test_fold_' + test_fold, 'bayes*'))
+    run_dirs = glob.glob(os.path.join(exp_dir, 'test_fold_' + str(test_fold), 'bayes*'))
     for i, dir in enumerate(run_dirs):
         run_num = int(fh.get_basename(dir).split('_')[-1])
 
