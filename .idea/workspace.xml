@@ -48,8 +48,8 @@
       <file leaf-file-name="summarize_results.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/evaluation/summarize_results.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.04310345">
-              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.5531609">
+              <caret line="50" column="43" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -845,12 +845,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00091" summary="forgot xavier init">
-      <created>1443037602621</created>
-      <option name="number" value="00091" />
-      <option name="project" value="LOCAL" />
-      <updated>1443037602621</updated>
-    </task>
     <task id="LOCAL-00092" summary="added gradient clipping and lr scaling by sequence length to rnn_minibatch_mod">
       <created>1443113078424</created>
       <option name="number" value="00092" />
@@ -1139,7 +1133,13 @@
       <option name="project" value="LOCAL" />
       <updated>1443825795426</updated>
     </task>
-    <option name="localTasksCounter" value="140" />
+    <task id="LOCAL-00140" summary="changed output location">
+      <created>1443825943771</created>
+      <option name="number" value="00140" />
+      <option name="project" value="LOCAL" />
+      <updated>1443825943771</updated>
+    </task>
+    <option name="localTasksCounter" value="141" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1209,7 +1209,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="corrected a file name" />
     <MESSAGE value="improved naming for basic bayes opt runs" />
     <MESSAGE value="added one number" />
     <MESSAGE value="removed code to load saved model" />
@@ -1234,7 +1233,8 @@
     <MESSAGE value="bug fix" />
     <MESSAGE value="restricted summary to reuse" />
     <MESSAGE value="update to summary script" />
-    <option name="LAST_COMMIT_MESSAGE" value="update to summary script" />
+    <MESSAGE value="changed output location" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed output location" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1714,8 +1714,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/evaluation/summarize_results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.04310345">
-          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.5531609">
+          <caret line="50" column="43" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
           <folding />
         </state>
       </provider>

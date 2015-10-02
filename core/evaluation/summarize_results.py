@@ -13,7 +13,7 @@ from core.util import file_handling as fh
 
 def main():
 
-    usage = "%prog exp_dir"
+    usage = "%prog exp_dir_test_fold_dir"
     parser = OptionParser(usage=usage)
 
     parser.add_option('-t', dest='test_fold', default=0,
@@ -24,9 +24,8 @@ def main():
     exp_dir = args[0]
 
     results = pd.DataFrame(columns=('masked', 'test', 'valid', 'dir'))
-    run_fold_dir = os.path.join(exp_dir, 'test_fold_' + str(test_fold))
 
-    run_dirs = glob.glob(os.path.join(run_fold_dir, 'bayes*reuse*'))
+    run_dirs = glob.glob(os.path.join(exp_dir, 'bayes*reuse*'))
     for i, dir in enumerate(run_dirs):
         run_num = int(fh.get_basename(dir).split('_')[-1])
 
@@ -49,7 +48,7 @@ def main():
             except:
                 continue
 
-    results.to_csv(fh.make_filename(run_fold_dir, 'summary', 'csv'))
+    results.to_csv(fh.make_filename(exp_dir, 'summary', 'csv'))
 
     sorted = results.sort('masked')
     print sorted
