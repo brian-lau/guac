@@ -48,7 +48,7 @@ def main():
             except:
                 continue
 
-    results.to_csv(fh.make_filename(exp_dir, 'summary', 'csv'))
+    results.to_csv(fh.make_filename(exp_dir, 'summary', 'csv'), columns=results.columns)
 
     sorted = results.sort('masked')
     print sorted
