@@ -92,13 +92,26 @@ def get_groups(group_file):
 
 
 def main():
-    labels = get_labels(['Republican-Dislikes'])
-    train, dev, test = ds.get_all_splits(0, None)
+    #labels = get_labels(['Republican-Dislikes'])
+    #train, dev, test = ds.get_all_splits(0, None)
+    #df = pd.DataFrame(columns=labels.columns)
+    #df.loc['n_train'] = labels.loc[train, :].sum(axis=0)
+    #df.loc['n_test'] = labels.loc[test, :].sum(axis=0)
+    #df.to_csv('/Users/dcard/Desktop/temp/counts.csv')
 
-    df = pd.DataFrame(columns=labels.columns)
-    df.loc['n_train'] = labels.loc[train, :].sum(axis=0)
-    df.loc['n_test'] = labels.loc[test, :].sum(axis=0)
-    df.to_csv('/Users/dcard/Desktop/temp/counts.csv')
+    usage = "%prog group_file"
+    parser = OptionParser(usage=usage)
+
+    (options, args) = parser.parse_args()
+    group_filename = args[0]
+
+    group_string = fh.read_text(group_filename)[0]
+    group = [g for g in group_string.split()]
+
+    print group
+    output_label_counts(group)
+
+
 
 if __name__ == '__main__':
     main()
