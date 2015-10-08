@@ -56,3 +56,4 @@ exp_dir = os.path.join(data_dir, '..', 'experiments')
 
 data_dir_tng = os.path.join(base_dir, 'tng')
 
+web_dir = os.path.join(base_dir, 'web')

@@ -590,8 +590,7 @@ def main(params=None):
         output_dir = fh.makedirs(defines.exp_dir, 'rnn', params['exp_name'], 'fold' + str(dev_fold))
 
         all_data, words2idx, items, all_labels = common.load_data(datasets, params['test_fold'], dev_fold,
-                                                                  params['min_doc_thresh'],
-                                                                  test_item='Republican-Dislikes_2202')
+                                                                  params['min_doc_thresh'])
         train_xy, valid_xy, test_xy = all_data
         train_lex, train_y = train_xy
         valid_lex, valid_y = valid_xy
@@ -804,33 +803,25 @@ def main(params=None):
         test_f1 = common.calc_mean_f1(predictions_test, test_y)
         valid_f1 = common.calc_mean_f1(predictions_valid, valid_y)
 
-        print predictions_test
+        output_dir = fh.makedirs(output_dir, 'responses')
 
         ms = 1
-        mb_x, mb_masks, mb_extra, mb_y = select_minibatch(test_x_win, test_masks, test_extra, test_y,
-                                                          params['win'], 0, 1, order=[0])
+        for i in range(n_test):
+            mb_x, mb_masks, mb_extra, mb_y = select_minibatch(test_x_win, test_masks, test_extra, test_y,
+                                                              params['win'], i, ms, order=range(len(test_y)))
 
-        print '\n'.join([' '.join([idx2words[idx] for idx in mb_x[:, k, 0].tolist()]) for k in range(ms)])
-        prediction = rnn.classify(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
-        print prediction
-        h, W, b, p_y, s = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
-        print p_y
+            #print '\n'.join([' '.join([idx2words[idx] for idx in mb_x[:, k, 0].tolist()]) for k in range(ms)])
+            #prediction = rnn.classify(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
+            #print prediction
+            h, W, b, p_y, s = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
 
-        print W
-        print b
-        temp = np.dot(h, W) + b
-        s = 1.0/(1.0 + np.exp(-temp))
-        print s
-        output_filename = fh.make_filename(output_dir, 's', 'csv')
-        np.savetxt(output_filename, s[:, 0, :], delimiter=',')
-        p_y_calc = np.max(s, axis=0)
-        print p_y_calc
-        print np.array(p_y_calc > 0.5, dtype='int')
+            temp = np.dot(h, W) + b
+            s = 1.0/(1.0 + np.exp(-temp))
+            output_filename = fh.make_filename(output_dir, test_items[i], 'csv')
+            np.savetxt(output_filename, s[:, 0, :], delimiter=',')
+            #p_y_calc = np.max(s, axis=0)
 
 
-
-        question_f1s = []
-        question_pps = []
 
         print "train_f1 =", train_f1, "valid_f1 =", valid_f1, "test_f1 =", test_f1
 
