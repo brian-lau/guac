@@ -806,20 +806,41 @@ def main(params=None):
         output_dir = fh.makedirs(output_dir, 'responses')
 
         ms = 1
+
+
+        for i in range(n_train):
+            mb_x, mb_masks, mb_extra, mb_y = select_minibatch(train_x_win, train_masks, train_extra, train_y,
+                                                              params['win'], i, ms, order=range(len(train_y)))
+
+            h, W, b, p_y, s = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
+
+            temp = np.dot(h, W) + b
+            s = 1.0/(1.0 + np.exp(-temp))
+            output_filename = fh.make_filename(output_dir, train_items[i], 'csv')
+            np.savetxt(output_filename, s[:, 0, :], delimiter=',')
+
+        for i in range(n_valid):
+            mb_x, mb_masks, mb_extra, mb_y = select_minibatch(valid_x_win, valid_masks, dev_extra, valid_y,
+                                                              params['win'], i, ms, order=range(len(valid_y)))
+
+            h, W, b, p_y, s = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
+
+            temp = np.dot(h, W) + b
+            s = 1.0/(1.0 + np.exp(-temp))
+            output_filename = fh.make_filename(output_dir, dev_items[i], 'csv')
+            np.savetxt(output_filename, s[:, 0, :], delimiter=',')
+
+
         for i in range(n_test):
             mb_x, mb_masks, mb_extra, mb_y = select_minibatch(test_x_win, test_masks, test_extra, test_y,
                                                               params['win'], i, ms, order=range(len(test_y)))
 
-            #print '\n'.join([' '.join([idx2words[idx] for idx in mb_x[:, k, 0].tolist()]) for k in range(ms)])
-            #prediction = rnn.classify(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
-            #print prediction
             h, W, b, p_y, s = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
 
             temp = np.dot(h, W) + b
             s = 1.0/(1.0 + np.exp(-temp))
             output_filename = fh.make_filename(output_dir, test_items[i], 'csv')
             np.savetxt(output_filename, s[:, 0, :], delimiter=',')
-            #p_y_calc = np.max(s, axis=0)
 
 
 

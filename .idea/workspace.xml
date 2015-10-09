@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/web/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/web/common.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/web/output_responses.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/web/output_words.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/util/defines.py" afterPath="$PROJECT_DIR$/core/util/defines.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/web/output_response_index.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/web/common.py" afterPath="$PROJECT_DIR$/core/web/common.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/web/output_responses.py" afterPath="$PROJECT_DIR$/core/web/output_responses.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run_test2.py" afterPath="$PROJECT_DIR$/run_test2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -40,18 +39,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="visualize_vectors.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/word_vectors/visualize_vectors.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="rnn_minibatch.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -65,18 +52,8 @@
       <file leaf-file-name="rnn_minibatch_mod_test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="497" column="0" selection-start-line="497" selection-start-column="0" selection-end-line="497" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="output_words.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/web/output_words.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+            <state vertical-scroll-proportion="-57.37037">
+              <caret line="828" column="32" selection-start-line="828" selection-start-column="32" selection-end-line="828" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -85,10 +62,22 @@
       <file leaf-file-name="output_responses.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/web/output_responses.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6621622">
-              <caret line="42" column="37" selection-start-line="42" selection-start-column="37" selection-end-line="42" selection-end-column="37" />
+            <state vertical-scroll-proportion="0.5608108">
+              <caret line="102" column="98" selection-start-line="102" selection-start-column="98" selection-end-line="102" selection-end-column="98" />
               <folding>
-                <element signature="e#0#13#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="output_response_index.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/web/output_response_index.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="48" column="34" selection-start-line="48" selection-start-column="34" selection-end-line="48" selection-end-column="34" />
+              <folding>
+                <element signature="e#21#30#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -98,7 +87,7 @@
         <entry file="file://$PROJECT_DIR$/core/web/common.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="46" column="13" selection-start-line="46" selection-start-column="13" selection-end-line="46" selection-end-column="13" />
+              <caret line="26" column="51" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -141,7 +130,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_lstm.py" />
         <option value="$PROJECT_DIR$/core/rnn/deeplearning_lstm.py" />
         <option value="$PROJECT_DIR$/core/brown_clusters/extract_text_from_reddit_comments.py" />
         <option value="$PROJECT_DIR$/core/gensim.py" />
@@ -169,7 +157,6 @@
         <option value="$PROJECT_DIR$/core/evaluation/find_most_errors.py" />
         <option value="$PROJECT_DIR$/core/experiment/experiment_multilabel_test.py" />
         <option value="$PROJECT_DIR$/core/models/ecc.py" />
-        <option value="$PROJECT_DIR$/run_test2.py" />
         <option value="$PROJECT_DIR$/core/models/sparse_model.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_accel.py" />
         <option value="$PROJECT_DIR$/core/rnn/run_with_bayes_opt_mod.py" />
@@ -187,10 +174,12 @@
         <option value="$PROJECT_DIR$/core/preprocessing/labels.py" />
         <option value="$PROJECT_DIR$/core/feature_extractors/tokenizer.py" />
         <option value="$PROJECT_DIR$/core/experiment/reusable_holdout.py" />
-        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py" />
         <option value="$PROJECT_DIR$/core/web/output_words.py" />
         <option value="$PROJECT_DIR$/core/util/defines.py" />
+        <option value="$PROJECT_DIR$/run_test2.py" />
         <option value="$PROJECT_DIR$/core/web/common.py" />
+        <option value="$PROJECT_DIR$/core/web/output_response_index.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py" />
         <option value="$PROJECT_DIR$/core/web/output_responses.py" />
       </list>
     </option>
@@ -745,12 +734,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00096" summary="added a script to visualize vectors with t-SNE">
-      <created>1443124611230</created>
-      <option name="number" value="00096" />
-      <option name="project" value="LOCAL" />
-      <updated>1443124611230</updated>
-    </task>
     <task id="LOCAL-00097" summary="updated rnn to run on multiple datasets, hopefully">
       <created>1443201799124</created>
       <option name="number" value="00097" />
@@ -1039,12 +1022,18 @@
       <option name="project" value="LOCAL" />
       <updated>1444093683760</updated>
     </task>
-    <option name="localTasksCounter" value="145" />
+    <task id="LOCAL-00145" summary="started adding code to output things to web">
+      <created>1444346316369</created>
+      <option name="number" value="00145" />
+      <option name="project" value="LOCAL" />
+      <updated>1444346316369</updated>
+    </task>
+    <option name="localTasksCounter" value="146" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="1472" y="146" width="1209" height="816" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1054,7 +1043,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32863072" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33563536" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3283582" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32734805" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24935733" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1063,7 +1052,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3480663" sideWeight="0.49351773" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3480663" sideWeight="0.49351773" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1109,7 +1098,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="restored extra input dims" />
     <MESSAGE value="forgot to remove the loading of the rnn..." />
     <MESSAGE value="commented out unnecessary saving" />
     <MESSAGE value="corrected bayes opt naming" />
@@ -1134,7 +1122,8 @@
     <MESSAGE value="changed filename" />
     <MESSAGE value="added a script to summarize rnns" />
     <MESSAGE value="minor change to labels to output certain info" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor change to labels to output certain info" />
+    <MESSAGE value="started adding code to output things to web" />
+    <option name="LAST_COMMIT_MESSAGE" value="started adding code to output things to web" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1207,7 +1196,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="136" />
+      <option name="time" value="138" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1216,13 +1205,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/preprocessing/normalize_text.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/feature_extractors/feature_extractor_dataset.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.4793578">
@@ -1336,13 +1318,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="210" column="60" selection-start-line="210" selection-start-column="60" selection-end-line="210" selection-end-column="60" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run_test2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
         </state>
       </provider>
     </entry>
@@ -1566,16 +1541,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/util/file_handling.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23706897">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/util/defines.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1600,36 +1565,66 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py">
+    <entry file="file://$PROJECT_DIR$/run_test2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="497" column="0" selection-start-line="497" selection-start-column="0" selection-end-line="497" selection-end-column="0" />
-          <folding />
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/web/output_words.py">
+    <entry file="file://$PROJECT_DIR$/core/util/file_handling.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/web/common.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="46" column="13" selection-start-line="46" selection-start-column="13" selection-end-line="46" selection-end-column="13" />
+          <caret line="26" column="51" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/web/output_response_index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="48" column="34" selection-start-line="48" selection-start-column="34" selection-end-line="48" selection-end-column="34" />
+          <folding>
+            <element signature="e#21#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/web/output_words.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.067567565">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-57.37037">
+          <caret line="828" column="32" selection-start-line="828" selection-start-column="32" selection-end-line="828" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/web/output_responses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6621622">
-          <caret line="42" column="37" selection-start-line="42" selection-start-column="37" selection-end-line="42" selection-end-column="37" />
+        <state vertical-scroll-proportion="0.5608108">
+          <caret line="102" column="98" selection-start-line="102" selection-start-column="98" selection-end-line="102" selection-end-column="98" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>

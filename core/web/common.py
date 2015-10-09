@@ -20,12 +20,14 @@ def make_body_end():
 def make_footer():
     return '</html>\n'
 
+def make_heading(text, level=1):
+    return '<h' + str(level) + '>' + text + '</h' + str(level) + '>'
 
-def make_table_start(n_cols, col_widths=None, sortable=False):
-    table = '<table cellpadding="' + str(n_cols) + '"'
-    if sortable:
-        table += ' class="sortable"'
-    table += '>\n'
+def make_link(link, text):
+    return '<a href="' + link + '">' + text + '</a>'
+
+def make_table_start(col_widths=None, style='t1'):
+    table = '<table class="' + style + '">\n'
     if col_widths is not None:
         for width in col_widths:
             table += '<col width="' + str(width) + '">\n'
