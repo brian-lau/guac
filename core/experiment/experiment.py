@@ -41,6 +41,8 @@ def main():
                       help='T for reusable holdout; default=%default')
     parser.add_option('--reuse_tau', dest='reusable_tau', default=0.01,
                       help='tau for reusable holdout; default=%default')
+    parser.add_option('--n_dev_folds', dest='n_dev_folds', default=5,
+                      help='Number of dev folds to use for tuning / evaluation; default=%default')
 
     (options, args) = parser.parse_args()
 
@@ -64,6 +66,7 @@ def main():
     reuse_holdout = options.reuse
     reuseable_T = options.reusable_T
     reuseable_tau = options.reusable_tau
+    n_dev_folds = int(options.n_dev_folds)
     kwargs = {}
     if options.regularizer is not None:
         kwargs['regularization'] = options.regularizer
@@ -92,7 +95,7 @@ def write_log(exp_dir, names_list, values_list):
 # Run an experiment on a group of questions
 def run_group_experiment(name, datasets, test_fold, feature_list, model_type, unique_name=False,
                          min_alpha_exp=-1, max_alpha_exp=8, alpha_exp_base=np.sqrt(10),
-                         reuse=True, orig_T=0.04, tau=0.01, verbose=1, best_alphas=None,
+                         reuse=True, orig_T=0.04, tau=0.01, verbose=1, best_alphas=None, n_dev_folds=5,
                          **kwargs):
     print model_type
     # create experiments directory and save the parameters for this experiment
@@ -118,7 +121,8 @@ def run_group_experiment(name, datasets, test_fold, feature_list, model_type, un
     all_y = labels.get_labels(datasets)
     index = all_y.index.tolist()
     codes = all_y.columns
-    n_dev_folds = ds.get_n_dev_folds(datasets[0])
+    if n_dev_folds is None:
+        n_dev_folds = ds.get_n_dev_folds(datasets[0])
 
     # load the features
     X, column_names = load_features(feature_list, test_fold, None, index, verbose=verbose)

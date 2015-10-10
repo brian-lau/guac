@@ -22,6 +22,7 @@ search_alpha = None
 run = None
 group = None
 test_fold = None
+n_dev_folds = None
 
 
 space = {
@@ -290,7 +291,8 @@ def call_experiment(args):
     name = fh.get_basename(output_filename) + '_' + str(max_num + 1)
 
     print feature_list
-    result = experiment.run_group_experiment(name, group, test_fold, feature_list, model_type=model, **kwargs)
+    result = experiment.run_group_experiment(name, group, test_fold, feature_list, model_type=model,
+                                             n_dev_folds=n_dev_folds, **kwargs)
     print result
 
     with codecs.open(output_filename, 'a') as output_file:
@@ -315,12 +317,15 @@ def main():
                       help='Use reusable holdout; default=%default')
     parser.add_option('--alpha', dest='alpha', action="store_true", default=False,
                       help='Include alpha in search space (instead of grid search); default=%default')
+    parser.add_option('--n_dev_folds', dest='n_dev_folds', default=5,
+                      help='Number of dev folds to use when tuning/evaluating; default=%default')
+
     #parser.add_option('--codes', dest='n_codes', default=33,
     #                  help='Number of codes (only matters with --alpha); default=%default')
 
     (options, args) = parser.parse_args()
 
-    global output_dirname, output_filename, reuse, search_alpha, space, run, group, test_fold
+    global output_dirname, output_filename, reuse, search_alpha, space, run, group, test_fold, n_dev_folds
 
     run = args[0]
     reuse = options.reuse
@@ -329,6 +334,7 @@ def main():
     output_dirname = options.output_dirname
     model = options.model
     test_fold = int(options.test_fold)
+    n_dev_folds = int(options.n_dev_folds)
 
     # allow user to specfiy a particular choice of model
     if model == 'LR':
