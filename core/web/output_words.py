@@ -11,9 +11,10 @@ from ..preprocessing import labels
 from ..preprocessing import data_splitting as ds
 
 import html
+import common
 from codes import code_names
 
-def output_responses():
+def output_words():
     output_dir = fh.makedirs(defines.web_dir, 'DRLD')
     blm_dir = fh.makedirs(defines.exp_dir, 'Democrat-Dislikes_Democrat-Likes_Republican-Dislikes_Republican-Likes', 'test_fold_0', 'L1LR_all_groups_a0', 'models')
 
@@ -40,6 +41,7 @@ def output_responses():
 
             output_file.write(html.make_header(word))
             output_file.write(html.make_body_start())
+            output_file.write(common.make_masthead(-1))
             output_file.write(html.make_heading('Word: ' + word, align='center'))
 
             table_header = ['Label', 'Value', 'Scaled']
@@ -77,7 +79,7 @@ def output_responses():
             output_file.write(html.make_footer())
 
 def main():
-    output_responses()
+    output_words()
 
 if __name__ == '__main__':
     main()

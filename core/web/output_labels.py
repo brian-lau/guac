@@ -11,6 +11,7 @@ from ..preprocessing import labels
 from ..preprocessing import data_splitting as ds
 
 import html
+import common
 from codes import code_names
 
 def output_label_pages():
@@ -26,6 +27,7 @@ def output_label_pages():
 
             output_file.write(html.make_header(code_name))
             output_file.write(html.make_body_start())
+            output_file.write(common.make_masthead(-1))
             output_file.write(html.make_heading('Label: ' + code_name, align='center'))
 
             table_header = ['Word', 'Value', 'Scaled']

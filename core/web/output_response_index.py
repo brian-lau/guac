@@ -10,11 +10,12 @@ from ..preprocessing import labels
 from ..preprocessing import data_splitting as ds
 
 import html
+import common
 from codes import code_names
 
 def output_response_index():
     output_dir = fh.makedirs(defines.web_dir, 'DRLD')
-    output_filename = fh.make_filename(output_dir, 'DRLD_index', 'html')
+    output_filename = fh.make_filename(output_dir, 'index_responses', 'html')
     datasets = ['Democrat-Dislikes', 'Democrat-Likes', 'Republican-Dislikes', 'Republican-Likes']
 
     text_file_dir = fh.makedirs(defines.data_dir, 'rnn')
@@ -23,6 +24,8 @@ def output_response_index():
     with codecs.open(output_filename, 'w') as output_file:
         output_file.write(html.make_header('Democrats vs Republicans'))
         output_file.write(html.make_body_start())
+
+        output_file.write(common.make_masthead(0))
 
         for dataset in datasets:
             true = labels.get_labels([dataset])
@@ -54,7 +57,8 @@ def output_response_index():
                         response = response[:100] + '. . .'
                     num = item.split('_')[1]
                     link = html.make_link(item + '.html', num, new_window=True)
-                    row = [link, split, response]
+                    link2 = html.make_link(item + '.html', response, new_window=True)
+                    row = [link, split, link2]
                     output_file.write(html.make_table_row(row))
 
             output_file.write(html.make_table_end())

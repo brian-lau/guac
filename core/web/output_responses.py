@@ -9,6 +9,7 @@ from ..preprocessing import labels
 from ..preprocessing import data_splitting as ds
 
 import html
+import common
 from codes import code_names
 
 def output_responses(dataset):
@@ -42,7 +43,10 @@ def output_responses(dataset):
 
             output_file.write(html.make_header(i))
             output_file.write(html.make_body_start())
-            table_header = ['Label'] + text[i] + ['True', 'Pred.']
+            output_file.write(common.make_masthead(-1))
+
+            links = [html.make_link('wordtype_' + w + '.html', w) for w in text[i]]
+            table_header = ['Label'] + links + ['True', 'Pred.']
             output_file.write(html.make_table_start(style='t1'))
             output_file.write(html.make_table_header(table_header))
             for code_index, code in enumerate(true.columns):
@@ -66,7 +70,9 @@ def output_responses(dataset):
                     colours += [(255, 255, 255) for w in words]
 
                 colours += [str((0, 0, 0))]*2
-                row = [code_names[code_index]] + words + [str(true_i[code]), str(int(pred_i[code])) + ' (LR)']
+                code_name = code_names[code_index]
+                link = html.make_link('label_' + html.replace_chars(code_name) + '.html', code_name)
+                row = [link] + words + [str(true_i[code]), str(int(pred_i[code])) + ' (LR)']
                 output_file.write(html.make_table_row(row, colours=colours))
 
                 colours = [str((0, 0, 0))]

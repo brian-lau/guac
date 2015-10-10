@@ -20,6 +20,23 @@ def make_body_end():
 def make_footer():
     return '</html>\n'
 
+def make_masthead(links, active_index):
+    #masthead = '<div class="container">\n'
+    #masthead += '<div class="masthead">\n'
+    #masthead = '<ul class="nav">\n'
+    masthead = '<div id="hmenu">\n'
+    masthead += '<ul class="nav">\n'
+    for index, link in enumerate(links):
+        if index == active_index:
+            masthead += '<li class="active">' + link + '</li>\n'
+        else:
+            masthead += '<li>' + link + '</li>\n'
+    #masthead += '</ul>\n'
+    masthead += '</ul>\n'
+    masthead += '</div>\n'
+    return masthead
+
+
 def make_heading(text, level=1, align=None):
     heading = '<h' + str(level)
     if align is not None:
