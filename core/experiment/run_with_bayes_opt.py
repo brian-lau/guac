@@ -409,6 +409,8 @@ def main():
 
     if reuse:
         output_dirname += '_reuse'
+    else:
+        output_dirname += '_noreuse'
     output_dirname += '_' + run
 
     output_filename = fh.make_filename(defines.exp_dir, fh.get_basename(output_dirname), 'log')

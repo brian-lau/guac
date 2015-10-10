@@ -300,6 +300,7 @@ class RNN(object):
         if bidirectional:
             # reverse the second hidden layer so it lines up with the first
             h_r = h_r[::-1, :, :]
+            c_r = c_r[::-1, :, :]
             if bi_combine == 'max':
                 h = T.maximum(h_f, h_r)
             elif bi_combine == 'mean':
@@ -307,6 +308,7 @@ class RNN(object):
             else:  # concatenate
                 #h = theano.printing.Print('h:')(T.concatenate([h_fp, h_rp], axis=1))
                 h = T.concatenate([h_f, h_r], axis=2)
+                c = T.concatenate([c_f, c_r], axis=2)
         else:
             #temp = T.printing.Print('isnan')(T.max(T.isnan(h_f)))
             #h = h_f * (1-temp)
@@ -403,7 +405,7 @@ class RNN(object):
             #    self.a_sum_check = theano.function(inputs=[idxs, extra], outputs=a_sum)
             self.sentence_step_through = theano.function(inputs=[idxs, mask, extra, minibatch_size],
                                                          outputs=[h, self.W_s, self.b_s, p_y_given_x_sentence,
-                                                                  s, i_f, i_r])
+                                                                  s, i_f, i_r, f_f, f_r, o_f, o_r, c])
 
         else:
             self.sentence_classify = theano.function(inputs=[idxs, mask, minibatch_size], outputs=y_pred)
@@ -767,7 +769,8 @@ def main(params=None):
             mb_x, mb_masks, mb_extra, mb_y = select_minibatch(test_x_win, test_masks, test_extra, test_y,
                                                               params['win'], i, ms, order=range(len(test_y)))
 
-            h, W, b, p_y, s, i_f, i_r = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
+            h, W, b, p_y, s, i_f, i_r,\
+                f_f, f_r, o_f, o_r, c = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
 
             temp = np.dot(h, W) + b
             s = 1.0/(1.0 + np.exp(-temp))
@@ -775,7 +778,20 @@ def main(params=None):
             np.savetxt(output_filename, s[:, 0, :], delimiter=',')
             output_filename = fh.make_filename(output_dir, test_items[i] + '_i_f', 'npy')
             fh.pickle_data(i_f, output_filename)
-
+            output_filename = fh.make_filename(output_dir, test_items[i] + '_i_r', 'npy')
+            fh.pickle_data(i_r, output_filename)
+            output_filename = fh.make_filename(output_dir, test_items[i] + '_f_f', 'npy')
+            fh.pickle_data(f_f, output_filename)
+            output_filename = fh.make_filename(output_dir, test_items[i] + '_f_r', 'npy')
+            fh.pickle_data(f_r, output_filename)
+            output_filename = fh.make_filename(output_dir, test_items[i] + '_o_f', 'npy')
+            fh.pickle_data(o_f, output_filename)
+            output_filename = fh.make_filename(output_dir, test_items[i] + '_o_r', 'npy')
+            fh.pickle_data(o_r, output_filename)
+            output_filename = fh.make_filename(output_dir, test_items[i] + '_h', 'npy')
+            fh.pickle_data(h, output_filename)
+            output_filename = fh.make_filename(output_dir, test_items[i] + '_c', 'npy')
+            fh.pickle_data(c, output_filename)
 
 
         print "train_f1 =", train_f1, "valid_f1 =", valid_f1, "test_f1 =", test_f1
