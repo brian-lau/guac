@@ -320,9 +320,9 @@ def main():
 
     (options, args) = parser.parse_args()
 
-    run = args[0]
-
     global output_dirname, output_filename, reuse, search_alpha, space, run, group, test_fold
+
+    run = args[0]
     reuse = options.reuse
     search_alpha = options.alpha
     #n_codes = int(options.n_codes)
