@@ -1,4 +1,4 @@
-__author__ = 'dcard'
+import re
 
 def make_header(title):
     header = '<!DOCTYPE HTML PUBLIC>\n'
@@ -20,13 +20,21 @@ def make_body_end():
 def make_footer():
     return '</html>\n'
 
-def make_heading(text, level=1):
-    return '<h' + str(level) + '>' + text + '</h' + str(level) + '>'
+def make_heading(text, level=1, align=None):
+    heading = '<h' + str(level)
+    if align is not None:
+        heading += ' align="' + align + '"'
+    heading += '>' + text + '</h' + str(level) + '>'
+    return heading
 
-def make_link(link, text):
-    return '<a href="' + link + '">' + text + '</a>'
+def make_link(dest, text, new_window=False):
+    link = '<a href="' + dest + '"'
+    if new_window:
+        link += ' target="_blank"'
+    link += '>' + text + '</a>'
+    return link
 
-def make_table_start(col_widths=None, style='t1'):
+def make_table_start(col_aligns=None, col_widths=None, style='t1'):
     table = '<table class="' + style + '">\n'
     if col_widths is not None:
         for width in col_widths:
@@ -53,3 +61,8 @@ def make_table_row(row, colours=None):
 
 def make_table_end():
     return '</table>\n'
+
+def replace_chars(text):
+    text = re.sub(' ', '_', text)
+    text = re.sub('/', '_', text)
+    return text

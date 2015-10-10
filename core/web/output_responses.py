@@ -8,41 +8,8 @@ from ..util import file_handling as fh
 from ..preprocessing import labels
 from ..preprocessing import data_splitting as ds
 
-from . import common
-
-code_names = ['General',
-              'Another party',
-              'Specific person',
-              'Ideology',
-              'Electability',
-              'Scandal',
-              'Campaign',
-              'Other past activity',
-              'Ability',
-              'Honesty',
-              'Intelligence',
-              'Leadership',
-              'Management',
-              'Religion',
-              'Education',
-              'Physical appearance',
-              'Demographics',
-              'Policy-Economic',
-              'Policy-Poor people',
-              'Policy-Liberty',
-              'Policy-Enemy countries',
-              'Policy-Friendly countries',
-              'Policy-General foreign',
-              'Policy-Other',
-              'Groups',
-              'Emotions/Feelings',
-              'Party-Other',
-              'Non-party',
-              'Party membership',
-              "Don't know",
-              'Refuse to answer',
-              'Respondent-Other',
-              'Other']
+import html
+from codes import code_names
 
 def output_responses(dataset):
     print dataset
@@ -60,7 +27,6 @@ def output_responses(dataset):
     all_items = ds.get_all_documents(dataset)
 
     for i in all_items:
-        print i
         true_i = true.loc[i]
         rnn_file = fh.make_filename(rnn_dir, i, 'csv')
         rnn_vals = pd.read_csv(rnn_file, header=-1)
@@ -74,11 +40,11 @@ def output_responses(dataset):
         output_filename = fh.make_filename(output_dir, i, 'html')
         with codecs.open(output_filename, 'w') as output_file:
 
-            output_file.write(common.make_header(i))
-            output_file.write(common.make_body_start())
+            output_file.write(html.make_header(i))
+            output_file.write(html.make_body_start())
             table_header = ['Label'] + text[i] + ['True', 'Pred.']
-            output_file.write(common.make_table_start(style='t1'))
-            output_file.write(common.make_table_header(table_header))
+            output_file.write(html.make_table_start(style='t1'))
+            output_file.write(html.make_table_header(table_header))
             for code_index, code in enumerate(true.columns):
                 # load coefficients from unigram model
                 words = text[i]
@@ -100,19 +66,19 @@ def output_responses(dataset):
                     colours += [(255, 255, 255) for w in words]
 
                 colours += [str((0, 0, 0))]*2
-                row = [code_names[code_index]] + words + [str(true_i[code]), str(int(pred_i[code]))]
-                output_file.write(common.make_table_row(row, colours=colours))
+                row = [code_names[code_index]] + words + [str(true_i[code]), str(int(pred_i[code])) + ' (LR)']
+                output_file.write(html.make_table_row(row, colours=colours))
 
                 colours = [str((0, 0, 0))]
                 vals = [int(235 - (v*235)) for v in rnn_vals[code]]
                 colours += [(v, 235, v) for v in vals]
                 colours += [str((0, 0, 0))]*2
-                row = [' '] + text[i] + [' ', str(int(rnn_vals[code].max()))]
-                output_file.write(common.make_table_row(row, colours=colours))
-            output_file.write(common.make_table_end())
+                row = [' '] + text[i] + [' ', str(int(rnn_vals[code].max() > 0.5)) + ' (RNN)']
+                output_file.write(html.make_table_row(row, colours=colours))
+            output_file.write(html.make_table_end())
 
-            output_file.write(common.make_body_end())
-            output_file.write(common.make_footer())
+            output_file.write(html.make_body_end())
+            output_file.write(html.make_footer())
 
 def main():
     output_responses(dataset='Democrat-Likes')

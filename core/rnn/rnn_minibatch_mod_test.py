@@ -247,7 +247,7 @@ class RNN(object):
             c_t = f_t * c_tm1 + i_t * d_t
             o_t = T.nnet.sigmoid(T.dot(x_t, self.W_xo) + T.dot(h_tm1, self.W_ho) + T.dot(c_t, self.W_co) + self.b_o)
             h_t = o_t * c_t
-            return [mask_t * h_t + (1 - mask_t) * h_tm1, mask_t * c_t + (1 - mask_t) * c_tm1]
+            return [mask_t * h_t + (1 - mask_t) * h_tm1, mask_t * c_t + (1 - mask_t) * c_tm1, i_t, f_t, o_t]
 
         def recurrence_lstm_reverse(x_t, mask_t, h_tp1, c_tp1):
             i_t = T.nnet.sigmoid(T.dot(x_t, self.W_xi) + T.dot(h_tp1, self.W_hi) + T.dot(c_tp1, self.W_ci) + self.b_i)
@@ -256,7 +256,7 @@ class RNN(object):
             c_t = f_t * c_tp1 + i_t * d_t
             o_t = T.nnet.sigmoid(T.dot(x_t, self.W_xo) + T.dot(h_tp1, self.W_ho) + T.dot(c_t, self.W_co) + self.b_o)
             h_t = o_t * c_t
-            return [mask_t * h_t + (1 - mask_t) * h_tp1, mask_t * c_t + (1 - mask_t) * c_tp1]
+            return [mask_t * h_t + (1 - mask_t) * h_tp1, mask_t * c_t + (1 - mask_t) * c_tp1, i_t, f_t, o_t]
 
         h_r = None
 
@@ -269,17 +269,22 @@ class RNN(object):
                                      outputs_info=[T.alloc(np.array(0.), minibatch_size, nh)],
                                      go_backwards=True)
         elif rnn_type == 'LSTM':
-            [h_f, c_f], _ = theano.scan(fn=recurrence_lstm, sequences=[x, mask_3d],
+            [h_f, c_f, i_f, f_f, o_f], _ = theano.scan(fn=recurrence_lstm, sequences=[x, mask_3d],
                                         outputs_info=[T.alloc(np.array(0.), minibatch_size, nh),
-                                                      T.alloc(np.array(0.), minibatch_size, nh)],
+                                                      T.alloc(np.array(0.), minibatch_size, nh),
+                                                      None, None, None],
                                         n_steps=x.shape[0])
             if bidirectional:
-                [h_r, c_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=[x, mask_3d],
+                [h_r, c_r, i_r, f_r, o_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=[x, mask_3d],
                                             outputs_info=[T.alloc(np.array(0.), minibatch_size, nh),
-                                                          T.alloc(np.array(0.), minibatch_size, nh)],
+                                                          T.alloc(np.array(0.), minibatch_size, nh),
+                                                          None, None, None],
                                             go_backwards=True)
                 #[h_r, c_r], _ = theano.scan(fn=recurrence_lstm_reverse, sequences=x,
                 #                            outputs_info=[self.h_i_r, self.c_i_r], go_backwards=True)
+                i_r = i_r[::-1, :, :]
+                f_r = f_r[::-1, :, :]
+                o_r = o_r[::-1, :, :]
         else:
             #h_f, _ = theano.scan(fn=recurrence_basic, sequences=x, outputs_info=[self.h_i_f], n_steps=x.shape[0])
             temp, _ = theano.scan(fn=recurrence_basic, sequences=[x, mask_3d],
@@ -397,7 +402,8 @@ class RNN(object):
             #if pooling_method == 'attention1' or pooling_method == 'attention2':
             #    self.a_sum_check = theano.function(inputs=[idxs, extra], outputs=a_sum)
             self.sentence_step_through = theano.function(inputs=[idxs, mask, extra, minibatch_size],
-                                                         outputs=[h, self.W_s, self.b_s, p_y_given_x_sentence, s])
+                                                         outputs=[h, self.W_s, self.b_s, p_y_given_x_sentence,
+                                                                  s, i_f, i_r])
 
         else:
             self.sentence_classify = theano.function(inputs=[idxs, mask, minibatch_size], outputs=y_pred)
@@ -409,7 +415,8 @@ class RNN(object):
             #if pooling_method == 'attention1' or pooling_method == 'attention2':
             #    self.a_sum_check = theano.function(inputs=[idxs, mask, minibatch_size], outputs=a_sum)
             self.sentence_step_through = theano.function(inputs=[idxs, mask, minibatch_size],
-                                                         outputs=[h, self.W_s, self.b_s, p_y_given_x_sentence, s])
+                                                         outputs=[h, self.W_s, self.b_s, p_y_given_x_sentence,
+                                                                  s, i_f, i_r])
 
 
         self.normalize = theano.function(inputs=[],
@@ -703,83 +710,7 @@ def main(params=None):
         params['clr'] = params['lr']
         n_train = len(order)
 
-        """
-        for e in xrange(params['n_epochs']):
-            # shuffle
-            #shuffle([train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
 
-            # sort by length on the first epoch
-            if e == 0:
-                order = length_order
-                train_lex = [train_lex[j] for j in order]
-                train_y = [train_y[j] for j in order]
-                train_extra = [train_extra[j] for j in order]
-                train_masks = [train_masks[j] for j in order]
-            else:
-                shuffle([order, train_lex, train_y, train_extra, train_masks], params['seed'])   # shuffle the input data
-            params['ce'] = e                # store the current epoch
-            tic = timeit.default_timer()
-
-            ms = params['minibatch_size']
-            n_train = len(train_lex)
-            nll = 0
-
-            #for i, orig_x in enumerate(train_lex):
-            for iteration, i in enumerate(range(0, n_train, ms)):
-
-                minibatch_x, minibatch_mask,\
-                minibatch_extra, minibatch_y= select_minibatch(train_x_win, train_masks, train_extra, train_y,
-                                                               params['win'], i, ms, order,
-                                                               params['add_OOV_noise'], params['OOV_noise_prob'])
-
-                n_elements, _, _ = minibatch_x.shape
-                #if i > -1:
-                #    print '\n'.join([' '.join([idx2words[idx] for idx in minibatch_x[:, k, 0].tolist()]) for
-                #           k in range(ms)])
-                #    print minibatch_y
-
-
-                nll_i, a_sum = rnn.train(minibatch_x, minibatch_mask, minibatch_y, params['win'],
-                                params['clr'] / float(n_elements) * 20,
-                                params['lr_emb_fac'], extra_input_dims, minibatch_extra)
-
-                nll += nll_i
-                #rnn.train(x, mask, y, params['win'], params['clr'], params['lr_emb_fac'],
-                #          extra_input_dims, extra)
-                print '[learning] epoch %i >> %2.2f%%' % (
-                    e, (i + 1) * 100. / float(n_sentences)),
-                print 'completed in %.2f (sec), nll = %.2f, a_sum = %.1f <<\r' % (timeit.default_timer() - tic,
-                                                                                  nll, np.max(a_sum)),
-                sys.stdout.flush()
-
-                if np.isnan(nll) or np.isinf(nll):
-                    if best_f1 > 0:
-                        break
-                    else:
-                        return {'loss': 1.0,
-                                'final_test_f1': 0,
-                                'valid_f1s': 0,
-                                'true_valid_f1s': 0,
-                                'train_f1s': 0,
-                                'test_f1s': 0,
-                                'status': STATUS_OK
-                                }
-
-            # evaluation // back into the real world : idx -> words
-            print ""
-
-
-            #print "true y", train_y[-1]
-            #y_pred = rnn.classify(np.array(train_x_win[-1]).reshape((1, len(train_x_win[-1]))),
-            #                      train_masks[-1], params['win'], extra_input_dims, train_extra[-1])[0]
-            #print "pred y", y_pred
-
-            #if params['pooling_method'] == 'attention1' or params['pooling_method'] == 'attention2':
-            #    if extra_input_dims == 0:
-            #        r = np.random.randint(0, len(train_lex))
-            #        print r, rnn.a_sum_check(np.asarray(contextwin(train_lex[r], params['win'])).astype('int32'))
-
-            """
 
         predictions_train = predict(n_train, params['classify_minibatch_size'], train_x_win, train_masks,
                                      train_y, params['win'], extra_input_dims, train_extra, rnn, order)
@@ -807,7 +738,7 @@ def main(params=None):
 
         ms = 1
 
-
+        """
         for i in range(n_train):
             mb_x, mb_masks, mb_extra, mb_y = select_minibatch(train_x_win, train_masks, train_extra, train_y,
                                                               params['win'], i, ms, order=range(len(train_y)))
@@ -830,17 +761,20 @@ def main(params=None):
             output_filename = fh.make_filename(output_dir, dev_items[i], 'csv')
             np.savetxt(output_filename, s[:, 0, :], delimiter=',')
 
+        """
 
         for i in range(n_test):
             mb_x, mb_masks, mb_extra, mb_y = select_minibatch(test_x_win, test_masks, test_extra, test_y,
                                                               params['win'], i, ms, order=range(len(test_y)))
 
-            h, W, b, p_y, s = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
+            h, W, b, p_y, s, i_f, i_r = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
 
             temp = np.dot(h, W) + b
             s = 1.0/(1.0 + np.exp(-temp))
             output_filename = fh.make_filename(output_dir, test_items[i], 'csv')
             np.savetxt(output_filename, s[:, 0, :], delimiter=',')
+            output_filename = fh.make_filename(output_dir, test_items[i] + '_i_f', 'npy')
+            fh.pickle_data(i_f, output_filename)
 
 
 

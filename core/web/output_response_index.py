@@ -9,8 +9,8 @@ from ..util import file_handling as fh
 from ..preprocessing import labels
 from ..preprocessing import data_splitting as ds
 
-from . import common
-
+import html
+from codes import code_names
 
 def output_response_index():
     output_dir = fh.makedirs(defines.web_dir, 'DRLD')
@@ -21,8 +21,8 @@ def output_response_index():
     text = fh.read_json(fh.make_filename(text_file_dir, 'ngrams_n1_m1_rnn', 'json'))
 
     with codecs.open(output_filename, 'w') as output_file:
-        output_file.write(common.make_header('D/R Dis/likes index'))
-        output_file.write(common.make_body_start())
+        output_file.write(html.make_header('Democrats vs Republicans'))
+        output_file.write(html.make_body_start())
 
         for dataset in datasets:
             true = labels.get_labels([dataset])
@@ -31,33 +31,36 @@ def output_response_index():
             dev_items = ds.get_dev_documents(dataset, 0, 0)
             test_items = ds.get_test_documents(dataset, 0)
 
-            output_file.write(common.make_heading(dataset))
+            output_file.write(html.make_heading(dataset, align='center'))
 
             table_header = ['Response', 'Split', 'Snippet']
-            col_widths = [100, 80, 500]
-            output_file.write(common.make_table_start(col_widths=col_widths, style='sortable'))
-            output_file.write(common.make_table_header(table_header))
+            col_widths = [130, 80, 800]
+            output_file.write(html.make_table_start(col_widths=col_widths, style='sortable'))
+            output_file.write(html.make_table_header(table_header))
 
-            for item in all_items:
-                if item in train_items:
-                    split = 'train'
-                elif item in dev_items:
-                    split = 'dev'
-                else:
-                    split = 'test'
+            for subset in [train_items, dev_items, test_items]:
+                subset.sort()
+                for item in subset:
+                    if item in train_items:
+                        split = 'train'
+                    elif item in dev_items:
+                        split = 'dev'
+                    else:
+                        split = 'test'
 
-                words = text[item]
-                if len(words) > 10:
-                    words = words[:10] + ['...']
-                num = item.split('_')[1]
-                link = common.make_link(item + '.html', num)
-                row = [link, split, ' '.join(words)]
-                output_file.write(common.make_table_row(row))
+                    words = text[item]
+                    response = ' '.join(words)
+                    if len(response) > 100:
+                        response = response[:100] + '. . .'
+                    num = item.split('_')[1]
+                    link = html.make_link(item + '.html', num, new_window=True)
+                    row = [link, split, response]
+                    output_file.write(html.make_table_row(row))
 
-            output_file.write(common.make_table_end())
+            output_file.write(html.make_table_end())
 
-            output_file.write(common.make_body_end())
-            output_file.write(common.make_footer())
+            output_file.write(html.make_body_end())
+            output_file.write(html.make_footer())
 
 def main():
     output_response_index()
