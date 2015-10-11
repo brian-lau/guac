@@ -83,3 +83,9 @@ def replace_chars(text):
     text = re.sub(' ', '_', text)
     text = re.sub('/', '_', text)
     return text
+
+def make_image(source):
+    image = '<center><img src="'
+    image += source
+    image += '" align="middle" ></center>\n'
+    return image

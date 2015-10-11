@@ -2,14 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c774ad18-1f5f-4f6c-aba0-c0acd944184f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/web/common.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/web/output_label_index.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/web/output_word_index.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/core/web/output_figures.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/web/common.py" afterPath="$PROJECT_DIR$/core/web/common.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/web/html.py" afterPath="$PROJECT_DIR$/core/web/html.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/web/output_labels.py" afterPath="$PROJECT_DIR$/core/web/output_labels.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/web/output_response_index.py" afterPath="$PROJECT_DIR$/core/web/output_response_index.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/web/output_responses.py" afterPath="$PROJECT_DIR$/core/web/output_responses.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/web/output_words.py" afterPath="$PROJECT_DIR$/core/web/output_words.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py" afterPath="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="guac.iws" />
@@ -32,28 +30,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="rnn_minibatch.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="990" column="16" selection-start-line="990" selection-start-column="16" selection-end-line="990" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rnn_minibatch_mod_test.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="793" column="28" selection-start-line="793" selection-start-column="28" selection-end-line="793" selection-end-column="28" />
-              <folding>
-                <element signature="e#66#101#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="output_words.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/web/output_words.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -66,13 +42,49 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="rnn_minibatch_mod_test.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="752" column="50" selection-start-line="752" selection-start-column="50" selection-end-line="752" selection-end-column="50" />
+              <folding>
+                <element signature="e#66#101#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="output_figures.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/web/output_figures.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="105" column="40" selection-start-line="105" selection-start-column="40" selection-end-line="105" selection-end-column="40" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="output_label_index.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/web/output_label_index.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+              <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="output_response_index.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/web/output_response_index.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="1.144628">
+              <caret line="60" column="46" selection-start-line="60" selection-start-column="46" selection-end-line="60" selection-end-column="46" />
+              <folding>
+                <element signature="e#21#30#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -82,55 +94,9 @@
         <entry file="file://$PROJECT_DIR$/core/web/output_word_index.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="45" column="41" selection-start-line="45" selection-start-column="41" selection-end-line="45" selection-end-column="41" />
+              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding>
                 <element signature="e#22#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="output_labels.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/web/output_labels.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="29" column="55" selection-start-line="0" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="output_responses.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/core/web/output_responses.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.48347107">
-              <caret line="77" column="42" selection-start-line="77" selection-start-column="42" selection-end-line="77" selection-end-column="42" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="output_response_index.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/web/output_response_index.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="common.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/web/common.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="29" column="41" selection-start-line="29" selection-start-column="41" selection-end-line="29" selection-end-column="41" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -140,8 +106,42 @@
         <entry file="file://$PROJECT_DIR$/core/web/html.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="30" column="43" selection-start-line="30" selection-start-column="43" selection-end-line="30" selection-end-column="43" />
+              <caret line="83" column="33" selection-start-line="83" selection-start-column="33" selection-end-line="83" selection-end-column="33" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="output_labels.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/web/output_labels.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="8" column="38" selection-start-line="8" selection-start-column="38" selection-end-line="8" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="output_responses.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/web/output_responses.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-8.62963">
+              <caret line="50" column="16" selection-start-line="50" selection-start-column="12" selection-end-line="50" selection-end-column="16" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="file_handling.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/util/file_handling.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-25.666666">
+              <caret line="73" column="0" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -173,7 +173,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/core/models/multilabel_model.py" />
         <option value="$PROJECT_DIR$/core/models/powerset_model.py" />
         <option value="$PROJECT_DIR$/core/rnn/rnn_general.py" />
         <option value="$PROJECT_DIR$/core/word2vec/train_vectors.py" />
@@ -213,17 +212,18 @@
         <option value="$PROJECT_DIR$/core/util/defines.py" />
         <option value="$PROJECT_DIR$/run_test2.py" />
         <option value="$PROJECT_DIR$/core/web/codes.py" />
-        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py" />
         <option value="$PROJECT_DIR$/core/experiment/run_with_bayes_opt.py" />
         <option value="$PROJECT_DIR$/core/experiment/experiment.py" />
         <option value="$PROJECT_DIR$/core/web/output_labels.py" />
-        <option value="$PROJECT_DIR$/core/web/output_response_index.py" />
-        <option value="$PROJECT_DIR$/core/web/html.py" />
         <option value="$PROJECT_DIR$/core/web/output_label_index.py" />
-        <option value="$PROJECT_DIR$/core/web/common.py" />
         <option value="$PROJECT_DIR$/core/web/output_words.py" />
         <option value="$PROJECT_DIR$/core/web/output_word_index.py" />
+        <option value="$PROJECT_DIR$/core/web/common.py" />
+        <option value="$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py" />
+        <option value="$PROJECT_DIR$/core/web/html.py" />
         <option value="$PROJECT_DIR$/core/web/output_responses.py" />
+        <option value="$PROJECT_DIR$/core/web/output_figures.py" />
+        <option value="$PROJECT_DIR$/core/web/output_response_index.py" />
       </list>
     </option>
   </component>
@@ -241,8 +241,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1460" />
-    <option name="y" value="162" />
+    <option name="x" value="1458" />
+    <option name="y" value="145" />
     <option name="width" value="1241" />
     <option name="height" value="846" />
   </component>
@@ -318,24 +318,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="guac" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="guac" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -759,12 +741,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00102" summary="changed matrix to dataframe for ease">
-      <created>1443298248996</created>
-      <option name="number" value="00102" />
-      <option name="project" value="LOCAL" />
-      <updated>1443298248996</updated>
-    </task>
     <task id="LOCAL-00103" summary="added error handler">
       <created>1443298370921</created>
       <option name="number" value="00103" />
@@ -1053,11 +1029,17 @@
       <option name="project" value="LOCAL" />
       <updated>1444502701801</updated>
     </task>
-    <option name="localTasksCounter" value="151" />
+    <task id="LOCAL-00151" summary="have most of the web linked up">
+      <created>1444508384282</created>
+      <option name="number" value="00151" />
+      <option name="project" value="LOCAL" />
+      <updated>1444508384282</updated>
+    </task>
+    <option name="localTasksCounter" value="152" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1460" y="162" width="1241" height="846" extended-state="0" />
+    <frame x="1458" y="145" width="1241" height="846" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1123,7 +1105,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="reset a param" />
     <MESSAGE value="found a bug in classifier chains and fixed it" />
     <MESSAGE value="made some modifications to bayes opt for rnns" />
     <MESSAGE value="changed a name" />
@@ -1148,7 +1129,8 @@
     <MESSAGE value="minor change to output naming; added outputs to rnn test" />
     <MESSAGE value="fixed a bug of declaring global after assignement" />
     <MESSAGE value="updated basic experiment to allow choosing the number of dev folds to use in tuning / evaluation" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated basic experiment to allow choosing the number of dev folds to use in tuning / evaluation" />
+    <MESSAGE value="have most of the web linked up" />
+    <option name="LAST_COMMIT_MESSAGE" value="have most of the web linked up" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1230,13 +1212,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_char.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.62740386">
-          <caret line="657" column="20" selection-start-line="657" selection-start-column="20" selection-end-line="657" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_multitask.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.036057692">
@@ -1502,16 +1477,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/util/file_handling.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/web/codes.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.016483517">
@@ -1536,16 +1501,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="793" column="28" selection-start-line="793" selection-start-column="28" selection-end-line="793" selection-end-column="28" />
-          <folding>
-            <element signature="e#66#101#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1562,18 +1517,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/web/html.py">
+    <entry file="file://$PROJECT_DIR$/core/web/common.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="43" selection-start-line="30" selection-start-column="43" selection-end-line="30" selection-end-column="43" />
-          <folding />
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/web/output_response_index.py">
+    <entry file="file://$PROJECT_DIR$/core/util/file_handling.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-25.666666">
+          <caret line="73" column="0" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/web/output_word_index.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="e#22#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/web/html.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="83" column="33" selection-start-line="83" selection-start-column="33" selection-end-line="83" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1581,29 +1558,17 @@
     <entry file="file://$PROJECT_DIR$/core/web/output_labels.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="29" column="55" selection-start-line="0" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
+          <caret line="8" column="38" selection-start-line="8" selection-start-column="38" selection-end-line="8" selection-end-column="38" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/web/output_label_index.py">
+    <entry file="file://$PROJECT_DIR$/core/rnn/rnn_minibatch_mod_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+          <caret line="752" column="50" selection-start-line="752" selection-start-column="50" selection-end-line="752" selection-end-column="50" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/web/common.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="29" column="41" selection-start-line="29" selection-start-column="41" selection-end-line="29" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#66#101#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1618,22 +1583,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/web/output_word_index.py">
+    <entry file="file://$PROJECT_DIR$/core/web/output_responses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="45" column="41" selection-start-line="45" selection-start-column="41" selection-end-line="45" selection-end-column="41" />
+        <state vertical-scroll-proportion="-8.62963">
+          <caret line="50" column="16" selection-start-line="50" selection-start-column="12" selection-end-line="50" selection-end-column="16" />
           <folding>
-            <element signature="e#22#31#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/web/output_responses.py">
+    <entry file="file://$PROJECT_DIR$/core/web/output_label_index.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48347107">
-          <caret line="77" column="42" selection-start-line="77" selection-start-column="42" selection-end-line="77" selection-end-column="42" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/web/output_figures.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="105" column="40" selection-start-line="105" selection-start-column="40" selection-end-line="105" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/web/output_response_index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.144628">
+          <caret line="60" column="46" selection-start-line="60" selection-start-column="46" selection-end-line="60" selection-end-column="46" />
+          <folding>
+            <element signature="e#21#30#0" expanded="true" />
           </folding>
         </state>
       </provider>

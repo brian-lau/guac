@@ -1,3 +1,4 @@
+import os
 import re
 import codecs
 
@@ -27,6 +28,8 @@ def output_responses(dataset):
     true = labels.get_labels([dataset])
     all_items = ds.get_all_documents(dataset)
 
+    word_list = common.get_word_list(true.columns, blm_dir)
+
     for i in all_items:
         true_i = true.loc[i]
         rnn_file = fh.make_filename(rnn_dir, i, 'csv')
@@ -45,7 +48,7 @@ def output_responses(dataset):
             output_file.write(html.make_body_start())
             output_file.write(common.make_masthead(-1))
 
-            links = [html.make_link('wordtype_' + w + '.html', w) for w in text[i]]
+            links = [html.make_link('wordtype_' + w + '.html', w) if w in word_list else w for w in text[i]]
             table_header = ['Label'] + links + ['True', 'Pred.']
             output_file.write(html.make_table_start(style='t1'))
             output_file.write(html.make_table_header(table_header))
@@ -82,6 +85,9 @@ def output_responses(dataset):
                 row = [' '] + text[i] + [' ', str(int(rnn_vals[code].max() > 0.5)) + ' (RNN)']
                 output_file.write(html.make_table_row(row, colours=colours))
             output_file.write(html.make_table_end())
+
+            output_file.write(html.make_heading('Gates', align='center'))
+            output_file.write(html.make_image(os.path.join('gate_plots', i + '_gates.png')))
 
             output_file.write(html.make_body_end())
             output_file.write(html.make_footer())

@@ -56,8 +56,8 @@ def output_response_index():
                     if len(response) > 100:
                         response = response[:100] + '. . .'
                     num = item.split('_')[1]
-                    link = html.make_link(item + '.html', num, new_window=True)
-                    link2 = html.make_link(item + '.html', response, new_window=True)
+                    link = html.make_link(item + '.html', num, new_window=False)
+                    link2 = html.make_link(item + '.html', response, new_window=False)
                     row = [link, split, link2]
                     output_file.write(html.make_table_row(row))
 

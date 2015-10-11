@@ -740,30 +740,31 @@ def main(params=None):
 
         ms = 1
 
-        """
         for i in range(n_train):
             mb_x, mb_masks, mb_extra, mb_y = select_minibatch(train_x_win, train_masks, train_extra, train_y,
                                                               params['win'], i, ms, order=range(len(train_y)))
 
-            h, W, b, p_y, s = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
+            h, W, b, p_y, s, i_f, i_r, \
+                f_f, f_r, o_f, o_r, c = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
 
             temp = np.dot(h, W) + b
             s = 1.0/(1.0 + np.exp(-temp))
             output_filename = fh.make_filename(output_dir, train_items[i], 'csv')
             np.savetxt(output_filename, s[:, 0, :], delimiter=',')
+            output_npy_files(output_dir, train_items[i], i_f, i_r, f_f, f_r, o_f, o_r, h, c)
 
         for i in range(n_valid):
             mb_x, mb_masks, mb_extra, mb_y = select_minibatch(valid_x_win, valid_masks, dev_extra, valid_y,
                                                               params['win'], i, ms, order=range(len(valid_y)))
 
-            h, W, b, p_y, s = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
+            h, W, b, p_y, s, i_f, i_r, \
+                f_f, f_r, o_f, o_r, c = rnn.step_through(mb_x, mb_masks, params['win'], extra_input_dims, mb_extra)
 
             temp = np.dot(h, W) + b
             s = 1.0/(1.0 + np.exp(-temp))
             output_filename = fh.make_filename(output_dir, dev_items[i], 'csv')
             np.savetxt(output_filename, s[:, 0, :], delimiter=',')
-
-        """
+            output_npy_files(output_dir, dev_items[i], i_f, i_r, f_f, f_r, o_f, o_r, h, c)
 
         for i in range(n_test):
             mb_x, mb_masks, mb_extra, mb_y = select_minibatch(test_x_win, test_masks, test_extra, test_y,
@@ -776,25 +777,28 @@ def main(params=None):
             s = 1.0/(1.0 + np.exp(-temp))
             output_filename = fh.make_filename(output_dir, test_items[i], 'csv')
             np.savetxt(output_filename, s[:, 0, :], delimiter=',')
-            output_filename = fh.make_filename(output_dir, test_items[i] + '_i_f', 'npy')
-            fh.pickle_data(i_f, output_filename)
-            output_filename = fh.make_filename(output_dir, test_items[i] + '_i_r', 'npy')
-            fh.pickle_data(i_r, output_filename)
-            output_filename = fh.make_filename(output_dir, test_items[i] + '_f_f', 'npy')
-            fh.pickle_data(f_f, output_filename)
-            output_filename = fh.make_filename(output_dir, test_items[i] + '_f_r', 'npy')
-            fh.pickle_data(f_r, output_filename)
-            output_filename = fh.make_filename(output_dir, test_items[i] + '_o_f', 'npy')
-            fh.pickle_data(o_f, output_filename)
-            output_filename = fh.make_filename(output_dir, test_items[i] + '_o_r', 'npy')
-            fh.pickle_data(o_r, output_filename)
-            output_filename = fh.make_filename(output_dir, test_items[i] + '_h', 'npy')
-            fh.pickle_data(h, output_filename)
-            output_filename = fh.make_filename(output_dir, test_items[i] + '_c', 'npy')
-            fh.pickle_data(c, output_filename)
-
+            output_npy_files(output_dir, test_items[i], i_f, i_r, f_f, f_r, o_f, o_r, h, c)
 
         print "train_f1 =", train_f1, "valid_f1 =", valid_f1, "test_f1 =", test_f1
+
+
+def output_npy_files(output_dir, basename, i_f, i_r, f_f, f_r, o_f, o_r, h, c):
+    output_filename = fh.make_filename(output_dir, basename + '_i_f', 'npy')
+    fh.pickle_data(i_f, output_filename)
+    output_filename = fh.make_filename(output_dir, basename + '_i_r', 'npy')
+    fh.pickle_data(i_r, output_filename)
+    output_filename = fh.make_filename(output_dir, basename + '_f_f', 'npy')
+    fh.pickle_data(f_f, output_filename)
+    output_filename = fh.make_filename(output_dir, basename + '_f_r', 'npy')
+    fh.pickle_data(f_r, output_filename)
+    output_filename = fh.make_filename(output_dir, basename + '_o_f', 'npy')
+    fh.pickle_data(o_f, output_filename)
+    output_filename = fh.make_filename(output_dir, basename + '_o_r', 'npy')
+    fh.pickle_data(o_r, output_filename)
+    output_filename = fh.make_filename(output_dir, basename + '_h', 'npy')
+    fh.pickle_data(h, output_filename)
+    output_filename = fh.make_filename(output_dir, basename + '_c', 'npy')
+    fh.pickle_data(c, output_filename)
 
 
 def expand_x_with_context_win(lex, window_size):

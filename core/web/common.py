@@ -1,3 +1,5 @@
+from ..util import file_handling as fh
+
 import html
 import output_labels
 import output_label_index
@@ -16,6 +18,21 @@ def make_masthead(active_index):
         links.append(link)
     masthead = html.make_masthead(links, active_index)
     return masthead
+
+
+def get_word_list(codes, model_dir):
+    word_list = set()
+    for code_index, code in enumerate(codes):
+        # load coefficients from unigram model
+        model_filename = fh.make_filename(model_dir, html.replace_chars(code), 'json')
+        model = fh.read_json(model_filename)
+        if 'coefs' in model:
+            coefs = dict(model['coefs'])
+            words = [word[4:] for word in coefs.keys()]
+            word_list.update(words)
+    word_list = list(word_list)
+    word_list.sort()
+    return word_list
 
 
 def make_all_pages():
