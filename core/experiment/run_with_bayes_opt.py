@@ -419,6 +419,9 @@ def main():
         output_dirname += '_noreuse'
     output_dirname += '_' + run
 
+    if n_dev_folds != 5:
+        output_dirname += '_' + str(n_dev_folds)
+
     output_filename = fh.make_filename(defines.exp_dir, fh.get_basename(output_dirname), 'log')
 
     with codecs.open(output_filename, 'w') as output_file:
