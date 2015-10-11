@@ -1,7 +1,7 @@
-__author__ = 'dcard'
 
 import re
 import codecs
+import random
 
 import pandas as pd
 
@@ -35,6 +35,17 @@ def output_words():
             word_list.update(words)
     word_list = list(word_list)
 
+    word_index = {}
+    order = text.keys()
+    random.shuffle(order)
+    for item in order:
+        words = text[item]
+        for word in words:
+            if word in word_index:
+                word_index[word].append(item)
+            else:
+                word_index[word] = [item]
+
     for word in word_list:
         output_filename = fh.make_filename(output_dir, 'wordtype_' + word, 'html')
         with codecs.open(output_filename, 'w') as output_file:
@@ -43,6 +54,21 @@ def output_words():
             output_file.write(html.make_body_start())
             output_file.write(common.make_masthead(-1))
             output_file.write(html.make_heading('Word: ' + word, align='center'))
+
+            if word in word_index:
+                output_file.write(html.make_paragraph('Sample responses:', align='center'))
+                item_list = word_index[word][:]
+                random.shuffle(item_list)
+                for item in item_list[:min(len(item_list), 5)]:
+                    item_text = text[item]
+                    occurence_index = item_text.index(word)
+                    start = max(0, occurence_index-10)
+                    end = min(len(item_text), occurence_index + 10)
+                    link = html.make_link(item + '.html', ' '.join(item_text[start:end]))
+                    output_file.write(html.make_paragraph(link, align="center", id="psmall"))
+
+
+            output_file.write(html.make_paragraph('Unigram model coefficients for each label:', align='center'))
 
             table_header = ['Label', 'Value', 'Scaled']
             output_file.write(html.make_table_start(style='sortable'))

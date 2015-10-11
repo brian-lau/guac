@@ -44,6 +44,15 @@ def make_heading(text, level=1, align=None):
     heading += '>' + text + '</h' + str(level) + '>'
     return heading
 
+def make_paragraph(text, align=None, id=None):
+    p = '<p'
+    if id is not None:
+        p += ' id="' + id + '"'
+    if align is not None:
+        p += ' align="center"'
+    p += '>' + text + '</p>\n'
+    return p
+
 def make_link(dest, text, new_window=False):
     link = '<a href="' + dest + '"'
     if new_window:

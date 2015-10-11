@@ -47,6 +47,11 @@ def output_responses(dataset):
             output_file.write(html.make_header(i))
             output_file.write(html.make_body_start())
             output_file.write(common.make_masthead(-1))
+            output_file.write(html.make_heading(i + ': Response', align='center'))
+            output_file.write(html.make_paragraph('The table below shows coeficients for the unigram model (red-blue)'))
+            output_file.write(html.make_paragraph('and sequence element probabilities for the LSTM (white-green).'))
+            output_file.write(html.make_paragraph('Words and Labels are linked.'))
+
 
             links = [html.make_link('wordtype_' + w + '.html', w) if w in word_list else w for w in text[i]]
             table_header = ['Label'] + links + ['True', 'Pred.']
@@ -86,8 +91,19 @@ def output_responses(dataset):
                 output_file.write(html.make_table_row(row, colours=colours))
             output_file.write(html.make_table_end())
 
-            output_file.write(html.make_heading('Gates', align='center'))
+            output_file.write(html.make_heading('LSTM Gates', align='center'))
+            output_file.write(html.make_paragraph('The plot below shows LSTM gate values at each sequence element',
+                                                  align="center"))
+            output_file.write(html.make_paragraph('Each grey line is one dimension; the colored line shows the mean',
+                                                  align="center"))
             output_file.write(html.make_image(os.path.join('gate_plots', i + '_gates.png')))
+
+            output_file.write(html.make_heading('LSTM vectors', align='center'))
+            output_file.write(html.make_paragraph('The plot below shows the LSTM hidden and memory nodes for each '
+                                                  'sequence element', align="Center"))
+            output_file.write(html.make_paragraph('Vectors have been projected to a common space',
+                                                  align="center"))
+            output_file.write(html.make_image(os.path.join('vector_plots', i + '_vectors.png')))
 
             output_file.write(html.make_body_end())
             output_file.write(html.make_footer())

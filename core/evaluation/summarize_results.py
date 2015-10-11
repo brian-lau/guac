@@ -29,7 +29,7 @@ def main():
     for i, dir in enumerate(run_dirs):
         run_num = int(fh.get_basename(dir).split('_')[-1])
 
-        if run_num < 41:
+        if run_num < 100:
             results_dir = os.path.join(dir, 'results')
             test_file = fh.make_filename(results_dir, 'test_macro_f1', 'csv')
             valid_file = fh.make_filename(results_dir, 'valid_cv_macro_f1', 'csv')
@@ -50,10 +50,11 @@ def main():
 
     results.to_csv(fh.make_filename(exp_dir, 'summary', 'csv'), columns=results.columns)
 
-    sorted = results.sort('masked')
+    sorted = results.sort('valid')
     print sorted
 
     print "best by masked"
+    sorted = results.sort('masked')
     print sorted.values[-1, :]
 
     print "best by valid"

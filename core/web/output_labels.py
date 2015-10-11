@@ -29,6 +29,7 @@ def output_label_pages():
             output_file.write(html.make_body_start())
             output_file.write(common.make_masthead(-1))
             output_file.write(html.make_heading('Label: ' + code_name, align='center'))
+            output_file.write(html.make_paragraph('Coefficients for unigram model:', align="center"))
 
             table_header = ['Word', 'Value', 'Scaled']
             output_file.write(html.make_table_start(style='sortable'))

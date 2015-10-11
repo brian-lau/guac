@@ -97,20 +97,23 @@ def make_gate_plots():
 def make_vector_plots():
     ddir = fh.makedirs(defines.exp_dir, 'rnn', 'bayes_opt_rnn_LSTM_reuse_mod_34_rerun', 'fold0', 'responses')
     text_filename = fh.makedirs(defines.data_dir, 'rnn', 'ngrams_n1_m1_rnn.json')
-    output_dir = fh.makedirs(defines.web_dir, 'DRLD', 'gate_plots')
+    output_dir = fh.makedirs(defines.web_dir, 'DRLD', 'vector_plots')
 
     colours = get_tableau_colors()
 
     with codecs.open(text_filename, 'r') as input_file:
         all_text = json.load(input_file)
 
-    all_c = np.array()
-    all_h = np.array()
+    all_c = None
+    all_h = None
     seq_lengths = []
+
+    print "Loading data"
 
     files = glob.glob(os.path.join(ddir, '*.csv'))
     for f in files:
         base = fh.get_basename(f)
+        text = all_text[base]
         print base
 
         c_file = os.path.join(ddir, base + '_c.npy')
@@ -119,48 +122,46 @@ def make_vector_plots():
         h = fh.unpickle_data(h_file)[:, 0, :]
 
         n_el, n_dim = c.shape
-        #n_hidden = n_dim / 2
-        #c_f = c[:, :n_hidden]
-        #c_r = c[:, n_hidden:]
-        #h_f = h[:, :n_hidden]
-        #h_r = h[:, n_hidden:]
 
-        all_c = np.vstack((all_c, c))
-        all_h = np.vstack((all_h, h))
-        seq_lengths.append(n_el)
+        if n_el > 0:
+            n_hidden = n_dim / 2
+            c_f = c[:, :n_hidden]
+            c_r = c[:, n_hidden:]
+            h_f = h[:, :n_hidden]
+            h_r = h[:, n_hidden:]
 
-    model = TSNE(n_components=2, random_state=0)
-    c2 = model.fit_transform(all_c)
-    h2 = model.fit_transform(all_h)
+            X = np.vstack((h_f, h_r, c_f, c_r))
 
-    fh.pickle_data(c2, '/Users/dcard/Desktop/c2.npy')
-    fh.pickle_data(h2, '/Users/dcard/Desktop/h2.npy')
+            model = TSNE(n_components=2, random_state=0)
+            X2 = model.fit_transform(X)
 
+            scale = np.max(X2[:, 0])
 
-    """
-    X2 = model.fit_transform(X)
+            fig, axes = plt.subplots(n_el, sharex=True, sharey=True, figsize=(6, n_el*2))
+            fig.subplots_adjust(hspace=0)
 
-    scale = np.max(X2[:, 0])
-    print scale
-
-    fig, axes = plt.subplots(n_el, sharex=True, sharey=True, figsize=(4, n_el))
-    fig.subplots_adjust(hspace=0)
-
-    for i in range(n_el):
-        ax = axes[i]
-        for j in range(4):
-            color = tableau20[j]
-            ax.plot((0, X2[i+n_el*j, 0]), (0, X2[i+n_el*j, 1]), color=color, linewidth=2)
-        ax.axis('off')
-        ax.text(scale*0.2, 0, text[i], size=13)
-    axes[0].legend(['hidden (f)', 'hidden (r)', 'memory (f)', 'memory (r)'], bbox_to_anchor=(1.7, 1.2))
-    """
-
-
+            for i in range(n_el):
+                if n_el > 1:
+                    ax = axes[i]
+                else:
+                    ax = axes
+                for j in range(4):
+                    color = colours[j+6]
+                    ax.plot((0, X2[i+n_el*j, 0]), (0, X2[i+n_el*j, 1]), color=color, linewidth=2)
+                ax.axis('off')
+                ax.text(scale*0.2, 0, text[i], size=13)
+            if n_el > 1:
+                ax = axes[0]
+            else:
+                ax = axes
+            ax.legend(['hidden (f)', 'hidden (r)', 'memory (f)', 'memory (r)'], bbox_to_anchor=(1.7, 1.2))
+            output_filename = fh.make_filename(output_dir, base + '_vectors', 'png')
+            plt.savefig(output_filename, bbox_inches='tight')
+            plt.close()
 
 
 def main():
-    make_gate_plots()
+    #make_gate_plots()
 
     make_vector_plots()
 
