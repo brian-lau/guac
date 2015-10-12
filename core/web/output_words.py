@@ -36,7 +36,7 @@ def output_words():
     word_list = list(word_list)
 
     word_index = {}
-    order = text.keys()
+    order = true.index.tolist()
     random.shuffle(order)
     for item in order:
         words = text[item]
@@ -56,7 +56,7 @@ def output_words():
             output_file.write(html.make_heading('Word: ' + word, align='center'))
 
             if word in word_index:
-                output_file.write(html.make_paragraph('Sample responses:', align='center'))
+                output_file.write(html.make_paragraph('Sample usage:', align='center'))
                 item_list = word_index[word][:]
                 random.shuffle(item_list)
                 for item in item_list[:min(len(item_list), 5)]:
@@ -64,9 +64,9 @@ def output_words():
                     occurence_index = item_text.index(word)
                     start = max(0, occurence_index-10)
                     end = min(len(item_text), occurence_index + 10)
+                    item_text = ['<b>' + w + '</b>' if w == word else w for w in item_text]
                     link = html.make_link(item + '.html', ' '.join(item_text[start:end]))
                     output_file.write(html.make_paragraph(link, align="center", id="psmall"))
-
 
             output_file.write(html.make_paragraph('Unigram model coefficients for each label:', align='center'))
 

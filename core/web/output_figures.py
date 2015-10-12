@@ -123,6 +123,8 @@ def make_vector_plots():
 
         n_el, n_dim = c.shape
 
+        n_el = min(n_el, 50)
+
         if n_el > 0:
             n_hidden = n_dim / 2
             c_f = c[:, :n_hidden]
