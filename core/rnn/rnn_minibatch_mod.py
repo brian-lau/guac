@@ -357,6 +357,16 @@ class RNN(object):
             #y_pred = T.printing.Print('y_pred')(p_y_given_x_sentence > 0.5)
             y_pred = p_y_given_x_sentence > 0.5
             element_weights = s
+        elif pooling_method == 'max2':
+            s = T.nnet.sigmoid((T.dot(T.max(h, axis=0), self.W_s) + self.b_s))  # [n_elements, minibatch_size, nc] in R(0,1)
+            #s_shape = T.printing.Print('s_shape')(s.shape)
+            #p_y_given_x_sentence = T.max(s_shape[0] * s, axis=0)
+            p_y_given_x_sentence = s
+            #p_y_given_x_sentence = T.printing.Print('p_y')(T.max(s, axis=0))
+            #temp = T.printing.Print('p_y')(p_y_given_x_sentence)
+            #y_pred = T.printing.Print('y_pred')(p_y_given_x_sentence > 0.5)
+            y_pred = p_y_given_x_sentence > 0.5
+            element_weights = s
         elif pooling_method == 'last':
             s = T.nnet.sigmoid((T.dot(h, self.W_s) + self.b_s))  # [n_elements, minibatch_size, nc] in R(0,1)
             p_y_given_x_sentence = s[-1, :, :]
@@ -519,7 +529,7 @@ def main(params=None):
             'xavier_init': True
         }
 
-    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_DRLD_LSTM_params.json')
+    #params = fh.read_json('/Users/dcard/Projects/CMU/ARK/guac/experiments/best_DRLD_LSTM_params_max2.json')
     #params['n_hidden'] = int(params['n_hidden'])
 
     keys = params.keys()

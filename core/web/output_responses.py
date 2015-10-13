@@ -30,6 +30,9 @@ def output_responses(dataset):
 
     word_list = common.get_word_list(true.columns, blm_dir)
 
+    train_words = {}
+    test_words = {}
+
     for i in all_items:
         true_i = true.loc[i]
         rnn_file = fh.make_filename(rnn_dir, i, 'csv')
@@ -38,10 +41,13 @@ def output_responses(dataset):
 
         if i in train_pred.index:
             pred_i = train_pred.loc[i]
+            train_item = True
         else:
             pred_i = test_pred.loc[i]
+            train_item = False
 
-        output_filename = fh.make_filename(output_dir, i, 'html')
+        #output_filename = fh.make_filename(output_dir, i, 'html')
+        output_filename = '/Users/dcard/Desktop.temp.html'
         with codecs.open(output_filename, 'w') as output_file:
 
             output_file.write(html.make_header(i))
@@ -52,7 +58,6 @@ def output_responses(dataset):
                                                   align="center"))
             output_file.write(html.make_paragraph('and sequence element probabilities for the LSTM (white-green).',
                                                   align="center"))
-
 
             links = [html.make_link('wordtype_' + w + '.html', w) if w in word_list else w for w in text[i]]
             table_header = ['Label'] + links + ['True', 'Pred.']
@@ -84,11 +89,26 @@ def output_responses(dataset):
                 row = [link] + words + [str(true_i[code]), str(int(pred_i[code])) + ' (LR)']
                 output_file.write(html.make_table_row(row, colours=colours))
 
+                for i_v, v in enumerate(rnn_vals[code].values):
+                    if v >= 0.5:
+                        if train_item:
+                            focal_word = text[i][i_v]
+                            if focal_word in train_words:
+                                train_words[focal_word] += 1
+                            else:
+                                train_words[focal_word] = 1
+                        else:
+                            focal_word = text[i][i_v]
+                            if focal_word in test_words:
+                                test_words[focal_word] += 1
+                            else:
+                                test_words[focal_word] = 1
+
                 colours = [str((0, 0, 0))]
                 vals = [int(235 - (v*235)) for v in rnn_vals[code]]
                 colours += [(v, 235, v) for v in vals]
                 colours += [str((0, 0, 0))]*2
-                row = [' '] + text[i] + [' ', str(int(rnn_vals[code].max() > 0.5)) + ' (RNN)']
+                row = [' '] + text[i] + [' ', str(int(rnn_vals[code].max() >= 0.5)) + ' (RNN)']
                 output_file.write(html.make_table_row(row, colours=colours))
             output_file.write(html.make_table_end())
 
@@ -109,11 +129,31 @@ def output_responses(dataset):
             output_file.write(html.make_body_end())
             output_file.write(html.make_footer())
 
+    return train_words, test_words
+
 def main():
-    output_responses(dataset='Democrat-Likes')
-    output_responses(dataset='Democrat-Dislikes')
-    output_responses(dataset='Republican-Dislikes')
-    output_responses(dataset='Republican-Likes')
+    train_words = {}
+    test_words = {}
+    tr, te = output_responses(dataset='Democrat-Likes')
+    train_words.update(tr)
+    test_words.update(te)
+    tr, te = output_responses(dataset='Democrat-Dislikes')
+    train_words.update(tr)
+    test_words.update(te)
+
+    tr, te = output_responses(dataset='Republican-Dislikes')
+    train_words.update(tr)
+    test_words.update(te)
+
+    tr, te = output_responses(dataset='Republican-Likes')
+    train_words.update(tr)
+    test_words.update(te)
+
+    print len(set(train_words).difference(set(test_words)))
+    print set(test_words).difference(set(train_words))
+
+    fh.write_to_json(train_words, '/Users/dcard/Desktop/train_words.json')
+    fh.write_to_json(test_words, '/Users/dcard/Desktop/test_words.json')
 
 if __name__ == '__main__':
     main()
