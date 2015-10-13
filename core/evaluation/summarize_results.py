@@ -29,7 +29,7 @@ def main():
     for i, dir in enumerate(run_dirs):
         run_num = int(fh.get_basename(dir).split('_')[-1])
 
-        if run_num < 100:
+        if run_num < 200:
             results_dir = os.path.join(dir, 'results')
             test_file = fh.make_filename(results_dir, 'test_macro_f1', 'csv')
             valid_file = fh.make_filename(results_dir, 'valid_cv_macro_f1', 'csv')
