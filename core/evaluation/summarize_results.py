@@ -29,7 +29,7 @@ def main():
     for i, dir in enumerate(run_dirs):
         run_num = int(fh.get_basename(dir).split('_')[-1])
 
-        if run_num < 200:
+        if run_num <= 40:
             results_dir = os.path.join(dir, 'results')
             test_file = fh.make_filename(results_dir, 'test_macro_f1', 'csv')
             valid_file = fh.make_filename(results_dir, 'valid_cv_macro_f1', 'csv')
@@ -41,10 +41,10 @@ def main():
                 masked_valid = pd.read_csv(masked_valid_file, header=False, index_col=0)
 
                 #results.loc[run_num, 'iteration'] = run_num
-                results.loc[run_num, 'masked'] = masked_valid['overall'].mean()
-                results.loc[run_num, 'test'] = test['overall'].mean()
-                results.loc[run_num, 'valid'] = valid['overall'].mean()
-                results.loc[run_num, 'dir'] = fh.get_basename(dir)
+                results.loc[i, 'masked'] = masked_valid['overall'].mean()
+                results.loc[i, 'test'] = test['overall'].mean()
+                results.loc[i, 'valid'] = valid['overall'].mean()
+                results.loc[i, 'dir'] = fh.get_basename(dir)
             except:
                 continue
 
