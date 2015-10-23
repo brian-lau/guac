@@ -29,7 +29,7 @@
         <entry file="file://$PROJECT_DIR$/core/evaluation/summarize_results.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.46407187">
-              <caret line="32" column="44" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
+              <caret line="32" column="54" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
               <folding />
             </state>
           </provider>
@@ -786,12 +786,6 @@
       <option name="number" value="Default" />
       <updated>1440641785978</updated>
     </task>
-    <task id="LOCAL-00111" summary="rejiggered saving a bit">
-      <created>1443325595090</created>
-      <option name="number" value="00111" />
-      <option name="project" value="LOCAL" />
-      <updated>1443325595090</updated>
-    </task>
     <task id="LOCAL-00112" summary="just realized I wasn't properly using the reusable holdout for linear models with bayes opt; now fixed">
       <created>1443325768194</created>
       <option name="number" value="00112" />
@@ -1080,7 +1074,13 @@
       <option name="project" value="LOCAL" />
       <updated>1445630407384</updated>
     </task>
-    <option name="localTasksCounter" value="160" />
+    <task id="LOCAL-00160" summary="filtered out 1_">
+      <created>1445630703683</created>
+      <option name="number" value="00160" />
+      <option name="project" value="LOCAL" />
+      <updated>1445630703683</updated>
+    </task>
+    <option name="localTasksCounter" value="161" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1150,7 +1150,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="minor updates to running scripts" />
     <MESSAGE value="removed debug line" />
     <MESSAGE value="bug fix" />
     <MESSAGE value="restricted summary to reuse" />
@@ -1175,7 +1174,8 @@
     <MESSAGE value="changed one limit" />
     <MESSAGE value="added a different sort of max operation" />
     <MESSAGE value="fixed something in summarize results" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed something in summarize results" />
+    <MESSAGE value="filtered out 1_" />
+    <option name="LAST_COMMIT_MESSAGE" value="filtered out 1_" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1642,7 +1642,7 @@
     <entry file="file://$PROJECT_DIR$/core/evaluation/summarize_results.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.46407187">
-          <caret line="32" column="44" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
+          <caret line="32" column="54" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
           <folding />
         </state>
       </provider>
