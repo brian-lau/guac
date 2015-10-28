@@ -24,25 +24,30 @@ def main():
     lines = fh.read_text(results_file)
 
     for i, line in enumerate(lines):
-        run_num = i
 
-        if i > 0 and run_num < 41:
+        if i > 0:
             parts = line.split()
             date = parts[0]
             time = parts[1]
             name = parts[2]
             masked = float(parts[3])
             test = float(parts[4])
-            if test > 0:
-                valid = parts[5][1:-1]
-            else:
-                valid = masked
 
-            #results.loc[run_num, 'iteration'] = run_num
-            results.loc[run_num, 'masked'] = masked
-            results.loc[run_num, 'test'] = test
-            results.loc[run_num, 'valid'] = valid
-            results.loc[run_num, 'dir'] = name
+            name_parts = name.split('_')
+            run_num = int(name_parts[-1])
+
+            if run_num < 41:
+
+                if test > 0:
+                    valid = parts[5][1:-1]
+                else:
+                    valid = masked
+
+                #results.loc[run_num, 'iteration'] = run_num
+                results.loc[run_num, 'masked'] = masked
+                results.loc[run_num, 'test'] = test
+                results.loc[run_num, 'valid'] = valid
+                results.loc[run_num, 'dir'] = name
 
     results.to_csv(results_file + 'results.csv', columns=results.columns)
 
