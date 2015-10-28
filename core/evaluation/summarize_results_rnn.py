@@ -26,7 +26,7 @@ def main():
     for i, line in enumerate(lines):
         run_num = i
 
-        if i > 0 and run_num < 42:
+        if i > 0 and run_num < 41:
             parts = line.split()
             date = parts[0]
             time = parts[1]
